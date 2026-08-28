@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Yuzawa Transit Guide</title>
+    <!-- PapaParse for easy CSV fetching -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.4.1/papaparse.min.js"></script>
+    <style>
+        :root { --bg: #121212; --card: #1E1E1E; --text: #FFFFFF; --accent: #007AFF; }
+        body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; background: var(--bg); color: var(--text); margin: 0; padding: 0; }
+        .header { background: var(--card); padding: 16px; position: sticky; top: 0; z-index: 100; border-bottom: 1px solid #333; }
+        .controls { display: flex; gap: 8px; margin-top: 12px; overflow-x: auto; padding-bottom: 4px; }
+        select { background: #333; color: white; border: none; padding: 8px 12px; border-radius: 8px; font-size: 14px; }
+        .stop-card { background: var(--card); margin: 12px; padding: 16px; border-radius: 12px; }
+        .stop-name { font-size: 18px; font-weight: bold; margin-bottom: 12px; }
+        .departures { display: flex; gap: 8px; flex-wrap: wrap; }
+        .time-badge { background: #333; padding: 6px 12px; border-radius: 6px; font-size: 14px; font-family: monospace; }
+        #loading { text-align: center; padding: 40px; color: #888; }
+    </style>
+</head>
+<body>
+
+    <div class="header">
+        <h2>Yuzawa Transit / 湯沢町バス</h2>
+        <div class="controls">
+            <select id="langSelect" onchange="renderApp()">
+                <option value="Stop_Name_EN">English</option>
+                <option value="Stop_Name_JP">日本語</option>
+                <option value="Stop_Name_ZH_TR">繁體中文</option>
+                <option value="Stop_Name_ZH_SI">简体中文</option>
+                <option value="Stop_Name_KO">한국어</option>
+            </select>
+            <select id="dirSelect" onchange="renderApp()">
+                <option value="Outbound">To Seibu Crystal</option>
+                <option value="Inbound">To Yuzawa Sta.</option>
+            </select>
+            <select id="daySelect" onchange="renderApp()">
+                <option value="Weekday">Weekday</option>
+                <option value="Weekend/Holiday">Weekend / Holiday</option>
+            </select>
+        </div>
+    </div>
+
+    <div id="loading">Loading live timetable...</div>
+    <div id="app"></div>
+
+    <script>
+        // PASTE YOUR PUBLISHED CSV URLS HERE
+        const STOPS_CSV_URL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vTP7TtdyoMDnpOOTF0rmnyHfB-bqH6gxTDHMTS7E8V5OxgTUFp4WAfC3nw2uvfluawrLWk7FpLUzG-K/pub?gid=1827150428&single=true&output=csv";
+        const SCHEDULE_CSV_URL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vTP7TtdyoMDnpOOTF0rmnyHfB-bqH6gxTDHMTS7E8V5OxgTUFp4WAfC3nw2uvfluawrLWk7FpLUzG-K/pub?gid=1754883098&single=true&output=csv";
+
+        let stopsData = [];
+        let scheduleData = [];
+
+        // Fetch and parse both CSVs on load
+        Promise.all([
+            new Promise(resolve => Papa.parse(STOPS_CSV_URL, { download: true, header: true, complete: resolve })),
+            new Promise(resolve => Papa.parse(SCHEDULE_CSV_URL, { download: true, header: true, complete: resolve }))
+        ]).then(results => {
+            stopsData = results[0].data.filter(row => row.Stop_ID); // Filter empty rows
+            scheduleData = results[1].data.filter(row => row.Schedule_ID);
+            
+            document.getElementById('loading').style.display = 'none';
+            renderApp();
+        });
+
+        function renderApp() {
+            const lang = document.getElementById('langSelect').value;
+            const direction = document.getElementById('dirSelect').value;
+            const dayType = document.getElementById('daySelect').value;
+            
+            const appDiv = document.getElementById('app');
+            appDiv.innerHTML = "";
+
+            // Sort stops based on direction
+            let displayStops = [...stopsData];
+            if (direction === "Inbound") displayStops.reverse();
+
+            displayStops.forEach(stop => {
+                // Find matching departures for this stop, direction, and day
+                let departures = scheduleData.filter(s => 
+                    s.Stop_ID === stop.Stop_ID && 
+                    s.Direction === direction && 
+                    (s.Operating_Days === dayType || s.Operating_Days === "Designated Fridays Only") // Adjust logic as needed
+                );
+
+                // Sort times chronologically
+                departures.sort((a, b) => a.Departure_Time.localeCompare(b.Departure_Time));
+
+                // Only render the card if there are buses
+                if (departures.length > 0) {
+                    const card = document.createElement('div');
+                    card.className = 'stop-card';
+                    
+                    const stopName = document.createElement('div');
+                    stopName.className = 'stop-name';
+                    stopName.innerText = stop[lang] || stop['Stop_Name_EN'];
+                    
+                    const timeContainer = document.createElement('div');
+                    timeContainer.className = 'departures';
+                    
+                    departures.forEach(dep => {
+                        if(dep.Departure_Time) {
+                            const badge = document.createElement('div');
+                            badge.className = 'time-badge';
+                            badge.innerText = dep.Departure_Time;
+                            timeContainer.appendChild(badge);
+                        }
+                    });
+
+                    card.appendChild(stopName);
+                    card.appendChild(timeContainer);
+                    appDiv.appendChild(card);
+                }
+            });
+
+            if(appDiv.innerHTML === "") {
+                appDiv.innerHTML = "<div style='padding:20px; text-align:center;'>No departures found for this selection.</div>";
+            }
+        }
+    </script>
+</body>
+</html>
