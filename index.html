@@ -25,18 +25,18 @@
     <div class="header">
         <h2 id="appTitle">Yuzawa Transit Guide</h2>
         <div class="controls">
-            <select id="langSelect" onchange="renderApp()">
+            <select id="langSelect" onchange="saveAndRender()">
                 <option value="Stop_Name_EN">English</option>
                 <option value="Stop_Name_JP">日本語</option>
                 <option value="Stop_Name_ZH_TR">繁體中文</option>
                 <option value="Stop_Name_ZH_SI">简体中文</option>
                 <option value="Stop_Name_KO">한국어</option>
             </select>
-            <select id="dirSelect" onchange="renderApp()">
+            <select id="dirSelect" onchange="saveAndRender()">
                 <option value="Outbound" id="optOutbound">To Seibu Crystal</option>
                 <option value="Inbound" id="optInbound">To Yuzawa Sta.</option>
             </select>
-            <select id="daySelect" onchange="renderApp()">
+            <select id="daySelect" onchange="saveAndRender()">
                 <option value="Weekday" id="optWeekday">Weekday</option>
                 <option value="Weekend/Holiday" id="optWeekend">Weekend / Holiday</option>
             </select>
@@ -61,6 +61,20 @@
         let stopsData = [];
         let scheduleData = [];
 
+        // Load saved preferences on startup if they exist
+        function loadPreferences() {
+            if (localStorage.getItem('yuzawa_lang')) document.getElementById('langSelect').value = localStorage.getItem('yuzawa_lang');
+            if (localStorage.getItem('yuzawa_dir')) document.getElementById('dirSelect').value = localStorage.getItem('yuzawa_dir');
+            if (localStorage.getItem('yuzawa_day')) document.getElementById('daySelect').value = localStorage.getItem('yuzawa_day');
+        }
+
+        function saveAndRender() {
+            localStorage.setItem('yuzawa_lang', document.getElementById('langSelect').value);
+            localStorage.setItem('yuzawa_dir', document.getElementById('dirSelect').value);
+            localStorage.setItem('yuzawa_day', document.getElementById('daySelect').value);
+            renderApp();
+        }
+
         function cleanHeaders(row) {
             const clean = {};
             for (let k in row) {
@@ -82,6 +96,8 @@
             }
             return t;
         }
+
+        loadPreferences(); // Apply stored settings before parsing data
 
         Promise.all([
             new Promise((resolve, reject) => Papa.parse(STOPS_CSV_URL, { download: true, header: true, transformHeader: h => h.trim(), complete: resolve, error: reject })),
