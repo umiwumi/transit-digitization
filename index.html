@@ -4,25 +4,26 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Yuzawa Transit Guide</title>
-    <!-- PapaParse for easy CSV fetching -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.4.1/papaparse.min.js"></script>
     <style>
-        :root { --bg: #121212; --card: #1E1E1E; --text: #FFFFFF; --accent: #007AFF; }
+        :root { --bg: #121212; --card: #1E1E1E; --text: #FFFFFF; }
         body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; background: var(--bg); color: var(--text); margin: 0; padding: 0; }
         .header { background: var(--card); padding: 16px; position: sticky; top: 0; z-index: 100; border-bottom: 1px solid #333; }
         .controls { display: flex; gap: 8px; margin-top: 12px; overflow-x: auto; padding-bottom: 4px; }
         select { background: #333; color: white; border: none; padding: 8px 12px; border-radius: 8px; font-size: 14px; }
         .stop-card { background: var(--card); margin: 12px; padding: 16px; border-radius: 12px; }
-        .stop-name { font-size: 18px; font-weight: bold; margin-bottom: 12px; }
+        .stop-name { font-size: 18px; font-weight: bold; margin-bottom: 12px; display: flex; justify-content: space-between; align-items: center; }
+        .map-btn { font-size: 14px; text-decoration: none; background: #333; padding: 4px 10px; border-radius: 12px; }
         .departures { display: flex; gap: 8px; flex-wrap: wrap; }
         .time-badge { background: #333; padding: 6px 12px; border-radius: 6px; font-size: 14px; font-family: monospace; }
         #loading { text-align: center; padding: 40px; color: #888; }
+        h2 { margin: 0; font-size: 20px; }
     </style>
 </head>
 <body>
 
     <div class="header">
-        <h2>Yuzawa Transit / 湯沢町バス</h2>
+        <h2 id="appTitle">Yuzawa Transit Guide</h2>
         <div class="controls">
             <select id="langSelect" onchange="renderApp()">
                 <option value="Stop_Name_EN">English</option>
@@ -32,12 +33,12 @@
                 <option value="Stop_Name_KO">한국어</option>
             </select>
             <select id="dirSelect" onchange="renderApp()">
-                <option value="Outbound">To Seibu Crystal</option>
-                <option value="Inbound">To Yuzawa Sta.</option>
+                <option value="Outbound" id="optOutbound">To Seibu Crystal</option>
+                <option value="Inbound" id="optInbound">To Yuzawa Sta.</option>
             </select>
             <select id="daySelect" onchange="renderApp()">
-                <option value="Weekday">Weekday</option>
-                <option value="Weekend/Holiday">Weekend / Holiday</option>
+                <option value="Weekday" id="optWeekday">Weekday</option>
+                <option value="Weekend/Holiday" id="optWeekend">Weekend / Holiday</option>
             </select>
         </div>
     </div>
@@ -46,21 +47,26 @@
     <div id="app"></div>
 
     <script>
-        // PASTE YOUR PUBLISHED CSV URLS HERE
         const STOPS_CSV_URL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vTP7TtdyoMDnpOOTF0rmnyHfB-bqH6gxTDHMTS7E8V5OxgTUFp4WAfC3nw2uvfluawrLWk7FpLUzG-K/pub?gid=1827150428&single=true&output=csv";
         const SCHEDULE_CSV_URL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vTP7TtdyoMDnpOOTF0rmnyHfB-bqH6gxTDHMTS7E8V5OxgTUFp4WAfC3nw2uvfluawrLWk7FpLUzG-K/pub?gid=1754883098&single=true&output=csv";
+
+        const uiDict = {
+            'Stop_Name_EN': { title: "Yuzawa Transit Guide", out: "To Seibu Crystal", in: "To Yuzawa Sta.", wk: "Weekday", we: "Weekend / Holiday", empty: "No departures found." },
+            'Stop_Name_JP': { title: "湯沢町バス時刻表", out: "西武クリスタル方面", in: "湯沢駅方面", wk: "平日", we: "土日祝", empty: "該当する運行はありません。" },
+            'Stop_Name_ZH_TR': { title: "湯澤町巴士時刻表", out: "往西武水晶", in: "往湯澤站", wk: "平日", we: "週末/假日", empty: "沒有符合的班次。" },
+            'Stop_Name_ZH_SI': { title: "汤泽町巴士时刻表", out: "往西武水晶", in: "往汤泽站", wk: "平日", we: "周末/假日", empty: "没有符合的班次。" },
+            'Stop_Name_KO': { title: "유자와 버스 시간표", out: "세이부 크리스탈 방면", in: "유자와역 방면", wk: "평일", we: "주말/공휴일", empty: "해당하는 운행이 없습니다." }
+        };
 
         let stopsData = [];
         let scheduleData = [];
 
-        // Fetch and parse both CSVs on load
         Promise.all([
             new Promise(resolve => Papa.parse(STOPS_CSV_URL, { download: true, header: true, complete: resolve })),
             new Promise(resolve => Papa.parse(SCHEDULE_CSV_URL, { download: true, header: true, complete: resolve }))
         ]).then(results => {
-            stopsData = results[0].data.filter(row => row.Stop_ID); // Filter empty rows
+            stopsData = results[0].data.filter(row => row.Stop_ID); 
             scheduleData = results[1].data.filter(row => row.Schedule_ID);
-            
             document.getElementById('loading').style.display = 'none';
             renderApp();
         });
@@ -70,32 +76,39 @@
             const direction = document.getElementById('dirSelect').value;
             const dayType = document.getElementById('daySelect').value;
             
+            const dict = uiDict[lang];
+            document.getElementById('appTitle').innerText = dict.title;
+            document.getElementById('optOutbound').innerText = dict.out;
+            document.getElementById('optInbound').innerText = dict.in;
+            document.getElementById('optWeekday').innerText = dict.wk;
+            document.getElementById('optWeekend').innerText = dict.we;
+
             const appDiv = document.getElementById('app');
             appDiv.innerHTML = "";
 
-            // Sort stops based on direction
             let displayStops = [...stopsData];
             if (direction === "Inbound") displayStops.reverse();
 
             displayStops.forEach(stop => {
-                // Find matching departures for this stop, direction, and day
                 let departures = scheduleData.filter(s => 
                     s.Stop_ID === stop.Stop_ID && 
                     s.Direction === direction && 
-                    (s.Operating_Days === dayType || s.Operating_Days === "Designated Fridays Only") // Adjust logic as needed
+                    s.Operating_Days === dayType 
                 );
 
-                // Sort times chronologically
                 departures.sort((a, b) => a.Departure_Time.localeCompare(b.Departure_Time));
 
-                // Only render the card if there are buses
                 if (departures.length > 0) {
                     const card = document.createElement('div');
                     card.className = 'stop-card';
                     
-                    const stopName = document.createElement('div');
-                    stopName.className = 'stop-name';
-                    stopName.innerText = stop[lang] || stop['Stop_Name_EN'];
+                    const stopNameContainer = document.createElement('div');
+                    stopNameContainer.className = 'stop-name';
+                    
+                    let nameText = stop[lang] || stop['Stop_Name_EN'];
+                    let mapHtml = stop.Google_Maps_URL ? `<a href="${stop.Google_Maps_URL}" target="_blank" class="map-btn">📍 Map</a>` : '';
+                    
+                    stopNameContainer.innerHTML = `<span>${nameText}</span> ${mapHtml}`;
                     
                     const timeContainer = document.createElement('div');
                     timeContainer.className = 'departures';
@@ -109,14 +122,14 @@
                         }
                     });
 
-                    card.appendChild(stopName);
+                    card.appendChild(stopNameContainer);
                     card.appendChild(timeContainer);
                     appDiv.appendChild(card);
                 }
             });
 
             if(appDiv.innerHTML === "") {
-                appDiv.innerHTML = "<div style='padding:20px; text-align:center;'>No departures found for this selection.</div>";
+                appDiv.innerHTML = `<div style='padding:20px; text-align:center; color:#888;'>${dict.empty}</div>`;
             }
         }
     </script>
