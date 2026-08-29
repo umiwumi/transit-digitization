@@ -72,6 +72,17 @@
             return clean;
         }
 
+        function normalizeTime(t) {
+            if (!t) return "";
+            const parts = t.split(":");
+            if (parts.length === 2) {
+                const hour = parts[0].padStart(2, "0");
+                const min = parts[1].padStart(2, "0");
+                return `${hour}:${min}`;
+            }
+            return t;
+        }
+
         Promise.all([
             new Promise((resolve, reject) => Papa.parse(STOPS_CSV_URL, { download: true, header: true, transformHeader: h => h.trim(), complete: resolve, error: reject })),
             new Promise((resolve, reject) => Papa.parse(SCHEDULE_CSV_URL, { download: true, header: true, transformHeader: h => h.trim(), complete: resolve, error: reject }))
@@ -79,13 +90,7 @@
             stopsData = (results[0].data || []).map(cleanHeaders).filter(row => Object.keys(row).some(k => k.toLowerCase().includes('stop_id') && row[k]));
             scheduleData = (results[1].data || []).map(cleanHeaders).filter(row => Object.keys(row).some(k => k.toLowerCase().includes('schedule_id') && row[k]));
 
-            const statusEl = document.getElementById('status-msg');
-            if (stopsData.length === 0 || scheduleData.length === 0) {
-                statusEl.innerHTML = `Diagnostic Warning:<br>Stops parsed: ${stopsData.length} | Schedule rows parsed: ${scheduleData.length}<br>Check primary key column headers (Stop_ID, Schedule_ID).`;
-                return;
-            }
-
-            statusEl.style.display = 'none';
+            document.getElementById('status-msg').style.display = 'none';
             renderApp();
         }).catch(err => {
             document.getElementById('status-msg').innerText = "Failed to load CSV endpoints: " + err;
@@ -129,8 +134,8 @@
                 });
 
                 departures.sort((a, b) => {
-                    const timeA = getVal(a, 'Departure_Time');
-                    const timeB = getVal(b, 'Departure_Time');
+                    const timeA = normalizeTime(getVal(a, 'Departure_Time'));
+                    const timeB = normalizeTime(getVal(b, 'Departure_Time'));
                     return timeA.localeCompare(timeB);
                 });
 
@@ -154,7 +159,7 @@
                     timeContainer.className = 'departures';
                     
                     departures.forEach(dep => {
-                        const t = getVal(dep, 'Departure_Time');
+                        const t = normalizeTime(getVal(dep, 'Departure_Time'));
                         if (t) {
                             const badge = document.createElement('div');
                             badge.className = 'time-badge';
