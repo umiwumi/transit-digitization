@@ -51,17 +51,16 @@
         const SCHEDULE_CSV_URL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vTP7TtdyoMDnpOOTF0rmnyHfB-bqH6gxTDHMTS7E8V5OxgTUFp4WAfC3nw2uvfluawrLWk7FpLUzG-K/pub?gid=1754883098&single=true&output=csv";
 
         const uiDict = {
-            'Stop_Name_EN': { title: "Yuzawa Transit Guide", out: "To Seibu Crystal", in: "To Yuzawa Sta.", wk: "Weekday", we: "Weekend / Holiday", empty: "No departures found.", farePrefix: "From Yuzawa: ¥" },
-            'Stop_Name_JP': { title: "湯沢町バス時刻表", out: "西武クリスタル方面", in: "湯沢駅方面", wk: "平日", we: "土日祝", empty: "該当する運行はありません。", farePrefix: "湯沢駅より: ¥" },
-            'Stop_Name_ZH_TR': { title: "湯澤町巴士時刻表", out: "往西武水晶", in: "往湯澤站", wk: "平日", we: "週末/假日", empty: "沒有符合的班次。", farePrefix: "從湯澤站出發: ¥" },
-            'Stop_Name_ZH_SI': { title: "汤泽町巴士时刻表", out: "往西武水晶", in: "往汤泽站", wk: "平日", we: "周末/假日", empty: "没有符合的班次。", farePrefix: "从汤泽站出发: ¥" },
-            'Stop_Name_KO': { title: "유자와 버스 시간표", out: "세이부 크리스탈 방면", in: "유자와역 방면", wk: "평일", we: "주말/공휴일", empty: "해당하는 운행이 없습니다.", farePrefix: "유자와역 출발: ¥" }
+            'Stop_Name_EN': { title: "Yuzawa Transit Guide", out: "To Seibu Crystal", in: "To Yuzawa Sta.", wk: "Weekday", we: "Weekend / Holiday", empty: "No departures found.", fareOut: "From Yuzawa: ¥", fareIn: "To Yuzawa: ¥" },
+            'Stop_Name_JP': { title: "湯沢町バス時刻表", out: "西武クリスタル方面", in: "湯沢駅方面", wk: "平日", we: "土日祝", empty: "該当する運行はありません。", fareOut: "湯沢駅より: ¥", fareIn: "湯沢駅まで: ¥" },
+            'Stop_Name_ZH_TR': { title: "湯澤町巴士時刻表", out: "往西武水晶", in: "往湯澤站", wk: "平日", we: "週末/假日", empty: "沒有符合的班次。", fareOut: "從湯澤站出發: ¥", fareIn: "到湯澤站: ¥" },
+            'Stop_Name_ZH_SI': { title: "汤泽町巴士时刻表", out: "往西武水晶", in: "往汤泽站", wk: "平日", we: "周末/假日", empty: "没有符合的班次。", fareOut: "从汤泽站出发: ¥", fareIn: "到汤泽站: ¥" },
+            'Stop_Name_KO': { title: "유자와 버스 시간표", out: "세이부 크리스탈 방면", in: "유자와역 방면", wk: "평일", we: "주말/공휴일", empty: "해당하는 운행이 없습니다.", fareOut: "유자와역 출발: ¥", fareIn: "유자와역까지: ¥" }
         };
 
         let stopsData = [];
         let scheduleData = [];
 
-        // Load saved preferences on startup if they exist
         function loadPreferences() {
             if (localStorage.getItem('yuzawa_lang')) document.getElementById('langSelect').value = localStorage.getItem('yuzawa_lang');
             if (localStorage.getItem('yuzawa_dir')) document.getElementById('dirSelect').value = localStorage.getItem('yuzawa_dir');
@@ -97,7 +96,7 @@
             return t;
         }
 
-        loadPreferences(); // Apply stored settings before parsing data
+        loadPreferences();
 
         Promise.all([
             new Promise((resolve, reject) => Papa.parse(STOPS_CSV_URL, { download: true, header: true, transformHeader: h => h.trim(), complete: resolve, error: reject })),
@@ -136,6 +135,9 @@
             let displayStops = [...stopsData];
             if (direction.toLowerCase() === "inbound") displayStops.reverse();
 
+            // Choose the correct fare prefix depending on direction
+            const activeFarePrefix = (direction.toLowerCase() === "inbound") ? dict.fareIn : dict.fareOut;
+
             displayStops.forEach(stop => {
                 const currentStopId = getVal(stop, 'Stop_ID');
                 
@@ -167,7 +169,7 @@
                     let fareVal = getVal(stop, 'Fare_Yuzawa');
 
                     let mapHtml = mapUrl ? `<a href="${mapUrl}" target="_blank" class="map-btn">📍 Map</a>` : '';
-                    let fareHtml = fareVal ? `<span style="font-size: 13px; color: #aaa; margin-left: 8px; font-weight: normal;">(${dict.farePrefix}${fareVal})</span>` : '';
+                    let fareHtml = fareVal ? `<span style="font-size: 13px; color: #aaa; margin-left: 8px; font-weight: normal;">(${activeFarePrefix}${fareVal})</span>` : '';
                     
                     stopNameContainer.innerHTML = `<span>${nameText} ${fareHtml}</span> ${mapHtml}`;
                     
