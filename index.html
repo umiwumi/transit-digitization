@@ -13,10 +13,10 @@
         select { background: #333; color: white; border: none; padding: 8px 12px; border-radius: 8px; font-size: 14px; }
         .stop-card { background: var(--card); margin: 12px; padding: 16px; border-radius: 12px; }
         .stop-name { font-size: 18px; font-weight: bold; margin-bottom: 12px; display: flex; justify-content: space-between; align-items: center; }
-        .map-btn { font-size: 14px; text-decoration: none; background: #333; padding: 4px 10px; border-radius: 12px; }
+        .map-btn { font-size: 14px; text-decoration: none; background: #333; padding: 4px 10px; border-radius: 12px; white-space: nowrap; }
         .departures { display: flex; gap: 8px; flex-wrap: wrap; }
         .time-badge { background: #333; padding: 6px 12px; border-radius: 6px; font-size: 14px; font-family: monospace; }
-        #loading { text-align: center; padding: 40px; color: #888; }
+        #status-msg { text-align: center; padding: 30px; color: #888; font-family: monospace; font-size: 13px; line-height: 1.6; }
         h2 { margin: 0; font-size: 20px; }
     </style>
 </head>
@@ -43,7 +43,7 @@
         </div>
     </div>
 
-    <div id="loading">Loading live timetable...</div>
+    <div id="status-msg">Loading live timetable...</div>
     <div id="app"></div>
 
     <script>
@@ -51,32 +51,58 @@
         const SCHEDULE_CSV_URL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vTP7TtdyoMDnpOOTF0rmnyHfB-bqH6gxTDHMTS7E8V5OxgTUFp4WAfC3nw2uvfluawrLWk7FpLUzG-K/pub?gid=1754883098&single=true&output=csv";
 
         const uiDict = {
-            'Stop_Name_EN': { title: "Yuzawa Transit Guide", out: "To Seibu Crystal", in: "To Yuzawa Sta.", wk: "Weekday", we: "Weekend / Holiday", empty: "No departures found." },
-            'Stop_Name_JP': { title: "湯沢町バス時刻表", out: "西武クリスタル方面", in: "湯沢駅方面", wk: "平日", we: "土日祝", empty: "該当する運行はありません。" },
-            'Stop_Name_ZH_TR': { title: "湯澤町巴士時刻表", out: "往西武水晶", in: "往湯澤站", wk: "平日", we: "週末/假日", empty: "沒有符合的班次。" },
-            'Stop_Name_ZH_SI': { title: "汤泽町巴士时刻表", out: "往西武水晶", in: "往汤泽站", wk: "平日", we: "周末/假日", empty: "没有符合的班次。" },
-            'Stop_Name_KO': { title: "유자와 버스 시간표", out: "세이부 크리스탈 방면", in: "유자와역 방면", wk: "평일", we: "주말/공휴일", empty: "해당하는 운행이 없습니다." }
+            'Stop_Name_EN': { title: "Yuzawa Transit Guide", out: "To Seibu Crystal", in: "To Yuzawa Sta.", wk: "Weekday", we: "Weekend / Holiday", empty: "No departures found.", farePrefix: "From Yuzawa: ¥" },
+            'Stop_Name_JP': { title: "湯沢町バス時刻表", out: "西武クリスタル方面", in: "湯沢駅方面", wk: "平日", we: "土日祝", empty: "該当する運行はありません。", farePrefix: "湯沢駅より: ¥" },
+            'Stop_Name_ZH_TR': { title: "湯澤町巴士時刻表", out: "往西武水晶", in: "往湯澤站", wk: "平日", we: "週末/假日", empty: "沒有符合的班次。", farePrefix: "從湯澤站出發: ¥" },
+            'Stop_Name_ZH_SI': { title: "汤泽町巴士时刻表", out: "往西武水晶", in: "往汤泽站", wk: "平日", we: "周末/假日", empty: "没有符合的班次。", farePrefix: "从汤泽站出发: ¥" },
+            'Stop_Name_KO': { title: "유자와 버스 시간표", out: "세이부 크리스탈 방면", in: "유자와역 방면", wk: "평일", we: "주말/공휴일", empty: "해당하는 운행이 없습니다.", farePrefix: "유자와역 출발: ¥" }
         };
 
         let stopsData = [];
         let scheduleData = [];
 
+        function cleanHeaders(row) {
+            const clean = {};
+            for (let k in row) {
+                if (row.hasOwnProperty(k) && k) {
+                    const normalizedKey = k.trim();
+                    clean[normalizedKey] = typeof row[k] === 'string' ? row[k].trim() : row[k];
+                }
+            }
+            return clean;
+        }
+
         Promise.all([
-            new Promise(resolve => Papa.parse(STOPS_CSV_URL, { download: true, header: true, complete: resolve })),
-            new Promise(resolve => Papa.parse(SCHEDULE_CSV_URL, { download: true, header: true, complete: resolve }))
+            new Promise((resolve, reject) => Papa.parse(STOPS_CSV_URL, { download: true, header: true, transformHeader: h => h.trim(), complete: resolve, error: reject })),
+            new Promise((resolve, reject) => Papa.parse(SCHEDULE_CSV_URL, { download: true, header: true, transformHeader: h => h.trim(), complete: resolve, error: reject }))
         ]).then(results => {
-            stopsData = results[0].data.filter(row => row.Stop_ID); 
-            scheduleData = results[1].data.filter(row => row.Schedule_ID);
-            document.getElementById('loading').style.display = 'none';
+            stopsData = (results[0].data || []).map(cleanHeaders).filter(row => Object.keys(row).some(k => k.toLowerCase().includes('stop_id') && row[k]));
+            scheduleData = (results[1].data || []).map(cleanHeaders).filter(row => Object.keys(row).some(k => k.toLowerCase().includes('schedule_id') && row[k]));
+
+            const statusEl = document.getElementById('status-msg');
+            if (stopsData.length === 0 || scheduleData.length === 0) {
+                statusEl.innerHTML = `Diagnostic Warning:<br>Stops parsed: ${stopsData.length} | Schedule rows parsed: ${scheduleData.length}<br>Check primary key column headers (Stop_ID, Schedule_ID).`;
+                return;
+            }
+
+            statusEl.style.display = 'none';
             renderApp();
+        }).catch(err => {
+            document.getElementById('status-msg').innerText = "Failed to load CSV endpoints: " + err;
         });
+
+        function getVal(obj, keyName) {
+            if (!obj) return "";
+            const match = Object.keys(obj).find(k => k.toLowerCase() === keyName.toLowerCase());
+            return match ? (obj[match] || "").trim() : "";
+        }
 
         function renderApp() {
             const lang = document.getElementById('langSelect').value;
             const direction = document.getElementById('dirSelect').value;
             const dayType = document.getElementById('daySelect').value;
             
-            const dict = uiDict[lang];
+            const dict = uiDict[lang] || uiDict['Stop_Name_EN'];
             document.getElementById('appTitle').innerText = dict.title;
             document.getElementById('optOutbound').innerText = dict.out;
             document.getElementById('optInbound').innerText = dict.in;
@@ -87,16 +113,26 @@
             appDiv.innerHTML = "";
 
             let displayStops = [...stopsData];
-            if (direction === "Inbound") displayStops.reverse();
+            if (direction.toLowerCase() === "inbound") displayStops.reverse();
 
             displayStops.forEach(stop => {
-                let departures = scheduleData.filter(s => 
-                    s.Stop_ID === stop.Stop_ID && 
-                    s.Direction === direction && 
-                    s.Operating_Days === dayType 
-                );
+                const currentStopId = getVal(stop, 'Stop_ID');
+                
+                let departures = scheduleData.filter(s => {
+                    const sStopId = getVal(s, 'Stop_ID');
+                    const sDir = getVal(s, 'Direction');
+                    const sDays = getVal(s, 'Operating_Days');
+                    
+                    return sStopId.toLowerCase() === currentStopId.toLowerCase() &&
+                           sDir.toLowerCase() === direction.toLowerCase() &&
+                           sDays.toLowerCase() === dayType.toLowerCase();
+                });
 
-                departures.sort((a, b) => a.Departure_Time.localeCompare(b.Departure_Time));
+                departures.sort((a, b) => {
+                    const timeA = getVal(a, 'Departure_Time');
+                    const timeB = getVal(b, 'Departure_Time');
+                    return timeA.localeCompare(timeB);
+                });
 
                 if (departures.length > 0) {
                     const card = document.createElement('div');
@@ -105,19 +141,24 @@
                     const stopNameContainer = document.createElement('div');
                     stopNameContainer.className = 'stop-name';
                     
-                    let nameText = stop[lang] || stop['Stop_Name_EN'];
-                    let mapHtml = stop.Google_Maps_URL ? `<a href="${stop.Google_Maps_URL}" target="_blank" class="map-btn">📍 Map</a>` : '';
+                    let nameText = getVal(stop, lang) || getVal(stop, 'Stop_Name_EN') || getVal(stop, 'Stop_Name_JP') || currentStopId;
+                    let mapUrl = getVal(stop, 'Google_Maps_URL') || getVal(stop, 'Map_Link');
+                    let fareVal = getVal(stop, 'Fare_Yuzawa');
+
+                    let mapHtml = mapUrl ? `<a href="${mapUrl}" target="_blank" class="map-btn">📍 Map</a>` : '';
+                    let fareHtml = fareVal ? `<span style="font-size: 13px; color: #aaa; margin-left: 8px; font-weight: normal;">(${dict.farePrefix}${fareVal})</span>` : '';
                     
-                    stopNameContainer.innerHTML = `<span>${nameText}</span> ${mapHtml}`;
+                    stopNameContainer.innerHTML = `<span>${nameText} ${fareHtml}</span> ${mapHtml}`;
                     
                     const timeContainer = document.createElement('div');
                     timeContainer.className = 'departures';
                     
                     departures.forEach(dep => {
-                        if(dep.Departure_Time) {
+                        const t = getVal(dep, 'Departure_Time');
+                        if (t) {
                             const badge = document.createElement('div');
                             badge.className = 'time-badge';
-                            badge.innerText = dep.Departure_Time;
+                            badge.innerText = t;
                             timeContainer.appendChild(badge);
                         }
                     });
@@ -128,7 +169,7 @@
                 }
             });
 
-            if(appDiv.innerHTML === "") {
+            if (appDiv.innerHTML === "") {
                 appDiv.innerHTML = `<div style='padding:20px; text-align:center; color:#888;'>${dict.empty}</div>`;
             }
         }
