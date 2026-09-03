@@ -1,201 +1,241 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Yuzawa Transit Guide</title>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.4.1/papaparse.min.js"></script>
-    <style>
-        :root { --bg: #121212; --card: #1E1E1E; --text: #FFFFFF; }
-        body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; background: var(--bg); color: var(--text); margin: 0; padding: 0; }
-        .header { background: var(--card); padding: 16px; position: sticky; top: 0; z-index: 100; border-bottom: 1px solid #333; }
-        .controls { display: flex; gap: 8px; margin-top: 12px; overflow-x: auto; padding-bottom: 4px; }
-        select { background: #333; color: white; border: none; padding: 8px 12px; border-radius: 8px; font-size: 14px; }
-        .stop-card { background: var(--card); margin: 12px; padding: 16px; border-radius: 12px; }
-        .stop-name { font-size: 18px; font-weight: bold; margin-bottom: 12px; display: flex; justify-content: space-between; align-items: center; }
-        .map-btn { font-size: 14px; text-decoration: none; background: #333; padding: 4px 10px; border-radius: 12px; white-space: nowrap; }
-        .departures { display: flex; gap: 8px; flex-wrap: wrap; }
-        .time-badge { background: #333; padding: 6px 12px; border-radius: 6px; font-size: 14px; font-family: monospace; }
-        #status-msg { text-align: center; padding: 30px; color: #888; font-family: monospace; font-size: 13px; line-height: 1.6; }
-        h2 { margin: 0; font-size: 20px; }
-    </style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Yuzawa Snow Transit</title>
+  <script src="https://cdn.jsdelivr.net/npm/papaparse@5.4.1/papaparse.min.js"></script>
+  <style>
+    :root {
+      --bg: #0f172a;
+      --card-bg: #1e293b;
+      --border: #334155;
+      --text: #f8fafc;
+      --text-muted: #94a3b8;
+      --accent: #38bdf8;
+      --accent-hover: #0284c7;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      background-color: var(--bg);
+      color: var(--text);
+      padding: 16px;
+      line-height: 1.5;
+    }
+    .container { max-width: 680px; margin: 0 auto; }
+    header { margin-bottom: 20px; display: flex; justify-content: space-between; align-items: center; }
+    h1 { font-size: 1.25rem; font-weight: 700; color: var(--accent); }
+    select, button {
+      background: var(--card-bg);
+      color: var(--text);
+      border: 1px solid var(--border);
+      padding: 8px 12px;
+      border-radius: 8px;
+      font-size: 0.95rem;
+      outline: none;
+    }
+    select:focus { border-color: var(--accent); }
+    .controls { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 16px; }
+    .control-group { display: flex; flex-direction: column; gap: 6px; }
+    label { font-size: 0.8rem; color: var(--text-muted); text-transform: uppercase; font-weight: 600; }
+    .card {
+      background: var(--card-bg);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 14px 16px;
+      margin-bottom: 10px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .time-col { display: flex; flex-direction: column; align-items: flex-start; }
+    .time { font-size: 1.4rem; font-weight: 700; color: var(--accent); }
+    .trip-badge { font-size: 0.75rem; color: var(--text-muted); }
+    .info-col { display: flex; flex-direction: column; align-items: flex-end; text-align: right; }
+    .stop-name { font-weight: 600; font-size: 1rem; }
+    .details { font-size: 0.8rem; color: var(--text-muted); margin-top: 4px; }
+    .map-link { color: var(--accent); text-decoration: none; font-size: 0.8rem; margin-left: 8px; }
+    .map-link:hover { text-decoration: underline; }
+    .notice { text-align: center; color: var(--text-muted); padding: 24px; font-size: 0.95rem; }
+  </style>
 </head>
 <body>
 
-    <div class="header">
-        <h2 id="appTitle">Yuzawa Transit Guide</h2>
-        <div class="controls">
-            <select id="langSelect" onchange="saveAndRender()">
-                <option value="Stop_Name_EN">English</option>
-                <option value="Stop_Name_JP">日本語</option>
-                <option value="Stop_Name_ZH_TR">繁體中文</option>
-                <option value="Stop_Name_ZH_SI">简体中文</option>
-                <option value="Stop_Name_KO">한국어</option>
-            </select>
-            <select id="dirSelect" onchange="saveAndRender()">
-                <option value="Outbound" id="optOutbound">To Seibu Crystal</option>
-                <option value="Inbound" id="optInbound">To Yuzawa Sta.</option>
-            </select>
-            <select id="daySelect" onchange="saveAndRender()">
-                <option value="Weekday" id="optWeekday">Weekday</option>
-                <option value="Weekend/Holiday" id="optWeekend">Weekend / Holiday</option>
-            </select>
-        </div>
+<div class="container">
+  <header>
+    <h1>❄️ Yuzawa Transit</h1>
+    <select id="langSelect">
+      <option value="en">English</option>
+      <option value="jp">日本語</option>
+      <option value="zh_tr">繁體中文</option>
+      <option value="zh_si">简体中文</option>
+      <option value="ko">한국어</option>
+    </select>
+  </header>
+
+  <div class="controls">
+    <div class="control-group">
+      <label id="lblRoute">Route</label>
+      <select id="routeSelect"></select>
     </div>
+    <div class="control-group">
+      <label id="lblDir">Direction</label>
+      <select id="dirSelect"></select>
+    </div>
+  </div>
 
-    <div id="status-msg">Loading live timetable...</div>
-    <div id="app"></div>
+  <div id="scheduleContainer">
+    <div class="notice">Loading timetables...</div>
+  </div>
+</div>
 
-    <script>
-        const STOPS_CSV_URL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vTP7TtdyoMDnpOOTF0rmnyHfB-bqH6gxTDHMTS7E8V5OxgTUFp4WAfC3nw2uvfluawrLWk7FpLUzG-K/pub?gid=1827150428&single=true&output=csv";
-        const SCHEDULE_CSV_URL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vTP7TtdyoMDnpOOTF0rmnyHfB-bqH6gxTDHMTS7E8V5OxgTUFp4WAfC3nw2uvfluawrLWk7FpLUzG-K/pub?gid=1754883098&single=true&output=csv";
+<script>
+  const STOPS_FILE = 'Winter_Shuttle_Stops.csv';
+  const SCHED_FILE = 'Winter_Shuttle_Schedules.csv';
 
-        const uiDict = {
-            'Stop_Name_EN': { title: "Yuzawa Transit Guide", out: "To Seibu Crystal", in: "To Yuzawa Sta.", wk: "Weekday", we: "Weekend / Holiday", empty: "No departures found.", fareOut: "From Yuzawa: ¥", fareIn: "To Yuzawa: ¥" },
-            'Stop_Name_JP': { title: "湯沢町バス時刻表", out: "西武クリスタル方面", in: "湯沢駅方面", wk: "平日", we: "土日祝", empty: "該当する運行はありません。", fareOut: "湯沢駅より: ¥", fareIn: "湯沢駅まで: ¥" },
-            'Stop_Name_ZH_TR': { title: "湯澤町巴士時刻表", out: "往西武水晶", in: "往湯澤站", wk: "平日", we: "週末/假日", empty: "沒有符合的班次。", fareOut: "從湯澤站出發: ¥", fareIn: "到湯澤站: ¥" },
-            'Stop_Name_ZH_SI': { title: "汤泽町巴士时刻表", out: "往西武水晶", in: "往汤泽站", wk: "平日", we: "周末/假日", empty: "没有符合的班次。", fareOut: "从汤泽站出发: ¥", fareIn: "到汤泽站: ¥" },
-            'Stop_Name_KO': { title: "유자와 버스 시간표", out: "세이부 크리스탈 방면", in: "유자와역 방면", wk: "평일", we: "주말/공휴일", empty: "해당하는 운행이 없습니다.", fareOut: "유자와역 출발: ¥", fareIn: "유자와역까지: ¥" }
-        };
+  let stopsMap = {};
+  let schedules = [];
+  let currentLang = 'en';
 
-        let stopsData = [];
-        let scheduleData = [];
+  const langKeys = {
+    en: 'Stop_Name_EN',
+    jp: 'Stop_Name_JP',
+    zh_tr: 'Stop_Name_ZH_TR',
+    zh_si: 'Stop_Name_ZH_SI',
+    ko: 'Stop_Name_KO'
+  };
 
-        function loadPreferences() {
-            if (localStorage.getItem('yuzawa_lang')) document.getElementById('langSelect').value = localStorage.getItem('yuzawa_lang');
-            if (localStorage.getItem('yuzawa_dir')) document.getElementById('dirSelect').value = localStorage.getItem('yuzawa_dir');
-            if (localStorage.getItem('yuzawa_day')) document.getElementById('daySelect').value = localStorage.getItem('yuzawa_day');
-        }
+  async function loadData() {
+    try {
+      const [stopsRes, schedRes] = await Promise.all([
+        fetch(STOPS_FILE).then(r => {
+          if (!r.ok) throw new Error(`HTTP ${r.status}: Failed to fetch ${STOPS_FILE}`);
+          return r.text();
+        }),
+        fetch(SCHED_FILE).then(r => {
+          if (!r.ok) throw new Error(`HTTP ${r.status}: Failed to fetch ${SCHED_FILE}`);
+          return r.text();
+        })
+      ]);
 
-        function saveAndRender() {
-            localStorage.setItem('yuzawa_lang', document.getElementById('langSelect').value);
-            localStorage.setItem('yuzawa_dir', document.getElementById('dirSelect').value);
-            localStorage.setItem('yuzawa_day', document.getElementById('daySelect').value);
-            renderApp();
-        }
-
-        function cleanHeaders(row) {
-            const clean = {};
-            for (let k in row) {
-                if (row.hasOwnProperty(k) && k) {
-                    const normalizedKey = k.trim();
-                    clean[normalizedKey] = typeof row[k] === 'string' ? row[k].trim() : row[k];
-                }
+      Papa.parse(stopsRes, {
+        header: true,
+        skipEmptyLines: true,
+        complete: (results) => {
+          results.data.forEach(row => {
+            if (row.Stop_ID) {
+              stopsMap[row.Stop_ID.trim()] = row;
             }
-            return clean;
+          });
         }
+      });
 
-        function normalizeTime(t) {
-            if (!t) return "";
-            const parts = t.split(":");
-            if (parts.length === 2) {
-                const hour = parts[0].padStart(2, "0");
-                const min = parts[1].padStart(2, "0");
-                return `${hour}:${min}`;
-            }
-            return t;
+      Papa.parse(schedRes, {
+        header: true,
+        skipEmptyLines: true,
+        complete: (results) => {
+          schedules = results.data
+            .filter(r => r.Route_Code && r.Departure_Time)
+            .map(r => ({
+              scheduleId: r.Schedule_ID ? r.Schedule_ID.trim() : '',
+              routeCode: r.Route_Code.trim(),
+              stopId: r.Stop_ID ? r.Stop_ID.trim() : '',
+              tripNumber: r.Trip_Number ? r.Trip_Number.trim() : '',
+              direction: r.Direction ? r.Direction.trim() : '',
+              operatingDays: r.Operating_Days ? r.Operating_Days.trim() : 'Daily',
+              departureTime: r.Departure_Time.trim()
+            }));
+
+          initUI();
         }
+      });
+    } catch (err) {
+      document.getElementById('scheduleContainer').innerHTML =
+        `<div class="notice" style="color: #f87171;">Error loading data: ${err.message}</div>`;
+    }
+  }
 
-        loadPreferences();
+  function initUI() {
+    const routeSelect = document.getElementById('routeSelect');
+    const uniqueRoutes = [...new Set(schedules.map(s => s.routeCode))];
 
-        Promise.all([
-            new Promise((resolve, reject) => Papa.parse(STOPS_CSV_URL, { download: true, header: true, transformHeader: h => h.trim(), complete: resolve, error: reject })),
-            new Promise((resolve, reject) => Papa.parse(SCHEDULE_CSV_URL, { download: true, header: true, transformHeader: h => h.trim(), complete: resolve, error: reject }))
-        ]).then(results => {
-            stopsData = (results[0].data || []).map(cleanHeaders).filter(row => Object.keys(row).some(k => k.toLowerCase().includes('stop_id') && row[k]));
-            scheduleData = (results[1].data || []).map(cleanHeaders).filter(row => Object.keys(row).some(k => k.toLowerCase().includes('schedule_id') && row[k]));
+    routeSelect.innerHTML = '';
+    uniqueRoutes.forEach(route => {
+      const opt = document.createElement('option');
+      opt.value = route;
+      opt.textContent = route.replace(/_/g, ' ');
+      routeSelect.appendChild(opt);
+    });
 
-            document.getElementById('status-msg').style.display = 'none';
-            renderApp();
-        }).catch(err => {
-            document.getElementById('status-msg').innerText = "Failed to load CSV endpoints: " + err;
-        });
+    routeSelect.addEventListener('change', updateDirections);
+    document.getElementById('dirSelect').addEventListener('change', renderTimetable);
+    document.getElementById('langSelect').addEventListener('change', (e) => {
+      currentLang = e.target.value;
+      renderTimetable();
+    });
 
-        function getVal(obj, keyName) {
-            if (!obj) return "";
-            const match = Object.keys(obj).find(k => k.toLowerCase() === keyName.toLowerCase());
-            return match ? (obj[match] || "").trim() : "";
-        }
+    updateDirections();
+  }
 
-        function renderApp() {
-            const lang = document.getElementById('langSelect').value;
-            const direction = document.getElementById('dirSelect').value;
-            const dayType = document.getElementById('daySelect').value;
-            
-            const dict = uiDict[lang] || uiDict['Stop_Name_EN'];
-            document.getElementById('appTitle').innerText = dict.title;
-            document.getElementById('optOutbound').innerText = dict.out;
-            document.getElementById('optInbound').innerText = dict.in;
-            document.getElementById('optWeekday').innerText = dict.wk;
-            document.getElementById('optWeekend').innerText = dict.we;
+  function updateDirections() {
+    const route = document.getElementById('routeSelect').value;
+    const dirSelect = document.getElementById('dirSelect');
+    const availableDirs = [...new Set(schedules.filter(s => s.routeCode === route).map(s => s.direction))];
 
-            const appDiv = document.getElementById('app');
-            appDiv.innerHTML = "";
+    dirSelect.innerHTML = '';
+    availableDirs.forEach(dir => {
+      const opt = document.createElement('option');
+      opt.value = dir;
+      opt.textContent = dir.replace(/_/g, ' ');
+      dirSelect.appendChild(opt);
+    });
 
-            let displayStops = [...stopsData];
-            if (direction.toLowerCase() === "inbound") displayStops.reverse();
+    renderTimetable();
+  }
 
-            // Choose the correct fare prefix depending on direction
-            const activeFarePrefix = (direction.toLowerCase() === "inbound") ? dict.fareIn : dict.fareOut;
+  function renderTimetable() {
+    const route = document.getElementById('routeSelect').value;
+    const dir = document.getElementById('dirSelect').value;
+    const container = document.getElementById('scheduleContainer');
 
-            displayStops.forEach(stop => {
-                const currentStopId = getVal(stop, 'Stop_ID');
-                
-                let departures = scheduleData.filter(s => {
-                    const sStopId = getVal(s, 'Stop_ID');
-                    const sDir = getVal(s, 'Direction');
-                    const sDays = getVal(s, 'Operating_Days');
-                    
-                    return sStopId.toLowerCase() === currentStopId.toLowerCase() &&
-                           sDir.toLowerCase() === direction.toLowerCase() &&
-                           sDays.toLowerCase() === dayType.toLowerCase();
-                });
+    const filtered = schedules
+      .filter(s => s.routeCode === route && s.direction === dir)
+      .sort((a, b) => {
+        const [aH, aM] = a.departureTime.split(':').map(Number);
+        const [bH, bM] = b.departureTime.split(':').map(Number);
+        return (aH * 60 + aM) - (bH * 60 + bM);
+      });
 
-                departures.sort((a, b) => {
-                    const timeA = normalizeTime(getVal(a, 'Departure_Time'));
-                    const timeB = normalizeTime(getVal(b, 'Departure_Time'));
-                    return timeA.localeCompare(timeB);
-                });
+    if (filtered.length === 0) {
+      container.innerHTML = '<div class="notice">No departures found for this selection.</div>';
+      return;
+    }
 
-                if (departures.length > 0) {
-                    const card = document.createElement('div');
-                    card.className = 'stop-card';
-                    
-                    const stopNameContainer = document.createElement('div');
-                    stopNameContainer.className = 'stop-name';
-                    
-                    let nameText = getVal(stop, lang) || getVal(stop, 'Stop_Name_EN') || getVal(stop, 'Stop_Name_JP') || currentStopId;
-                    let mapUrl = getVal(stop, 'Google_Maps_URL') || getVal(stop, 'Map_Link');
-                    let fareVal = getVal(stop, 'Fare_Yuzawa');
+    container.innerHTML = filtered.map(item => {
+      const stop = stopsMap[item.stopId] || {};
+      const colKey = langKeys[currentLang] || 'Stop_Name_EN';
+      const stopName = stop[colKey] || stop['Stop_Name_EN'] || item.stopId;
+      const fareText = stop.Fare && parseInt(stop.Fare) > 0 ? `¥${stop.Fare}` : 'Free';
+      const mapLink = stop.Google_Maps_URL ? `<a class="map-link" href="${stop.Google_Maps_URL}" target="_blank" rel="noopener">Map ↗</a>` : '';
 
-                    let mapHtml = mapUrl ? `<a href="${mapUrl}" target="_blank" class="map-btn">📍 Map</a>` : '';
-                    let fareHtml = fareVal ? `<span style="font-size: 13px; color: #aaa; margin-left: 8px; font-weight: normal;">(${activeFarePrefix}${fareVal})</span>` : '';
-                    
-                    stopNameContainer.innerHTML = `<span>${nameText} ${fareHtml}</span> ${mapHtml}`;
-                    
-                    const timeContainer = document.createElement('div');
-                    timeContainer.className = 'departures';
-                    
-                    departures.forEach(dep => {
-                        const t = normalizeTime(getVal(dep, 'Departure_Time'));
-                        if (t) {
-                            const badge = document.createElement('div');
-                            badge.className = 'time-badge';
-                            badge.innerText = t;
-                            timeContainer.appendChild(badge);
-                        }
-                    });
+      return `
+        <div class="card">
+          <div class="time-col">
+            <span class="time">${item.departureTime}</span>
+            <span class="trip-badge">Trip #${item.tripNumber} · ${item.operatingDays.replace(/_/g, ' ')}</span>
+          </div>
+          <div class="info-col">
+            <div class="stop-name">${stopName}</div>
+            <div class="details">${fareText} ${mapLink}</div>
+          </div>
+        </div>
+      `;
+    }).join('');
+  }
 
-                    card.appendChild(stopNameContainer);
-                    card.appendChild(timeContainer);
-                    appDiv.appendChild(card);
-                }
-            });
+  loadData();
+</script>
 
-            if (appDiv.innerHTML === "") {
-                appDiv.innerHTML = `<div style='padding:20px; text-align:center; color:#888;'>${dict.empty}</div>`;
-            }
-        }
-    </script>
 </body>
 </html>
