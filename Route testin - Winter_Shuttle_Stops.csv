@@ -1,0 +1,72 @@
+Route_Code,Stop_ID,Stop_Name_EN,Stop_Name_JP,Stop_Name_ZH_TR,Stop_Name_ZH_SI,Stop_Name_KO,Google_Maps_URL,Stop_Order,Fare
+BLUE,BL-01,NASPA Ski Garden,NASPA,NASPA滑雪花園,NASPA滑雪花园,나스파-스키가든,https://www.google.com/maps/search/?api=1&query=NASPAニューオータニ+シャトルバス,1,0
+BLUE,BL-02,Hirokawa Hotel,広川ホテル,廣川飯店,广川饭店,히로카와-호텔,https://www.google.com/maps/search/?api=1&query=広川ホテル+湯沢町,2,0
+BLUE,BL-03,Lions Mansion No. 3,ライオンズ第3,獅子大廈第3,狮子大厦第3,라이온스-제3,https://www.google.com/maps/search/?api=1&query=ライオンズマンション越後湯沢第3,3,0
+BLUE,BL-04,Echigo-Yuzawa Sta. West Exit (Inamoto-mae),越後湯沢駅西口(いなもと前),越後湯澤站西口(稻本前),越后汤泽站西口(稻本前),에치고유자와역-서구(이나모토-앞),https://www.google.com/maps/search/?api=1&query=湯沢温泉通+いなもと前,4,0
+BLUE,BL-05,Kagetsu Hotel,松泉閣花月,松泉閣花月,松泉阁花月,쇼센카쿠-카게츠,https://www.google.com/maps/search/?api=1&query=松泉閣花月+湯沢町,5,0
+BLUE,BL-06,Snow Country Museum,雪国資料館,雪國資料館,雪国资料馆,유키구니-자료관,https://www.google.com/maps/search/?api=1&query=雪国館+湯沢町,6,0
+BLUE,BL-07,Yuzawa Kogen,湯沢高原,湯澤高原,汤泽高原,유자와-고원,https://www.google.com/maps/search/?api=1&query=湯沢高原ロープウェイ+山麓駅,7,0
+BLUE,BL-08,Nunoba Minami-guchi,布場南口,布場南口,布场南口,누노바-미나미구치,https://www.google.com/maps/search/?api=1&query=布場スキー場+湯沢町,8,0
+BLUE,BL-09,Takahan-shita,高半下,高半下,高半下,다카한-시타,https://www.google.com/maps/search/?api=1&query=雪国の宿+高半+湯沢町,9,0
+BLUE,BL-10,GALA Yuzawa,GALA湯沢,GALA湯澤,GALA汤泽,갈라-유자와,https://www.google.com/maps/search/?api=1&query=ガーラ湯沢駅+スキー場,10,0
+BLUE,BL-11,Ishiuchi Maruyama Chuo-guchi,石打丸山(中央口),石打丸山(中央口),石打丸山(中央口),이시우치-마루야마(중앙구),https://www.google.com/maps/search/?api=1&query=石打丸山スキー場+中央口,11,0
+BLUE,BL-12,Echigo-Yuzawa Sta. East Exit,越後湯沢駅東口,越後湯澤站東口,越后汤泽站东口,에치고유자와역-동구,https://www.google.com/maps/search/?api=1&query=越後湯沢駅東口+シャトルバスのりば,12,0
+BLUE,BL-13,Sakura-tei-mae,さくら亭前,櫻亭前,樱亭前,사쿠라테이-앞,https://www.google.com/maps/search/?api=1&query=湯沢スキーハウス+さくら亭,13,0
+ORANGE,OL-01,NASPA Ski Garden,NASPA,NASPA滑雪花園,NASPA滑雪花园,나스파-스키가든,https://www.google.com/maps/search/?api=1&query=NASPAニューオータニ+シャトルバス,1,0
+ORANGE,OL-02,Hirokawa Hotel,広川ホテル,廣川飯店,广川饭店,히로카와-호텔,https://www.google.com/maps/search/?api=1&query=広川ホテル+湯沢町,2,0
+ORANGE,OL-03,Sakura-tei-mae,さくら亭前,櫻亭前,樱亭前,사쿠라테이-앞,https://www.google.com/maps/search/?api=1&query=湯沢スキーハウス+さくら亭,3,0
+ORANGE,OL-04,Echigo-Yuzawa Sta. East Exit,越後湯沢駅東口,越後湯澤站東口,越后汤泽站东口,에치고유자와역-동구,https://www.google.com/maps/search/?api=1&query=越後湯沢駅東口+シャトルバスのりば,4,0
+ORANGE,OL-05,Yuzawa Kogen,湯沢高原,湯澤高原,汤泽高原,유자와-고원,https://www.google.com/maps/search/?api=1&query=湯沢高原ロープウェイ+山麓駅,5,0
+ORANGE,OL-06,Nunoba Minami-guchi,布場南口,布場南口,布场南口,누노바-미나미구치,https://www.google.com/maps/search/?api=1&query=布場スキー場+湯沢町,6,0
+ORANGE,OL-07,Takahan-shita,高半下,高半下,高半下,다카한-시타,https://www.google.com/maps/search/?api=1&query=雪国の宿+高半+湯沢町,7,0
+ORANGE,OL-08,GALA Yuzawa,GALA湯沢,GALA湯澤,GALA汤泽,갈라-유자와,https://www.google.com/maps/search/?api=1&query=ガーラ湯沢駅+スキー場,8,0
+ORANGE,OL-09,Ishiuchi Maruyama Chuo-guchi,石打丸山(中央口),石打丸山(中央口),石打丸山(中央口),이시우치-마루야마(중앙구),https://www.google.com/maps/search/?api=1&query=石打丸山スキー場+中央口,9,0
+ORANGE,OL-10,Snow Country Museum,雪国資料館,雪國資料館,雪国资料馆,유키구니-자료관,https://www.google.com/maps/search/?api=1&query=雪国館+湯沢町,10,0
+ORANGE,OL-11,Kagetsu Hotel,松泉閣花月,松泉閣花月,松泉阁花月,쇼센카쿠-카게츠,https://www.google.com/maps/search/?api=1&query=松泉閣花月+湯沢町,11,0
+ORANGE,OL-12,Echigo-Yuzawa Sta. West Exit (Inamoto-mae),越後湯沢駅西口(いなもと前),越後湯澤站西口(稻本前),越后汤泽站西口(稻本前),에치고유자와역-서구(이나모토-앞),https://www.google.com/maps/search/?api=1&query=湯沢温泉通+いなもと前,12,0
+ORANGE,OL-13,Lions Mansion No. 3,ライオンズ第3,獅子大廈第3,狮子大厦第3,라이온스-제3,https://www.google.com/maps/search/?api=1&query=ライオンズマンション越後湯沢第3,13,0
+ISHIUCHI_DIRECT,IM-01,Ishiuchi Maruyama Resort Center,中央口リゾートセンター,中央口度假中心,中央口度假中心,이시우치-마루야마-리조트센터,https://www.google.com/maps/search/?api=1&query=石打丸山リゾートセンター,1,0
+ISHIUCHI_DIRECT,IM-02,Hatsukaishi-guchi,ハツカ石口,初卡石口,初卡石口,하츠카이시구치,https://www.google.com/maps/search/?api=1&query=石打丸山スキー場+ハツカ石口,2,0
+ISHIUCHI_DIRECT,IM-03,Echigo-Yuzawa Sta. East Exit,越後湯沢駅(東口),越後湯澤站(東口),越后汤泽站(东口),에치고유자와역-동구,https://www.google.com/maps/search/?api=1&query=越後湯沢駅東口+シャトルバスのりば,3,0
+ISHIUCHI_LOOP,IM-01,Ishiuchi Maruyama Resort Center,中央口リゾートセンター,中央口度假中心,中央口度假中心,이시우치-마루야마-리조트센터,https://www.google.com/maps/search/?api=1&query=石打丸山リゾートセンター,1,0
+ISHIUCHI_LOOP,IM-04,Yungparunas,ユングパルナス,榮格帕納斯,荣格帕纳斯,융파르나스,https://www.google.com/maps/search/?api=1&query=ハツカ石温泉+ホテルヤングパルナス,2,0
+ISHIUCHI_LOOP,IM-02,Hatsukaishi-guchi,ハツカ石口,初卡石口,初卡石口,하츠카이시구치,https://www.google.com/maps/search/?api=1&query=石打丸山スキー場+ハツカ石口,3,0
+ISHIUCHI_LOOP,IM-05,North Entrance (Kanko-guchi),北口(観光口),北口(觀光口),北口(观光口),북구(관광구),https://www.google.com/maps/search/?api=1&query=石打丸山スキー場+観光口,4,0
+ISHIUCHI_LOOP,IM-06,Resort Center ANNEX,アネックス,ANNEX,ANNEX,아넥스,https://www.google.com/maps/search/?api=1&query=石打丸山+アネックス,5,0
+ISHIUCHI_NIGHT,IM-01,Ishiuchi Maruyama Resort Center,中央口リゾートセンター,中央口度假中心,中央口度假中心,이시우치-마루ヤ마-리조트센터,https://www.google.com/maps/search/?api=1&query=石打丸山リゾートセンター,1,0
+ISHIUCHI_NIGHT,IM-02,Hatsukaishi-guchi,ハツカ石口,初卡石口,初卡石口,하츠카이시구치,https://www.google.com/maps/search/?api=1&query=石打丸山スキー場+ハツカ石口,2,0
+ISHIUCHI_NIGHT,IM-03,Echigo-Yuzawa Sta. East Exit,越後湯沢駅(東口),越後湯澤站(東口),越后汤泽站(东口),에치고유자와역-동구,https://www.google.com/maps/search/?api=1&query=越後湯沢駅東口+シャトルバスのりば,3,0
+IWAHARA,IW-01,Echigo-Yuzawa Sta. East Exit Info Desk,越後湯沢駅東口案内所,越後湯澤站東口諮詢處,越后汤泽站东口问讯处,에치고유자와역-동구안내소,https://www.google.com/maps/search/?api=1&query=越後湯沢駅東口案内所,1,0
+IWAHARA,IW-02,Iwappara Sanroku Resort Center 1,岩原山麓 リゾートセンター1,岩原山麓度假中心1,岩原山麓度假中心1,이와파라-산로쿠-리조트센터1,https://www.google.com/maps/search/?api=1&query=岩原スキー場+リゾートセンター1,2,0
+IWAHARA,IW-03,Iwappara Chufuku Resort Center 2,岩原中腹 リゾートセンター2,岩原中腹度假中心2,岩原中腹度假中心2,이와파라-추후쿠-리조트센터2,https://www.google.com/maps/search/?api=1&query=岩原スキー場+リゾートセンター2,3,0
+IWAHARA_JOKOKU,IW-03,Iwappara Chufuku Resort Center 2,岩原中腹 リゾートセンター2,岩原中腹度假中心2,岩原中腹度假中心2,이와파라-추후쿠-리조트센터2,https://www.google.com/maps/search/?api=1&query=岩原スキー場+リゾートセンター2,1,0
+IWAHARA_JOKOKU,IW-02,Iwappara Sanroku Resort Center 1,岩原山麓 リゾートセンター1,岩原山麓度假中心1,岩原山麓度假中心1,이와파라-산로쿠-리조트센터1,https://www.google.com/maps/search/?api=1&query=岩原スキー場+リゾートセンター1,2,0
+IWAHARA_JOKOKU,IW-05,Yuzawa Denkiya,湯沢湯沢でんき屋,湯澤湯澤電器屋,汤泽汤泽电器屋,유자와-덴키야,https://www.google.com/maps/search/?api=1&query=越後湯沢温泉+ホテル湯沢湯沢でんき屋,3,0
+IWAHARA_JOKOKU,IW-06,Famille Villa No. 2,ファミールヴィラ第2,Famille Villa第2,Famille Villa第2,파밀-빌라-제2,https://www.google.com/maps/search/?api=1&query=ファミールヴィラ越後湯沢弐番館,4,0
+IWAHARA_JOKOKU,IW-07,White Plaza Yuzawa,ホワイトプラザ湯沢,White Plaza湯澤,White Plaza汤泽,화이트-플라자-유자와,https://www.google.com/maps/search/?api=1&query=ホワイトプラザ湯沢岩原,5,0
+IWAHARA_JOKOKU,IW-08,Kyu Est Club Iwappara,旧エストクラブ岩原,舊Est Club岩原,旧Est Club岩原,구-에스트클럽-이와파라,https://www.google.com/maps/search/?api=1&query=エストクラブ岩原,6,0
+IWAHARA_JOKOKU,IW-01,Echigo-Yuzawa Sta. East Exit Info Desk,越後湯沢駅東口案内所,越後湯澤站東口諮詢處,越后汤泽站东口问讯处,에치고유자와역-동구안내소,https://www.google.com/maps/search/?api=1&query=越後湯沢駅東口案内所,7,0
+IWAHARA_JOKOKU,IW-04,Joetsu Kokusai Ski Resort Sta.,上越国際スキー場駅,上越國際滑雪場站,上越国际滑雪场站,조에츠코쿠사이-스키장역,https://www.google.com/maps/search/?api=1&query=上越国際スキー場駅,8,0
+NAKASATO,NK-01,Echigo-Yuzawa Sta. West Exit (Angel Grandia Desk),越後湯沢駅西口(エンゼルグランディア案内所),越後湯澤站西口(天使格蘭帝亞諮詢處),越后汤泽站西口(天使格兰帝亚问讯处),에치고유자와역-서구(엔젤그란디아-안내소),https://www.google.com/maps/search/?api=1&query=エンゼルグランディア越後中里+シャトルバス案内所,1,0
+NAKASATO,NK-02,Yuzawa Nakasato Snow Resort (Echigo-Nakasato Sta. West Exit),湯沢中里スノーリゾート(越後中里駅西口),湯澤中里滑雪度假村(越後中里站西口),汤泽中里滑雪度假村(越后中里站西口),유자와-나카사토-스노우리조트(에치고나카사토역-서구),https://www.google.com/maps/search/?api=1&query=越後中里駅西口+湯沢中里スノーリゾート,2,0
+CHATEAU_SHIOZAWA,CS-01,Echigo-Yuzawa Sta.,越後湯沢駅,越後湯澤站,越后汤泽站,에치고유자와역,https://www.google.com/maps/search/?api=1&query=越後湯沢駅+送迎バス,1,0
+CHATEAU_SHIOZAWA,CS-02,Shiozawa Sta.,塩沢駅,鹽澤站,盐泽站,시오자와역,https://www.google.com/maps/search/?api=1&query=塩沢駅,2,0
+CHATEAU_SHIOZAWA,CS-03,Chateau Tell Ipponsugi,一本杉,一本杉,一本杉,잇폰스기,https://www.google.com/maps/search/?api=1&query=シャトーテル一本杉,3,0
+CHATEAU_SHIOZAWA,CS-04,Chateau Tell Yoshizato,吉里,吉里,吉里,요시자토,https://www.google.com/maps/search/?api=1&query=シャトーテル吉里,4,0
+KAGURA_NAEBA,KN-01,Echigo-Yuzawa Sta. East Exit,越後湯沢駅前,越後湯澤站前,越后汤泽站前,에치고유자와역-앞,https://www.google.com/maps/search/?api=1&query=越後湯沢駅東口+バスのりば,1,0
+KAGURA_NAEBA,KN-02,Kagura Mitsumata Ski Resort,かぐら三俣スキー場,神樂三俁滑雪場,神乐三俣滑雪场,카구라-미츠마타-스키장,https://www.google.com/maps/search/?api=1&query=かぐらスキー場+みつまたステーション+バス停,2,400
+KAGURA_NAEBA,KN-03,Kaikake Onsen,貝掛温泉,貝掛溫泉,贝挂温泉,카이카케-온천,https://www.google.com/maps/search/?api=1&query=貝掛温泉口+バス停,3,460
+KAGURA_NAEBA,KN-04,Futai Tashiro Ski Resort-mae,二居田代スキー場前,二居田代滑雪場前,二居田代滑雪场前,후타이-타시로-스키장-앞,https://www.google.com/maps/search/?api=1&query=二居田代スキー場前+バス停,4,570
+KAGURA_NAEBA,KN-05,Tashiro Ski Resort,田代スキー場,田代滑雪場,田代滑雪场,타시로-스키장,https://www.google.com/maps/search/?api=1&query=かぐらスキー場+田代ステーション+バス停,5,570
+KAGURA_NAEBA,KN-06,Naeba Ski Resort,苗場スキー場,苗場滑雪場,苗场滑雪场,나에바-스키장,https://www.google.com/maps/search/?api=1&query=苗場スキー場+日帰りスキーセンター+バス停,6,700
+KAGURA_NAEBA,KN-07,Seibu Villa-Iriguchi,西武ヴィラ入口,西武Villa入口,西武Villa入口,세이부-빌라-입구,https://www.google.com/maps/search/?api=1&query=西武ヴィラ入口+バス停,7,700
+KAGURA_NAEBA,KN-08,Naeba Prince Hotel-mae,苗場プリンスホテル前,苗場王子大飯店前,苗场王子大饭店前,나에바-프린스호텔-앞,https://www.google.com/maps/search/?api=1&query=苗場プリンスホテル+バス停,8,700
+KAGURA_NAEBA,KN-09,Seibu Crystal,西武クリスタル,西武水晶,西武水晶,세이부-크리스탈,https://www.google.com/maps/search/?api=1&query=西武クリスタル+バス停,9,700
+MAIKO_HOTEL,MK-01,Echigo-Yuzawa Sta. East Exit,越後湯沢駅東口,越後湯澤站東口,越后汤泽站东口,에치고유자와역-동구,https://www.google.com/maps/search/?api=1&query=越後湯沢駅東口+舞子シャトルバスのりば,1,0
+MAIKO_HOTEL,MK-02,Kadoya Rental-mae,レンタルかどや前,Kadoya雪具店前,Kadoya雪具店前,렌탈-카도야-앞,https://www.google.com/maps/search/?api=1&query=レンタルかどや+南魚沼市,2,0
+MAIKO_HOTEL,MK-03,Maiko Parking,舞子パーキング,舞子停車場,舞子停车场,마이코-주차장,https://www.google.com/maps/search/?api=1&query=舞子パーキング+南魚沼市,3,0
+MAIKO_HOTEL,MK-04,Maiko Kogen Hotel,舞子高原ホテル,舞子高原飯店,舞子高原饭店,마이코-코겐-호텔,https://www.google.com/maps/search/?api=1&query=舞子高原ホテル,4,0
+MAIKO_DIRECT,MK-01,Echigo-Yuzawa Sta. East Exit,越後湯沢駅東口,越後湯澤站東口,越后汤泽站东口,에치고유자와역-동구,https://www.google.com/maps/search/?api=1&query=越後湯沢駅東口+舞子シャトルバスのりば,1,0
+MAIKO_DIRECT,MK-05,Maiko Day Ski Center (Gondola),日帰りスキーセンター,日帰り滑雪中心,日归滑雪中心,당일치기-스키센터(곤돌라),https://www.google.com/maps/search/?api=1&query=舞子スノーリゾート+日帰りスキーセンター,2,0
+MUICA,MC-01,Muikamachi Sta. East Exit,六日町駅東口,六日町站東口,六日町站东口,무이카마치역-동구,https://www.google.com/maps/search/?api=1&query=六日町駅東口,1,0
+MUICA,MC-02,Muica Snow Resort (Hotel Main Entrance),ムイカスノーリゾート(正面玄関前),Muica滑雪度假村(正面大門前),Muica滑雪度假村(正面大门前),무이카-스노우리조트(정문-앞),https://www.google.com/maps/search/?api=1&query=むいか温泉ホテル+正面玄関,2,0
