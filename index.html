@@ -633,6 +633,7 @@
     container.innerHTML = filtered.map(item => {
       const stop = resolveStop(currentMode, item.routeCode, item.stopId);
       const colKey = stopLangKeys[currentLang] || 'Stop_Name_EN';
+      const stopName = stop[colKey] || stop['Stop_Name_EN'] || item.stopId;
       const stopNameJP = stop['Stop_Name_JP'] || '';
       const fareBadge = formatFareBadge(extractFare(stop), stopNameJP);
       const mapUrl = stop.Google_Maps_URL;
