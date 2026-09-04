@@ -1,0 +1,131 @@
+Route_Code,Stop_ID,Stop_Name_EN,Stop_Name_JP,Stop_Name_ZH_TR,Stop_Name_ZH_SI,Stop_Name_KO,Google_Maps_URL,Stop_Order,Fare
+SEIBU_CRYSTAL,SC-01,Echigo-Yuzawa Sta. East Exit,湯沢駅前,越後湯澤站前,越后汤泽站前,에치고유자와역 앞,https://www.google.com/maps/search/?api=1&query=越後湯沢駅東口+バスのりば,1,0
+SEIBU_CRYSTAL,SC-02,Yuzawa Medical Center,湯沢医療センター前,湯澤醫療中心前,汤泽医疗中心前,유자와 의료센터 앞,https://www.google.com/maps/search/?api=1&query=湯沢町保健医療センター+バス停,2,160
+SEIBU_CRYSTAL,SC-03,Yuzawa Town Hall,湯沢役場前,湯澤町公所前,汤泽町公所前,유자와 정사무소 앞,https://www.google.com/maps/search/?api=1&query=湯沢町役場+バス停,3,160
+SEIBU_CRYSTAL,SC-04,Kohara,小原,小原,小原,오하라,https://www.google.com/maps/search/?api=1&query=小原+バス停+新潟県湯沢町,4,160
+SEIBU_CRYSTAL,SC-05,Tanaka,田中,田中,田中,다나카,https://www.google.com/maps/search/?api=1&query=田中+バス停+新潟県湯沢町,5,160
+SEIBU_CRYSTAL,SC-06,Tozawa,戸沢,戶澤,户泽,도자와,https://www.google.com/maps/search/?api=1&query=戸沢+バス停+新潟県湯沢町,6,230
+SEIBU_CRYSTAL,SC-07,Stella Tower Kandatsu,ステラタワー神立前,神立斯特拉塔前,神立斯特拉塔前,스텔라 타워 간다츠 앞,https://www.google.com/maps/search/?api=1&query=ステラタワー神立+バス停,7,230
+SEIBU_CRYSTAL,SC-08,Nanakiri-shita,七谷切下,七谷切下,七谷切下,나나키리시타,https://www.google.com/maps/search/?api=1&query=七谷切下+バス停+新潟県湯沢町,8,230
+SEIBU_CRYSTAL,SC-09,Nanakiri,七谷切,七谷切,七谷切,나나키리,https://www.google.com/maps/search/?api=1&query=七谷切+バス停+新潟県湯沢町,9,290
+SEIBU_CRYSTAL,SC-10,Shibahara-shita,芝原下,芝原下,芝原下,시바하라시타,https://www.google.com/maps/search/?api=1&query=芝原下+バス停+新潟県湯沢町,10,290
+SEIBU_CRYSTAL,SC-11,Shibahara,芝原,芝原,芝原,시바하라,https://www.google.com/maps/search/?api=1&query=芝原+バス停+新潟県湯沢町,11,370
+SEIBU_CRYSTAL,SC-12,Yagisawa Entrance,八木沢口,八木澤口,八木泽口,야기사와 입구,https://www.google.com/maps/search/?api=1&query=八木沢口+バス停+新潟県湯沢町,12,400
+SEIBU_CRYSTAL,SC-13,Roadside Station Mitsumata,道の駅みつまた前,道之驛三俁前,道之驿三俣前,미치노에키 미츠마타 앞,https://www.google.com/maps/search/?api=1&query=道の駅みつまた+バス停,13,400
+SEIBU_CRYSTAL,SC-14,Mitsumata Chuo,三俣中央,三俁中央,三俣中央,미츠마타 중앙,https://www.google.com/maps/search/?api=1&query=三俣中央+バス停+新潟県湯沢町,14,400
+SEIBU_CRYSTAL,SC-15,Kagura Mitsumata Ski Resort,かぐら三俣スキー場前,神樂三俁滑雪場前,神乐三俣滑雪场前,카구라 미츠마타 스키장 앞,https://www.google.com/maps/search/?api=1&query=かぐらスキー場+みつまたステーション+バス停,15,400
+SEIBU_CRYSTAL,SC-16,Kaikake Onsen,貝掛温泉,貝掛溫泉,贝挂温泉,카이카케 온천,https://www.google.com/maps/search/?api=1&query=貝掛温泉+バス停,16,460
+SEIBU_CRYSTAL,SC-17,Futai Tashiro Ski Resort,二居田代スキー場前,二居田代滑雪場前,二居田代滑雪场前,후타이 다시로 스키장 앞,https://www.google.com/maps/search/?api=1&query=二居田代スキー場前+バス停,17,570
+SEIBU_CRYSTAL,SC-18,Yamadorihara,やまどり原,山鳥原,山鸟原,야마도리하라,https://www.google.com/maps/search/?api=1&query=やまどり原+バス停+新潟県湯沢町,18,570
+SEIBU_CRYSTAL,SC-19,Motohashi,元橋,元橋,元桥,모토하시,https://www.google.com/maps/search/?api=1&query=元橋+バス停+新潟県湯沢町,19,650
+SEIBU_CRYSTAL,SC-20,Tairappyo Trailhead,平標登山口,平標登山口,平标登山口,타이라표 등산로 입구,https://www.google.com/maps/search/?api=1&query=平標登山口+バス停,20,650
+SEIBU_CRYSTAL,SC-21,Shirakabaguchi,白樺口,白樺口,白桦口,시라카바구치,https://www.google.com/maps/search/?api=1&query=白樺口+バス停+新潟県湯沢町,21,660
+SEIBU_CRYSTAL,SC-22,Seibu Villa Entrance,西武ヴィラ入口,西武別墅入口,西武别墅入口,세이부 빌라 입구,https://www.google.com/maps/search/?api=1&query=西武ヴィラ入口+バス停+新潟県湯沢町,22,700
+SEIBU_CRYSTAL,SC-23,Naeba Prince Hotel,苗場プリンスホテル前,苗場王子大飯店前,苗场王子大饭店前,나에바 프린스 호텔 앞,https://www.google.com/maps/search/?api=1&query=苗場プリンスホテル+バス停,23,700
+SEIBU_CRYSTAL,SC-24,Asagai-shita,浅貝下,淺貝下,浅贝下,아사가이시타,https://www.google.com/maps/search/?api=1&query=浅貝下+バス停+新潟県湯沢町,24,700
+SEIBU_CRYSTAL,SC-25,Asagai,浅貝,淺貝,浅贝,아사가이,https://www.google.com/maps/search/?api=1&query=浅貝+バス停+新潟県湯沢町,25,700
+SEIBU_CRYSTAL,SC-26,Asagai-ue,浅貝上,淺貝上,浅贝上,아사가이우에,https://www.google.com/maps/search/?api=1&query=浅貝上+バス停+新潟県湯沢町,26,700
+SEIBU_CRYSTAL,SC-27,Seibu Crystal,西武クリスタル前,西武水晶前,西武水晶前,세이부 크리스탈 앞,https://www.google.com/maps/search/?api=1&query=西武クリスタル前+バス停,27,700
+KIYOTSU,K-01,Echigo-Yuzawa Sta.,越後湯沢駅,湯澤站前,汤泽站前,에치고유자와역 앞,https://www.google.com/maps/search/?api=1&query=越後湯沢駅東口+バスのりば,1,0
+KIYOTSU,K-02,Onsengai Iriguchi,温泉街入口,溫泉街入口,温泉街入口,온센가이 입구,https://www.google.com/maps/search/?api=1&query=温泉街入口+バス停+新潟県湯沢町,2,160
+KIYOTSU,K-03,Rakumachi,楽町,樂町,乐町,라쿠마치,https://www.google.com/maps/search/?api=1&query=楽町+バス停+新潟県湯沢町,3,160
+KIYOTSU,K-04,Shimonaka Iriguchi,下中入口,下中入口,下中入口,시모나카 입구,https://www.google.com/maps/search/?api=1&query=下中入口+バス停+新潟県湯沢町,4,160
+KIYOTSU,K-05,Yunozawa Iriguchi,湯之沢入口,湯之澤入口,汤之泽入口,유노자와 입구,https://www.google.com/maps/search/?api=1&query=湯之沢入口+バス停+新潟県湯沢町,5,160
+KIYOTSU,K-06,Ishiuchi Hatsukai-guchi,石打ハツカ石口,石打初卡石口,石打初卡石口,이시우치 하츠카이시 입구,https://www.google.com/maps/search/?api=1&query=石打ハツカ石口+バス停,6,230
+KIYOTSU,K-07,Ishiuchi Chuo-guchi,石打中央口,石打中央口,石打中央口,이시우치 주오 입구,https://www.google.com/maps/search/?api=1&query=石打中央口+バス停,7,230
+KIYOTSU,K-08,Ishiuchi Maruyama Ski Resort ,石打丸山スキー場,石打丸山滑雪場入口,石打丸山滑雪场入口,이시우치 마루야마 스키장 입구,https://www.google.com/maps/search/?api=1&query=石打丸山スキー場入口+バス停,8,230
+KIYOTSU,K-09,Ishiuchi Yubinkyoku-mae (Ishiuchi Post Office),石打郵便局前,石打郵局前,石打邮局前,이시우치 우체국 앞,https://www.google.com/maps/search/?api=1&query=石打郵便局前+バス停,9,230
+KIYOTSU,K-10,Ueno,上野,上野,上野,우에노,https://www.google.com/maps/search/?api=1&query=上野+バス停+新潟県湯沢町,10,290
+KIYOTSU,K-11,Ueno Kosen,上野鉱泉,上野礦泉,上野矿泉,우에노 고센,https://www.google.com/maps/search/?api=1&query=上野鉱泉+バス停,11,290
+KIYOTSU,K-12,Kurashita Iriguchi,倉下入口,倉下入口,仓下入口,쿠라시타 입구,https://www.google.com/maps/search/?api=1&query=倉下入口+バス停+新潟県十日町市,12,370
+KIYOTSU,K-13,Kiyotsukyo Iriguchi (Kiyotsu Gorge),清津峡入口,清津峽入口,清津峡入口,키요츠쿄 협곡 입구,https://www.google.com/maps/search/?api=1&query=清津峡入口+バス停+十日町市,13,400
+DAIGENTA,D-01,Echigo-Yuzawa Sta.,湯沢駅前,湯澤站前,汤泽站前,에치고유자와역-앞,https://www.google.com/maps/search/?api=1&query=越後湯沢駅東口+バスのりば,1,0
+DAIGENTA,D-02,Yuzawa Iryo Center-mae,湯沢医療センター前,湯澤醫療中心前,汤泽医疗中心前,유자와-의료센터-앞,https://www.google.com/maps/search/?api=1&query=湯沢医療センター前+バス停,2,160
+DAIGENTA,D-03,Yuzawa Yakuba-mae,湯沢役場前,湯澤役場前,汤泽役场前,유자와-역사-앞,https://www.google.com/maps/search/?api=1&query=湯沢役場前+バス停,3,160
+DAIGENTA,D-04,Miyabayashi,宮林,宮林,宫林,미야바야시,https://www.google.com/maps/search/?api=1&query=宮林+バス停+新潟県湯沢町,4,160
+DAIGENTA,D-05,Harashinden,原新田,原新田,原新田,하라신덴,https://www.google.com/maps/search/?api=1&query=原新田+バス停+新潟県湯沢町,5,160
+DAIGENTA,D-06,Yuzawa Gakuen,湯沢学園,湯澤學園,汤泽学园,유자와-학원,https://www.google.com/maps/search/?api=1&query=湯沢学園+バス停+新潟県湯沢町,6,200
+DAIGENTA,D-07,Yuzawa Gakuen-Iriguchi,湯沢学園入口,湯澤學園入口,汤泽学园入口,유자와-학원-입구,https://www.google.com/maps/search/?api=1&query=湯沢学園入口+バス停,7,200
+DAIGENTA,D-08,Chuo Koen-Iriguchi,中央公園入口,中央公園入口,中央公园入口,주오-공원-입구,https://www.google.com/maps/search/?api=1&query=中央公園入口+バス停+新潟県湯沢町,8,200
+DAIGENTA,D-09,Pool Aurora-mae,プールオーロラ前,泳池極光前,泳池极光前,풀-오로라-앞,https://www.google.com/maps/search/?api=1&query=プールオーロラ前+バス停,9,200
+DAIGENTA,D-10,Ishiuchi,岩原,岩原,岩原,이시우치,https://www.google.com/maps/search/?api=1&query=岩原+バス停+新潟県湯沢町,10,260
+DAIGENTA,D-11,Ishiuchi Chuo,岩原中央,岩原中央,岩原中央,이시우치-주오,https://www.google.com/maps/search/?api=1&query=岩原中央+バス停+新潟県湯沢町,11,260
+DAIGENTA,D-12,Ishiuchi-Iriguchi,岩原入口,岩原入口,岩原入口,이시우치-입구,https://www.google.com/maps/search/?api=1&query=岩原入口+バス停+新潟県湯沢町,12,260
+DAIGENTA,D-13,Soena,添名,添名,添名,소에나,https://www.google.com/maps/search/?api=1&query=添名+バス停+新潟県湯沢町,13,330
+DAIGENTA,D-14,Hara,原,原,原,하라,https://www.google.com/maps/search/?api=1&query=原+バス停+新潟県湯沢町旭原,14,330
+DAIGENTA,D-15,Kosaka,小坂,小坂,小坂,고사카,https://www.google.com/maps/search/?api=1&query=小坂+バス停+新潟県湯沢町,15,370
+DAIGENTA,D-16,Takinomata-Iriguchi,滝ノ又入口,瀧ノ又入口,泷之又入口,타키노마타-입구,https://www.google.com/maps/search/?api=1&query=滝ノ又入口+バス停+新潟県湯沢町,16,370
+DAIGENTA,D-17,Tanigo,谷後,谷後,谷后,타니고,https://www.google.com/maps/search/?api=1&query=谷後+バス停+新潟県湯沢町,17,390
+DAIGENTA,D-18,Kami-Tanigo,上谷後,上谷後,上谷后,가미타니고,https://www.google.com/maps/search/?api=1&query=上谷後+バス停+新潟県湯沢町,18,390
+DAIGENTA,D-19,Asahibara Hananosato,旭原花の郷,旭原花之鄉,旭原花之乡,아사히바라-하나노사토,https://www.google.com/maps/search/?api=1&query=旭原花の郷+バス停+新潟県湯沢町,19,410
+DAIGENTA,D-20,Taiken Kobo Daigenta-mae,体験工房大源太前,體驗工房大源太前,体验工房大源太前,타이켄-코보-다이겐타-앞,https://www.google.com/maps/search/?api=1&query=体験工房大源太前+バス停,20,410
+DAIGENTA,D-21,Asahibara,旭原,旭原,旭原,아사히바라,https://www.google.com/maps/search/?api=1&query=旭原+バス停+新潟県湯沢町,21,410
+DAIGENTA,D-22,Daigenta Canyon,大源太キャニオン,大源太峽谷,大源太峡谷,다이겐타-캐니언,https://www.google.com/maps/search/?api=1&query=大源太キャニオン+バス停,22,410
+MAIKO,YM-01,Yuzawa Shako-mae,湯沢車庫前,湯澤車庫前,汤泽车库前,유자와-차고-앞,https://www.google.com/maps/search/?api=1&query=湯沢車庫前+バス停,1,160
+MAIKO,YM-02,Yuzawa Iryo Center-mae,湯沢医療センター前,湯澤醫療中心前,汤泽医疗中心前,유자와-의료센터-앞,https://www.google.com/maps/search/?api=1&query=湯沢医療センター前+バス停,2,160
+MAIKO,YM-03,Echigo-Yuzawa Sta.,湯沢駅前,湯澤站前,汤泽站前,에치고유자와역-앞,https://www.google.com/maps/search/?api=1&query=越後湯沢駅東口+バスのりば,3,0
+MAIKO,YM-04,Onsengai-Iriguchi,温泉街入口,溫泉街入口,温泉街入口,온센가이-입구,https://www.google.com/maps/search/?api=1&query=温泉街入口+バス停+新潟県湯沢町,4,160
+MAIKO,YM-05,Rakumachi,楽町,樂町,乐町,라쿠마치,https://www.google.com/maps/search/?api=1&query=楽町+バス停+新潟県湯沢町,5,170
+MAIKO,YM-06,Shimonaka-Iriguchi,下中入口,下中入口,下中入口,시모나카-입구,https://www.google.com/maps/search/?api=1&query=下中入口+バス停+新潟県湯沢町,6,230
+MAIKO,YM-07,Yunozawa-Iriguchi,湯之沢入口,湯之澤入口,汤之泽入口,유노자와-입구,https://www.google.com/maps/search/?api=1&query=湯之沢入口+バス停+新潟県湯沢町,7,270
+MAIKO,YM-08,Ishiuchi Hatsukaishiguchi,石打ハツカ石口,石打初卡石口,石打初卡石口,이시우치-하츠카이시구치,https://www.google.com/maps/search/?api=1&query=石打ハツカ石口+バス停,8,320
+MAIKO,YM-09,Ishiuchi Chuo-guchi,石打中央口,石打中央口,石打中央口,이시우치-주오구치,https://www.google.com/maps/search/?api=1&query=石打中央口+バス停,9,330
+MAIKO,YM-10,Ishiuchi Maruyama Ski Resort,石打丸山スキー場入口,石打丸山滑雪場入口,石打丸山滑雪场入口,이시우치-마루야마-스키장-입구,https://www.google.com/maps/search/?api=1&query=石打丸山スキー場入口+バス停,10,350
+MAIKO,YM-11,Ishiuchi Eki-kaku,石打駅角,石打站角,石打站角,이시우치-역각,https://www.google.com/maps/search/?api=1&query=石打駅角+バス停,11,350
+MAIKO,YM-12,Ishiuchi Shita-guchi,石打下口,石打下口,石打下口,이시우치-시타구치,https://www.google.com/maps/search/?api=1&query=石打下口+バス停,12,350
+MAIKO,YM-13,Obasima Shinden,姥島新田,姥島新田,姥岛新田,오바시마-신덴,https://www.google.com/maps/search/?api=1&query=姥島新田+バス停+南魚沼市,13,370
+MAIKO,YM-14,Obasima Shita-guchi,姥島下口,姥島下口,姥岛下口,오바시마-시타구치,https://www.google.com/maps/search/?api=1&query=姥島下口+バス停+南魚沼市,14,370
+MAIKO,YM-15,Manjo Shinden,万条新田,萬條新田,万条新田,만조-신덴,https://www.google.com/maps/search/?api=1&query=万条新田+バス停+南魚沼市,15,370
+MAIKO,YM-16,Obara,小原,小原,小原,오바라,https://www.google.com/maps/search/?api=1&query=小原+バス停+南魚沼市,16,380
+MAIKO,YM-17,Kami Maiko,上舞子,上舞子,上舞子,가미-마이코,https://www.google.com/maps/search/?api=1&query=上舞子+バス停+南魚沼市,17,400
+MAIKO,YM-18,Shimo Maiko,下舞子,下舞子,下舞子,시모-마이코,https://www.google.com/maps/search/?api=1&query=下舞子+バス停+南魚沼市,18,470
+MAIKO,YM-19,Sengoku,仙石,仙石,仙石,센고쿠,https://www.google.com/maps/search/?api=1&query=仙石+バス停+南魚沼市,19,480
+MAIKO,YM-20,Nakanoshima Shogakko-iriguchi,中之島小学校入口,中之島小學校入口,中之岛小学校入口,나카노시마-초등학교-입구,https://www.google.com/maps/search/?api=1&query=中之島小学校入口+バス停,20,520
+MAIKO,YM-21,Yoshiyama,吉山,吉山,吉山,요시야마,https://www.google.com/maps/search/?api=1&query=吉山+バス停+南魚沼市,21,520
+MAIKO,YM-22,Terae,寺前,寺前,寺前,테라에,https://www.google.com/maps/search/?api=1&query=寺前+バス停+南魚沼市,22,520
+MAIKO,YM-23,Okuroku,大木六,大木六,大木六,오쿠로쿠,https://www.google.com/maps/search/?api=1&query=大木六+バス停+南魚沼市,23,520
+MAIKO,YM-24,Furukawa,古川,古川,古川,후루카와,https://www.google.com/maps/search/?api=1&query=古川+バス停+南魚沼市,24,520
+MAIKO,YM-25,Nakano Sansaro,中野三叉路,中野三叉路,中野三叉路,나카노-삼거리,https://www.google.com/maps/search/?api=1&query=中野三叉路+バス停+南魚沼市,25,520
+MAIKO,YM-26,Nakamura Jiroji,中村十字路,中村十字路,中村十字路,나카무라-십자로,https://www.google.com/maps/search/?api=1&query=中村十字路+バス停+南魚沼市,26,520
+MAIKO,YM-27,Nakamura,中村,中村,中村,나카무라,https://www.google.com/maps/search/?api=1&query=中村+バス停+南魚沼市,27,520
+MAIKO,YM-28,Mera,目来,目来,目来,메라,https://www.google.com/maps/search/?api=1&query=目来+バス停+南魚沼市,28,520
+MAIKO,YM-29,Shiozawa Shita-guchi,塩沢上口,塩澤上口,盐泽上口,시오자와-시타구치,https://www.google.com/maps/search/?api=1&query=塩沢上口+バス停,29,520
+MAIKO,YM-30,Shiozawa Eki-kaku,塩沢駅角,塩澤站角,盐泽站角,시오자와-역각,https://www.google.com/maps/search/?api=1&query=塩沢駅角+バス停,30,520
+MAIKO,YM-31,Shima-Iriguchi,島入口,島入口,岛入口,시마-입구,https://www.google.com/maps/search/?api=1&query=島入口+バス停+南魚沼市,31,520
+MAIKO,YM-32,Hanshin-mae,原信前,原信前,原信前,한신-앞,https://www.google.com/maps/search/?api=1&query=原信前+バス停+南魚沼市,32,520
+MAIKO,YM-33,Takenomata-Iriguchi,竹の俣入口,竹之俣入口,竹之俣入口,타케노마타-입구,https://www.google.com/maps/search/?api=1&query=竹の俣入口+バス停,33,520
+MAIKO,YM-34,Santech-mae,サンティック前,桑蒂克前,桑蒂克前,산틱-앞,https://www.google.com/maps/search/?api=1&query=サンティック前+バス停,34,520
+MAIKO,YM-35,Chiiki Shinkokyoku-mae,地域振興局前,地域振興局前,地域振兴局前,지요키-신코쿄쿠-앞,https://www.google.com/maps/search/?api=1&query=地域振興局前+バス停,35,520
+MAIKO,YM-36,Muikamachi Chuo-dori,六日町中央通り,六日町中央通,六日町中央通,무이카마치-츄오도리,https://www.google.com/maps/search/?api=1&query=六日町中央通り+バス停,36,520
+MAIKO,YM-37,Muikamachi Eki-kaku,六日町駅角,六日町站角,六日町站角,무이카마치-역각,https://www.google.com/maps/search/?api=1&query=六日町駅角+バス停,37,520
+MAIKO,YM-38,Hachiman,八幡,八幡,八幡,하치만,https://www.google.com/maps/search/?api=1&query=八幡+バス停+南魚沼市,38,520
+MAIKO,YM-39,Muikamachi Eigyosho-mae,六日町営業所前,六日町營業所前,六日町营业所前,무이카마치-영업소-앞,https://www.google.com/maps/search/?api=1&query=六日町営業所前+バス停,39,520
+MAIKO,YM-40,Muikamachi Shako-mae,六日町車庫前,六日町車庫前,六日町车库前,무이카마치-차고-앞,https://www.google.com/maps/search/?api=1&query=六日町車庫前+バス停,40,520
+HAKKAISAN,H-01,Muikamachi Sta.,六日町駅前,六日町站前,六日町站前,무이카마치역-앞,https://www.google.com/maps/search/?api=1&query=六日町駅前+バス停,1,0
+HAKKAISAN,H-02,Muikamachi Eki-kaku,六日町駅角,六日町站角,六日町站角,무이카마치-역각,https://www.google.com/maps/search/?api=1&query=六日町駅角+バス停,2,160
+HAKKAISAN,H-03,Disport-mae,ディスポート前,Disport前,Disport前,디스포트-앞,https://www.google.com/maps/search/?api=1&query=ディスポート前+バス停+南魚沼市,3,160
+HAKKAISAN,H-04,Daikyuji-mae,大久寺前,大久寺前,大久寺前,다이큐지-앞,https://www.google.com/maps/search/?api=1&query=大久寺前+バス停+南魚沼市,4,180
+HAKKAISAN,H-05,Futsukamachi,二日町,二日町,二日町,후츠카마치,https://www.google.com/maps/search/?api=1&query=二日町+バス停+南魚沼市,5,230
+HAKKAISAN,H-06,Yagi,八木,八木,八木,야기,https://www.google.com/maps/search/?api=1&query=八木+バス停+南魚沼市,6,230
+HAKKAISAN,H-07,Shinbori Shinden,新堀新田,新堀新田,新堀新田,신보리-신덴,https://www.google.com/maps/search/?api=1&query=新堀新田+バス停+南魚沼市,7,250
+HAKKAISAN,H-08,Shimohara Sanyato,下原三夜塔,下原三夜塔,下原三夜塔,시모하라-산야토,https://www.google.com/maps/search/?api=1&query=下原三夜塔+バス停+南魚沼市,8,280
+HAKKAISAN,H-09,Uehara Shita,上原下,上原下,上原下,우에하라-시타,https://www.google.com/maps/search/?api=1&query=上原下+バス停+南魚沼市,9,340
+HAKKAISAN,H-10,Uehara Juroji,上原十字路,上原十字路,上原十字路,우에하라-십자로,https://www.google.com/maps/search/?api=1&query=上原十字路+バス停+南魚沼市,10,340
+HAKKAISAN,H-11,Uehara Shinden,上原新田,上原新田,上原新田,우에하라-신덴,https://www.google.com/maps/search/?api=1&query=上原新田+バス停+南魚沼市,11,390
+HAKKAISAN,H-12,Nagashima,長島,長島,长岛,나가시마,https://www.google.com/maps/search/?api=1&query=長島+バス停+南魚沼市,12,390
+HAKKAISAN,H-13,Kami Yakushido,上薬師堂,上藥師堂,上药师堂,가미-야쿠시도,https://www.google.com/maps/search/?api=1&query=上薬師堂+バス停+南魚沼市,13,410
+HAKKAISAN,H-14,Okamura,岡村,岡村,冈村,오카무라,https://www.google.com/maps/search/?api=1&query=岡村+バス停+南魚沼市,14,410
+HAKKAISAN,H-15,Yamaguchi-Iriguchi,山口入口,山口入口,山口入口,야마구치-입구,https://www.google.com/maps/search/?api=1&query=山口入口+バス停+南魚沼市,15,420
+HAKKAISAN,H-16,Yamaguchi Naka,山口中,山口中,山口中,야마구치-나카,https://www.google.com/maps/search/?api=1&query=山口中+バス停+南魚沼市,16,420
+HAKKAISAN,H-17,Yamaguchi,山口,山口,山口,야마구치,https://www.google.com/maps/search/?api=1&query=山口+バス停+南魚沼市,17,420
+HAKKAISAN,H-18,Nakatehara,中手原,中手原,中手原,나카테하라,https://www.google.com/maps/search/?api=1&query=中手原+バス停+南魚沼市,18,450
+HAKKAISAN,H-19,Hakkaisan Ski Resort,八海山スキー場,八海山滑雪場,八海山滑雪场,핫카이산-스키장,https://www.google.com/maps/search/?api=1&query=八海山スキー場+バス停,19,450
+TOKAMACHIAEON,MA-01,Muikamachi Sta.,六日町駅前,六日町站前,六日町站前,무이카마치역-앞,https://www.google.com/maps/search/?api=1&query=六日町駅前+バス停,1,0
+TOKAMACHIAEON,MA-02,Muikamachi Eki-kaku,六日町駅角,六日町站角,六日町站角,무이카마치-역각,https://www.google.com/maps/search/?api=1&query=六日町駅角+バス停,2,160
+TOKAMACHIAEON,MA-03,Hachiman,八幡,八幡,八幡,하치만,https://www.google.com/maps/search/?api=1&query=八幡+バス停+南魚沼市,3,160
+TOKAMACHIAEON,MA-04,Aeon Muikamachi-ten,イオン六日町店,AEON六日町店,AEON六日町店,이온-무이카마치점,https://www.google.com/maps/search/?api=1&query=イオン六日町店+バス停,4,160
+TOKAMACHIAEON,MA-05,Muikamachi Eigyosho-mae,六日町営業所前,六日町營業所前,六日町营业所前,무이카마치-영업소-앞,https://www.google.com/maps/search/?api=1&query=六日町営業所前+バス停,5,160
+TOKAMACHIAEON,MA-06,Muikamachi Shako-mae,六日町車庫前,六日町車庫前,六日町车库前,무이카마치-차고-앞,https://www.google.com/maps/search/?api=1&query=六日町車庫前+バス停,6,160
+GALA_SPRING,GL-01,GALA Yuzawa,GALA湯沢,GALA湯澤,GALA汤泽,갈라-유자와,https://www.google.com/maps/search/?api=1&query=ガーラ湯沢駅+スキー場,1,0
+GALA_SPRING,GL-02,Echigo-Yuzawa Sta. East Exit,越後湯沢駅東口,越後湯澤站東口,越后汤泽站东口,에치고유자와역-동구,https://www.google.com/maps/search/?api=1&query=越後湯沢駅東口+シャトルバスのりば,2,0
+GALA_SPRING,GL-03,Echigo-Yuzawa Sta. West Exit (Inamoto-mae),越後湯沢駅西口(いなもと前),越後湯澤站西口(稻本前),越后汤泽站西口(稻本前),에치고유자와역-서구(이나모토-앞),https://www.google.com/maps/search/?api=1&query=湯沢温泉通+いなもと前,3,0
