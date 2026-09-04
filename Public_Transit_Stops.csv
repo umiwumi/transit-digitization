@@ -31,14 +31,14 @@ KIYOTSU,K-02,Onsengai Iriguchi,温泉街入口,溫泉街入口,温泉街入口,�
 KIYOTSU,K-03,Rakumachi,楽町,樂町,乐町,라쿠마치,https://www.google.com/maps/search/?api=1&query=楽町+バス停+新潟県湯沢町,3,160
 KIYOTSU,K-04,Shimonaka Iriguchi,下中入口,下中入口,下中入口,시모나카 입구,https://www.google.com/maps/search/?api=1&query=下中入口+バス停+新潟県湯沢町,4,160
 KIYOTSU,K-05,Yunozawa Iriguchi,湯之沢入口,湯之澤入口,汤之泽入口,유노자와 입구,https://www.google.com/maps/search/?api=1&query=湯之沢入口+バス停+新潟県湯沢町,5,160
-KIYOTSU,K-06,Ishiuchi Hatsukai-guchi,石打ハツカ石口,石打初卡石口,石打初卡石口,이시우치 하츠카이시 입구,https://www.google.com/maps/search/?api=1&query=石打ハツカ石口+バス停,6,230
+KIYOTSU,K-06,Ishiuchi Hatsukai-guchi,石打ハツカ石口,石打初卡石口,石打初卡石口,이시우치 하츠카이시 입구,https://www.google.com/maps/search/?api=1&query=石打ハツカ石口+バス停,6,170
 KIYOTSU,K-07,Ishiuchi Chuo-guchi,石打中央口,石打中央口,石打中央口,이시우치 주오 입구,https://www.google.com/maps/search/?api=1&query=石打中央口+バス停,7,230
 KIYOTSU,K-08,Ishiuchi Maruyama Ski Resort ,石打丸山スキー場,石打丸山滑雪場入口,石打丸山滑雪场入口,이시우치 마루야마 스키장 입구,https://www.google.com/maps/search/?api=1&query=石打丸山スキー場入口+バス停,8,230
-KIYOTSU,K-09,Ishiuchi Yubinkyoku-mae (Ishiuchi Post Office),石打郵便局前,石打郵局前,石打邮局前,이시우치 우체국 앞,https://www.google.com/maps/search/?api=1&query=石打郵便局前+バス停,9,230
+KIYOTSU,K-09,Ishiuchi Yubinkyoku-mae (Ishiuchi Post Office),石打郵便局前,石打郵局前,石打邮局前,이시우치 우체국 앞,https://www.google.com/maps/search/?api=1&query=石打郵便局前+バス停,9,270
 KIYOTSU,K-10,Ueno,上野,上野,上野,우에노,https://www.google.com/maps/search/?api=1&query=上野+バス停+新潟県湯沢町,10,290
-KIYOTSU,K-11,Ueno Kosen,上野鉱泉,上野礦泉,上野矿泉,우에노 고센,https://www.google.com/maps/search/?api=1&query=上野鉱泉+バス停,11,290
-KIYOTSU,K-12,Kurashita Iriguchi,倉下入口,倉下入口,仓下入口,쿠라시타 입구,https://www.google.com/maps/search/?api=1&query=倉下入口+バス停+新潟県十日町市,12,370
-KIYOTSU,K-13,Kiyotsukyo Iriguchi (Kiyotsu Gorge),清津峡入口,清津峽入口,清津峡入口,키요츠쿄 협곡 입구,https://www.google.com/maps/search/?api=1&query=清津峡入口+バス停+十日町市,13,400
+KIYOTSU,K-11,Ueno Kosen,上野鉱泉,上野礦泉,上野矿泉,우에노 고센,https://www.google.com/maps/search/?api=1&query=上野鉱泉+バス停,11,330
+KIYOTSU,K-12,Kurashita Iriguchi,倉下入口,倉下入口,仓下入口,쿠라시타 입구,https://www.google.com/maps/search/?api=1&query=倉下入口+バス停+新潟県十日町市,12,430
+KIYOTSU,K-13,Kiyotsukyo Iriguchi (Kiyotsu Gorge),清津峡入口,清津峽入口,清津峡入口,키요츠쿄 협곡 입구,https://www.google.com/maps/search/?api=1&query=清津峡入口+バス停+十日町市,13,500
 DAIGENTA,D-01,Echigo-Yuzawa Sta.,湯沢駅前,湯澤站前,汤泽站前,에치고유자와역-앞,https://www.google.com/maps/search/?api=1&query=越後湯沢駅東口+バスのりば,1,0
 DAIGENTA,D-02,Yuzawa Iryo Center-mae,湯沢医療センター前,湯澤醫療中心前,汤泽医疗中心前,유자와-의료센터-앞,https://www.google.com/maps/search/?api=1&query=湯沢医療センター前+バス停,2,160
 DAIGENTA,D-03,Yuzawa Yakuba-mae,湯沢役場前,湯澤役場前,汤泽役场前,유자와-역사-앞,https://www.google.com/maps/search/?api=1&query=湯沢役場前+バス停,3,160
