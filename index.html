@@ -155,14 +155,22 @@
       'DESIGNATED_FRIDAYS_ONLY': { en: 'Designated Fridays Only', jp: '特定金曜日運行', zh_tr: '特定週五運行', zh_si: '特定周五运行', ko: '특정 금요일 운행' }
     },
     routes: {
+      // Public Transit Lines
       'SEIBU_CRYSTAL': { en: 'Seibu Crystal Line', jp: '西武クリスタル線', zh_tr: '西武水晶線', zh_si: '西武水晶线', ko: '세이부 크리스탈선' },
-      'CRYSTAL': { en: 'Seibu Crystal Line', jp: '西武クリスタル線', zh_tr: '西武水晶線', zh_si: '西武水晶线', ko: '세이부 크リス탈선' },
+      'CRYSTAL': { en: 'Seibu Crystal Line', jp: '西武クリスタル線', zh_tr: '西武水晶線', zh_si: '西武水晶线', ko: '세이부 크리스탈선' },
       'R_01': { en: 'Seibu Crystal Line', jp: '西武クリスタル線', zh_tr: '西武水晶線', zh_si: '西武水晶线', ko: '세이부 크리스탈선' },
+      'KIYOTSU': { en: 'Kiyotsukyo Gorge Line', jp: '清津峡線', zh_tr: '清津峽線', zh_si: '清津峡线', ko: '키요츠쿄선' },
       'KIYOTSUKYO': { en: 'Kiyotsukyo Gorge Line', jp: '清津峡線', zh_tr: '清津峽線', zh_si: '清津峡线', ko: '키요츠쿄선' },
+      'HAKKAISAN': { en: 'Hakkaisan Line', jp: '八海山線', zh_tr: '八海山線', zh_si: '八海山线', ko: '핫카이산선' },
+      'TOKAMACHIAEON': { en: 'Tokamachi / Aeon Line', jp: '十日町・イオン線', zh_tr: '十日町・永旺線', zh_si: '十日町・永旺线', ko: '토카마치・이온선' },
+      'TOKAMACHI_AEON': { en: 'Tokamachi / Aeon Line', jp: '十日町・イオン線', zh_tr: '十日町・永旺線', zh_si: '十日町・永旺线', ko: '토카마치・이온선' },
+      'LOOP': { en: 'Town Loop Line', jp: '町内循環線', zh_tr: '市區循環線', zh_si: '市区循环线', ko: '마을 순환선' },
       'TOWN_LOOP': { en: 'Town Loop Line', jp: '町内循環線', zh_tr: '市區循環線', zh_si: '市区循环线', ko: '마을 순환선' },
       'MUIKAMACHI': { en: 'Muikamachi Line', jp: '六日町線', zh_tr: '六日町線', zh_si: '六日町线', ko: '무이카마치선' },
       'DAIGENTA': { en: 'Daigenta Canyon Line', jp: '大源太線', zh_tr: '大源太峽谷線', zh_si: '大源太峡谷线', ko: '다이겐타선' },
       'TSUCHITARU': { en: 'Tsuchitaru Line', jp: '土樽線', zh_tr: '土樽線', zh_si: '土樽线', ko: '츠치타루선' },
+
+      // Winter Resort Shuttles & Expresses
       'BLUE': { en: 'Blue Line (GALA / NASPA)', jp: 'ブルーライン（GALA・NASPA）', zh_tr: '藍線（GALA・NASPA）', zh_si: '蓝线（GALA・NASPA）', ko: '블루 라인 (GALA・NASPA)' },
       'ORANGE': { en: 'Orange Line', jp: 'オレンジライン', zh_tr: '橘線', zh_si: '橙线', ko: '오렌지 라인' },
       'PURPLE': { en: 'Purple Line', jp: 'パープルライン', zh_tr: '紫線', zh_si: '紫线', ko: '퍼플 라인' },
@@ -170,11 +178,21 @@
       'PINK': { en: 'Pink Line', jp: 'ピンクライン', zh_tr: '粉紅線', zh_si: '粉红线', ko: '핑크 라인' },
       'YELLOW': { en: 'Yellow Line', jp: 'イエローライン', zh_tr: '黃線', zh_si: '黄线', ko: '옐로우 라인' },
       'RED': { en: 'Red Line', jp: 'レッドライン', zh_tr: '紅線', zh_si: '红线', ko: '레드 라인' },
-      'WHITE': { en: 'White Line', jp: 'ホワイトライン', zh_tr: '白線', zh_si: '白线', ko: '화이트 라イン' },
-      'MAIKO': { en: 'Maiko Direct Express', jp: '舞子直行便', zh_tr: '舞子直達專車', zh_si: '舞子直达专车', ko: '마이코 직행' },
-      'MAIKO_DIRECT': { en: 'Maiko Direct Express', jp: '舞子直行便', zh_tr: '舞子直達專車', zh_si: '舞子直达专车', ko: '마이코 직행' },
+      'WHITE': { en: 'White Line', jp: 'ホワイトライン', zh_tr: '白線', zh_si: '白线', ko: '화이트 라인' },
+      'GALA_SPRING': { en: 'GALA Spring Shuttle', jp: 'GALA春便', zh_tr: 'GALA春季專車', zh_si: 'GALA春季专车', ko: 'GALA 봄 셔틀' },
+      'ISHIUCHI_DIRECT': { en: 'Ishiuchi Direct Express', jp: '石打直行便', zh_tr: '石打直達專車', zh_si: '石打直达专车', ko: '이시우치 직행' },
+      'DIRECT': { en: 'Direct Express Shuttle', jp: '直行便シャトル', zh_tr: '直達接駁專車', zh_si: '直达接驳专车', ko: '직행 셔틀' },
+      'NIGHT': { en: 'Night Ski Shuttle', jp: 'ナイターシャトル', zh_tr: '夜間滑雪接駁車', zh_si: '夜间滑雪接驳车', ko: '야간 스키 셔틀' },
       'IWAHARA': { en: 'Iwahara Line', jp: '岩原線', zh_tr: '岩原線', zh_si: '岩原线', ko: '이와하라선' },
       'IWAPPARA': { en: 'Iwahara Line', jp: '岩原線', zh_tr: '岩原線', zh_si: '岩原线', ko: '이와하라선' },
+      'CHATEAU_SHIOZAWA': { en: 'Chateau Shiozawa Shuttle', jp: 'シャトー塩沢シャトル', zh_tr: '鹽澤城堡接駁車', zh_si: '盐泽城堡接驳车', ko: '샤토 시오자와 셔틀' },
+      'CHATEAU_SHIIOZAWA': { en: 'Chateau Shiozawa Shuttle', jp: 'シャトー塩沢シャトル', zh_tr: '鹽澤城堡接駁車', zh_si: '盐泽城堡接驳车', ko: '샤토 시오자와 셔틀' },
+      'KAGURA_LOCAL': { en: 'Kagura Local Line', jp: 'かぐら各停便', zh_tr: '神樂各站停靠便', zh_si: '神乐各站停靠便', ko: '카구라 각역정차편' },
+      'EXPRESS': { en: 'Express Shuttle', jp: '急行シャトル', zh_tr: '急行接駁專車', zh_si: '急行接驳专车', ko: '급행 셔틀' },
+      'MAIKO_HOTEL': { en: 'Maiko Hotel Shuttle', jp: '舞子高原ホテル便', zh_tr: '舞子高原飯店專車', zh_si: '舞子高原饭店专车', ko: '마이코 호텔 셔틀' },
+      'MAIKO_DIRECT': { en: 'Maiko Direct Express', jp: '舞子直行便', zh_tr: '舞子直達專車', zh_si: '舞子直达专车', ko: '마이코 직행' },
+      'MAIKO': { en: 'Maiko Direct Express', jp: '舞子直行便', zh_tr: '舞子直達專車', zh_si: '舞子直达专车', ko: '마이코 직행' },
+      'MUICA': { en: 'Muica Snow Resort Shuttle', jp: 'むいかスノーリゾート線', zh_tr: 'Muica滑雪度假村線', zh_si: 'Muica滑雪度假村线', ko: '무이카 스노우 리조트선' },
       'KANDATSU': { en: 'Kandatsu Shuttle', jp: '神立シャトル', zh_tr: '神立接駁車', zh_si: '神立接驳车', ko: '간다츠 셔틀' },
       'KAGURA_NAEBA': { en: 'Kagura / Naeba Express', jp: 'かぐら・苗場急行バス', zh_tr: '神樂・苗場急行巴士', zh_si: '神乐・苗场急行巴士', ko: '카구라・나에바 급행버스' },
       'KAGURA': { en: 'Kagura Express', jp: 'かぐら急行バス', zh_tr: '神樂急行巴士', zh_si: '神乐急行巴士', ko: '카구라 급행버스' },
@@ -232,7 +250,7 @@
   }
 
   function translateDays(rawDays) {
-    const key = (rawDays || '').trim().toUpperCase().replace(/\s+/g, '_');
+    const key = normalizeKey(rawDays);
     const entry = I18N.days[key] || I18N.days[rawDays];
     return (entry && entry[currentLang]) ? entry[currentLang] : rawDays.replace(/_/g, ' ');
   }
