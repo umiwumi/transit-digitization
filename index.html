@@ -249,7 +249,9 @@
         zh_tr: '🔍 搜尋站牌、滑雪場或路線 (例如: 苗場, 清津峽, GALA)...',
         zh_si: '🔍 搜索站牌、滑雪场或路线 (例如: 苗场, 清津峡, GALA)...',
         ko: '🔍 정류장, 리조트 또는 노선 검색 (예: 나에바, 키요츠쿄, GALA)...'
-      }
+      },
+      terminal: { en: 'Terminal Station', jp: '発着拠点', zh_tr: '出發總站', zh_si: '始发总站', ko: '출발/도착역' },
+      toFromStation: { en: '(to/from Station)', jp: '(駅発着)', zh_tr: '(往返車站)', zh_si: '(往返车站)', ko: '(역 왕복)' },
     },
     days: {
       'DAILY': { en: 'Daily', jp: '毎日運行', zh_tr: '每日運行', zh_si: '每日运行', ko: '매일 운행' },
@@ -403,15 +405,32 @@
     return null;
   }
 
-  function formatFareBadge(fareVal) {
+  function formatFareBadge(fareVal, stopNameJP) {
     const freeText = I18N.ui.free[currentLang] || I18N.ui.free.en;
-    if (!fareVal) return `<span class="fare-tag">${freeText}</span>`;
-    
-    const digits = String(fareVal).replace(/[^\d.]/g, '');
+    const digits = String(fareVal || '').replace(/[^\d.]/g, '');
     const num = parseFloat(digits);
-    if (!isNaN(num) && num > 0) {
-      return `<span class="fare-tag paid">¥${Math.round(num).toLocaleString()}</span>`;
+
+    // Winter Mode: Zero or blank is genuinely complimentary
+    if (currentMode === 'winter') {
+      if (!isNaN(num) && num > 0) {
+        return `<span class="fare-tag paid">¥${Math.round(num).toLocaleString()}</span>`;
+      }
+      return `<span class="fare-tag">${freeText}</span>`;
     }
+
+    // Public Transit Mode:
+    if (!isNaN(num) && num > 0) {
+      const suffix = I18N.ui.toFromStation[currentLang] || '';
+      return `<span class="fare-tag paid">¥${Math.round(num).toLocaleString()} <small style="font-size:0.7rem; opacity:0.8;">${suffix}</small></span>`;
+    }
+
+    // Check if the stop is Echigo-Yuzawa Station (Fare origin)
+    const isStation = /湯沢駅/i.test(stopNameJP || '');
+    if (isStation || num === 0) {
+      const termText = I18N.ui.terminal[currentLang] || 'Terminal';
+      return `<span class="fare-tag" style="background: rgba(148, 163, 184, 0.15); color: var(--text-muted); font-weight: 500;">${termText}</span>`;
+    }
+
     return `<span class="fare-tag">${freeText}</span>`;
   }
 
@@ -614,8 +633,8 @@
     container.innerHTML = filtered.map(item => {
       const stop = resolveStop(currentMode, item.routeCode, item.stopId);
       const colKey = stopLangKeys[currentLang] || 'Stop_Name_EN';
-      const stopName = stop[colKey] || stop['Stop_Name_EN'] || item.stopId;
-      const fareBadge = formatFareBadge(extractFare(stop));
+      const stopNameJP = stop['Stop_Name_JP'] || '';
+      const fareBadge = formatFareBadge(extractFare(stop), stopNameJP);
       const mapUrl = stop.Google_Maps_URL;
       const mapLink = mapUrl ? `<a class="map-link" href="${mapUrl}" target="_blank" rel="noopener">${mapWord}</a>` : '';
       const daysText = translateDays(item.operatingDays);
