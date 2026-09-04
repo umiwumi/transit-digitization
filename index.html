@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Yuzawa Snow Transit</title>
+  <title>Yuzawa Transit Directory</title>
   <script src="https://cdn.jsdelivr.net/npm/papaparse@5.4.1/papaparse.min.js"></script>
   <style>
     :root {
@@ -24,7 +24,7 @@
       line-height: 1.5;
     }
     .container { max-width: 680px; margin: 0 auto; }
-    header { margin-bottom: 20px; display: flex; justify-content: space-between; align-items: center; }
+    header { margin-bottom: 16px; display: flex; justify-content: space-between; align-items: center; }
     h1 { font-size: 1.25rem; font-weight: 700; color: var(--accent); }
     select, button {
       background: var(--card-bg);
@@ -36,6 +36,33 @@
       outline: none;
     }
     select:focus { border-color: var(--accent); }
+    
+    .mode-toggle {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 8px;
+      background: var(--card-bg);
+      padding: 4px;
+      border-radius: 10px;
+      border: 1px solid var(--border);
+      margin-bottom: 16px;
+    }
+    .mode-btn {
+      border: none;
+      background: transparent;
+      color: var(--text-muted);
+      font-weight: 600;
+      padding: 10px;
+      border-radius: 8px;
+      cursor: pointer;
+      text-align: center;
+      transition: background 0.2s, color 0.2s;
+    }
+    .mode-btn.active {
+      background: var(--accent);
+      color: #0f172a;
+    }
+
     .controls { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 16px; }
     .control-group { display: flex; flex-direction: column; gap: 6px; }
     label { font-size: 0.8rem; color: var(--text-muted); text-transform: uppercase; font-weight: 600; }
@@ -64,7 +91,7 @@
 
 <div class="container">
   <header>
-    <h1>❄️ Yuzawa Transit</h1>
+    <h1>🚌 Yuzawa Transit</h1>
     <select id="langSelect">
       <option value="en">English</option>
       <option value="jp">日本語</option>
@@ -73,6 +100,11 @@
       <option value="ko">한국어</option>
     </select>
   </header>
+
+  <div class="mode-toggle">
+    <button class="mode-btn active" id="btnWinter" onclick="switchMode('winter')">❄️ Winter Shuttles</button>
+    <button class="mode-btn" id="btnPublic" onclick="switchMode('public')">🚍 Public Transit</button>
+  </div>
 
   <div class="controls">
     <div class="control-group">
@@ -91,11 +123,22 @@
 </div>
 
 <script>
-  const STOPS_FILE = 'Winter_Shuttle_Stops.csv';
-  const SCHED_FILE = 'Winter_Shuttle_Schedules.csv';
+  const DATA_CONFIG = {
+    winter: {
+      stops: 'Winter_Shuttle_Stops.csv',
+      schedules: 'Winter_Shuttle_Schedules.csv'
+    },
+    public: {
+      stops: 'Public_Transit_Stops.csv',
+      schedules: 'Public_Transit_Schedules.csv'
+    }
+  };
 
-  let stopsMap = {};
-  let schedules = [];
+  let currentMode = 'winter';
+  let cache = {
+    winter: { stopsMap: {}, schedules: [] },
+    public: { stopsMap: {}, schedules: [] }
+  };
   let currentLang = 'en';
 
   const langKeys = {
@@ -106,59 +149,74 @@
     ko: 'Stop_Name_KO'
   };
 
-  async function loadData() {
+  async function loadDataForMode(mode) {
+    if (cache[mode].schedules.length > 0) return;
+
+    const stopsFile = DATA_CONFIG[mode].stops;
+    const schedFile = DATA_CONFIG[mode].schedules;
+
+    const [stopsRes, schedRes] = await Promise.all([
+      fetch(stopsFile).then(r => {
+        if (!r.ok) throw new Error(`Failed to load ${stopsFile}`);
+        return r.text();
+      }),
+      fetch(schedFile).then(r => {
+        if (!r.ok) throw new Error(`Failed to load ${schedFile}`);
+        return r.text();
+      })
+    ]);
+
+    Papa.parse(stopsRes, {
+      header: true,
+      skipEmptyLines: true,
+      complete: (results) => {
+        results.data.forEach(row => {
+          if (row.Stop_ID) {
+            cache[mode].stopsMap[row.Stop_ID.trim()] = row;
+          }
+        });
+      }
+    });
+
+    Papa.parse(schedRes, {
+      header: true,
+      skipEmptyLines: true,
+      complete: (results) => {
+        cache[mode].schedules = results.data
+          .filter(r => (r.Route_Code || r.Route_ID) && r.Departure_Time)
+          .map(r => ({
+            scheduleId: (r.Schedule_ID || '').trim(),
+            routeCode: (r.Route_Code || r.Route_ID || '').trim(),
+            stopId: (r.Stop_ID || '').trim(),
+            tripNumber: (r.Trip_Number || '').trim(),
+            direction: (r.Direction || '').trim(),
+            operatingDays: (r.Operating_Days || 'Daily').trim(),
+            departureTime: (r.Departure_Time || '').trim()
+          }));
+      }
+    });
+  }
+
+  async function switchMode(mode) {
+    currentMode = mode;
+    document.getElementById('btnWinter').classList.toggle('active', mode === 'winter');
+    document.getElementById('btnPublic').classList.toggle('active', mode === 'public');
+    
+    document.getElementById('scheduleContainer').innerHTML = '<div class="notice">Loading timetables...</div>';
+
     try {
-      const [stopsRes, schedRes] = await Promise.all([
-        fetch(STOPS_FILE).then(r => {
-          if (!r.ok) throw new Error(`HTTP ${r.status}: Failed to fetch ${STOPS_FILE}`);
-          return r.text();
-        }),
-        fetch(SCHED_FILE).then(r => {
-          if (!r.ok) throw new Error(`HTTP ${r.status}: Failed to fetch ${SCHED_FILE}`);
-          return r.text();
-        })
-      ]);
-
-      Papa.parse(stopsRes, {
-        header: true,
-        skipEmptyLines: true,
-        complete: (results) => {
-          results.data.forEach(row => {
-            if (row.Stop_ID) {
-              stopsMap[row.Stop_ID.trim()] = row;
-            }
-          });
-        }
-      });
-
-      Papa.parse(schedRes, {
-        header: true,
-        skipEmptyLines: true,
-        complete: (results) => {
-          schedules = results.data
-            .filter(r => r.Route_Code && r.Departure_Time)
-            .map(r => ({
-              scheduleId: r.Schedule_ID ? r.Schedule_ID.trim() : '',
-              routeCode: r.Route_Code.trim(),
-              stopId: r.Stop_ID ? r.Stop_ID.trim() : '',
-              tripNumber: r.Trip_Number ? r.Trip_Number.trim() : '',
-              direction: r.Direction ? r.Direction.trim() : '',
-              operatingDays: r.Operating_Days ? r.Operating_Days.trim() : 'Daily',
-              departureTime: r.Departure_Time.trim()
-            }));
-
-          initUI();
-        }
-      });
+      await loadDataForMode(mode);
+      initUI();
     } catch (err) {
       document.getElementById('scheduleContainer').innerHTML =
-        `<div class="notice" style="color: #f87171;">Error loading data: ${err.message}</div>`;
+        `<div class="notice" style="color: #f87171;">Error: ${err.message}</div>`;
     }
   }
 
   function initUI() {
+    const activeSchedules = cache[currentMode].schedules;
     const routeSelect = document.getElementById('routeSelect');
-    const uniqueRoutes = [...new Set(schedules.map(s => s.routeCode))];
+    const uniqueRoutes = [...new Set(activeSchedules.map(s => s.routeCode))];
 
     routeSelect.innerHTML = '';
     uniqueRoutes.forEach(route => {
@@ -168,12 +226,12 @@
       routeSelect.appendChild(opt);
     });
 
-    routeSelect.addEventListener('change', updateDirections);
-    document.getElementById('dirSelect').addEventListener('change', renderTimetable);
-    document.getElementById('langSelect').addEventListener('change', (e) => {
+    routeSelect.onchange = updateDirections;
+    document.getElementById('dirSelect').onchange = renderTimetable;
+    document.getElementById('langSelect').onchange = (e) => {
       currentLang = e.target.value;
       renderTimetable();
-    });
+    };
 
     updateDirections();
   }
@@ -181,7 +239,8 @@
   function updateDirections() {
     const route = document.getElementById('routeSelect').value;
     const dirSelect = document.getElementById('dirSelect');
-    const availableDirs = [...new Set(schedules.filter(s => s.routeCode === route).map(s => s.direction))];
+    const activeSchedules = cache[currentMode].schedules;
+    const availableDirs = [...new Set(activeSchedules.filter(s => s.routeCode === route).map(s => s.direction))];
 
     dirSelect.innerHTML = '';
     availableDirs.forEach(dir => {
@@ -198,8 +257,10 @@
     const route = document.getElementById('routeSelect').value;
     const dir = document.getElementById('dirSelect').value;
     const container = document.getElementById('scheduleContainer');
+    const activeStops = cache[currentMode].stopsMap;
+    const activeSchedules = cache[currentMode].schedules;
 
-    const filtered = schedules
+    const filtered = activeSchedules
       .filter(s => s.routeCode === route && s.direction === dir)
       .sort((a, b) => {
         const [aH, aM] = a.departureTime.split(':').map(Number);
@@ -213,11 +274,13 @@
     }
 
     container.innerHTML = filtered.map(item => {
-      const stop = stopsMap[item.stopId] || {};
+      const stop = activeStops[item.stopId] || {};
       const colKey = langKeys[currentLang] || 'Stop_Name_EN';
       const stopName = stop[colKey] || stop['Stop_Name_EN'] || item.stopId;
-      const fareText = stop.Fare && parseInt(stop.Fare) > 0 ? `¥${stop.Fare}` : 'Free';
-      const mapLink = stop.Google_Maps_URL ? `<a class="map-link" href="${stop.Google_Maps_URL}" target="_blank" rel="noopener">Map ↗</a>` : '';
+      const fareVal = stop.Fare || stop.Fare_Yuzawa;
+      const fareText = fareVal && parseInt(fareVal) > 0 ? `¥${fareVal}` : 'Free';
+      const mapUrl = stop.Google_Maps_URL;
+      const mapLink = mapUrl ? `<a class="map-link" href="${mapUrl}" target="_blank" rel="noopener">Map ↗</a>` : '';
 
       return `
         <div class="card">
@@ -234,7 +297,8 @@
     }).join('');
   }
 
-  loadData();
+  // Load winter shuttles by default on entry
+  switchMode('winter');
 </script>
 
 </body>
