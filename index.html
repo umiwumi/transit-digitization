@@ -300,7 +300,7 @@
       'IWAHARA_JOETSU_KOKUSAI': { en: 'Iwahara / Jokoku Shuttle', jp: '岩原・上国シャトル', zh_tr: '岩原・上國接駁車', zh_si: '岩原・上国接驳车', ko: '이와하라・조코쿠 셔틀' },
       'IWAPPARA_JOETSU_KOKUSAI': { en: 'Iwahara / Jokoku Shuttle', jp: '岩原・上国シャトル', zh_tr: '岩原・上國接駁車', zh_si: '岩原・上国接驳车', ko: '이와하라・조코쿠 셔틀' },
       'CHATEAU_SHIOZAWA': { en: 'Chateau Shiozawa Shuttle', jp: 'シャトー塩沢シャトル', zh_tr: '鹽澤城堡接駁車', zh_si: '盐泽城堡接驳车', ko: '샤토 시오자와 셔틀' },
-      'CHATEAU_SHIIOZAWA': { en: 'Chateau Shiozawa Shuttle', jp: 'シャトー塩沢シャトル', zh_tr: '鹽澤城堡接駁車', zh_si: '盐泽城堡接驳车', ko: '샤토 시오자와 셔틀' },
+      'CHATEAU_SHIIOZAWA': { en: 'Chateau Shiozawa Shuttle', jp: 'シャトー塩沢シャトル', zh_tr: '鹽澤城堡接駁車', zh_si: '盐泽城堡接驳车', ko: '샤토 시オ沢シャトル' },
       'KAGURA_LOCAL': { en: 'Kagura Local Line', jp: 'かぐら各停便', zh_tr: '神樂各站停靠便', zh_si: '神乐各站停靠便', ko: '카구라 각역정차편' },
       'EXPRESS': { en: 'Express Shuttle', jp: '急行シャトル', zh_tr: '急行接駁專車', zh_si: '急行接驳专车', ko: '급행 셔틀' },
       'KAGURA_EXPRESS': { en: 'Kagura Express', jp: 'かぐら急行バス', zh_tr: '神樂急行巴士', zh_si: '神乐急行巴士', ko: '카구라 급행버스' },
@@ -326,7 +326,12 @@
       'OUTBOUND': { en: 'Outbound (From Station)', jp: '下り（越後湯沢駅発）', zh_tr: '去程（越後湯澤站發車）', zh_si: '去程（越后汤泽站发车）', ko: '하행 (유자와역발)' },
       'INBOUND': { en: 'Inbound (To Station)', jp: '上り（越後湯沢駅行）', zh_tr: '回程（往越後湯澤站）', zh_si: '回程（往越后汤泽站）', ko: '상행 (유자와역행)' },
       'TO_CRYSTAL': { en: 'To Seibu Crystal', jp: '西武クリスタル前行', zh_tr: '往西武水晶前', zh_si: '往西武水晶前', ko: '세이부 크리스탈행' },
-      'TO_STATION': { en: 'To Echigo-Yuzawa Station', jp: '越後湯沢駅行', zh_tr: '往越後湯澤站', zh_si: '往越后汤泽站', ko: '에치고유자와역행' }
+      'TO_STATION': { en: 'To Echigo-Yuzawa Station', jp: '越後湯沢駅行', zh_tr: '往越後湯澤站', zh_si: '往越后汤泽站', ko: '에치고유자와역행' },
+      'FROM_STATION': { en: 'From Echigo-Yuzawa Station', jp: '越後湯沢駅発', zh_tr: '越後湯澤站發車', zh_si: '越后汤泽站发车', ko: '에치고유자와역발' },
+      'LOOP': { en: 'Loop', jp: '循環', zh_tr: '循環', zh_si: '循环', ko: '순환' },
+      'LOOP_RETURN': { en: 'Loop Return', jp: '循環（復路）', zh_tr: '循環（回程）', zh_si: '循环（回程）', ko: '순환 (복귀)' },
+      'LOOP_OUTBOUND': { en: 'Loop (Outbound)', jp: '循環（往路）', zh_tr: '循環（去程）', zh_si: '循环（去程）', ko: '순환 (가는편)' },
+      'RETURN': { en: 'Return', jp: '復路', zh_tr: '回程', zh_si: '回程', ko: '복귀' }
     }
   };
 
@@ -349,7 +354,7 @@
     return (str || '')
       .trim()
       .toUpperCase()
-      .replace(/[\s\-\/&・·,._~～—–\+]+/g, '_')
+      .replace(/[\s\-\/&・·,._~～—–\+()（）\[\]【】]+/g, '_')
       .replace(/^_+|_+$/g, '');
   }
 
@@ -653,7 +658,6 @@
     }).join('');
   }
 
-  // Preload both modes in background for universal search
   async function preloadAll() {
     await Promise.all([loadDataForMode('winter'), loadDataForMode('public')]);
   }
@@ -681,7 +685,6 @@
       const rawStops = cache[mode].rawStops;
       const schedules = cache[mode].schedules;
 
-      // Match stops across all 5 languages
       rawStops.forEach(stop => {
         const names = [
           stop.Stop_Name_EN, stop.Stop_Name_JP,
@@ -708,7 +711,6 @@
         }
       });
 
-      // Match routes across all 5 languages
       const uniqueRoutes = [...new Set(schedules.map(s => s.routeCode))];
       uniqueRoutes.forEach(rCode => {
         const translatedNames = ['en', 'jp', 'zh_tr', 'zh_si', 'ko'].map(l => {
@@ -788,7 +790,7 @@
     populateRoutes();
   });
 
-  // URL Query Parameters Engine for Physical QR Code Deep-Linking
+  // URL Query Parameters Engine
   async function handleUrlParams() {
     const params = new URLSearchParams(window.location.search);
     const mode = params.get('mode');
@@ -851,7 +853,7 @@
     });
   }
 
-  // App Initialization Sequence
+  // App Initialization
   updateStaticUI();
   switchMode('winter').then(() => {
     preloadAll().then(() => handleUrlParams());
