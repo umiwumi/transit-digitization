@@ -246,11 +246,11 @@
       loading: { en: 'Loading timetables...', jp: '時刻表を読み込み中...', zh_tr: '正在載入時刻表...', zh_si: '正在加载时刻表...', ko: '시간표를 불러오는 중...' },
       noDepartures: { en: 'No departures found for this selection.', jp: '該当する運行便がありません。', zh_tr: '沒有找到符合條件的班次。', zh_si: '没有找到符合条件的班次。', ko: '해당 조건의 운행 정보가 없습니다.' },
       searchPlaceholder: {
-        en: '🔍 Search stop or route (e.g. Naeba, 清津峡, GALA)...',
-        jp: '🔍 バス停・スキー場・路線を検索 (例: 苗場, 清津峡, GALA)...',
-        zh_tr: '🔍 搜尋站牌、滑雪場或路線 (例如: 苗場, 清津峽, GALA)...',
-        zh_si: '🔍 搜索站牌、滑雪场或路线 (例如: 苗场, 清津峡, GALA)...',
-        ko: '🔍 정류장, 리조트 또는 노선 검색 (예: 나에바, 키요츠쿄, GALA)...'
+        en: '🔍 Search stop or route (e.g. Iwappara, 清津峡, GALA)...',
+        jp: '🔍 バス停・スキー場・路線を検索 (例: 岩原, 清津峡, GALA)...',
+        zh_tr: '🔍 搜尋站牌、滑雪場或路線 (例如: 岩原, 清津峽, GALA)...',
+        zh_si: '🔍 搜索站牌、滑雪场或路线 (例如: 岩原, 清津峡, GALA)...',
+        ko: '🔍 정류장, 리조트 또는 노선 검색 (예: 이와하라, 키요츠쿄, GALA)...'
       }
     },
     days: {
@@ -261,10 +261,8 @@
       'DESIGNATED_FRIDAYS_ONLY': { en: 'Designated Fridays Only', jp: '特定金曜日運行', zh_tr: '特定週五運行', zh_si: '特定周五运行', ko: '특정 금요일 운행' }
     },
     routes: {
-      // Public Transit Lines
       'SEIBU_CRYSTAL': { en: 'Seibu Crystal Line', jp: '西武クリスタル線', zh_tr: '西武水晶線', zh_si: '西武水晶线', ko: '세이부 크리스탈선' },
       'CRYSTAL': { en: 'Seibu Crystal Line', jp: '西武クリスタル線', zh_tr: '西武水晶線', zh_si: '西武水晶线', ko: '세이부 크리스탈선' },
-      'R_01': { en: 'Seibu Crystal Line', jp: '西武クリスタル線', zh_tr: '西武水晶線', zh_si: '西武水晶线', ko: '세이부 크리스탈선' },
       'KIYOTSU': { en: 'Kiyotsukyo Gorge Line', jp: '清津峡線', zh_tr: '清津峽線', zh_si: '清津峡线', ko: '키요츠쿄선' },
       'KIYOTSUKYO': { en: 'Kiyotsukyo Gorge Line', jp: '清津峡線', zh_tr: '清津峽線', zh_si: '清津峡线', ko: '키요츠쿄선' },
       'HAKKAISAN': { en: 'Hakkaisan Line', jp: '八海山線', zh_tr: '八海山線', zh_si: '八海山线', ko: '핫카이산선' },
@@ -275,8 +273,6 @@
       'MUIKAMACHI': { en: 'Muikamachi Line', jp: '六日町線', zh_tr: '六日町線', zh_si: '六日町线', ko: '무이카마치선' },
       'DAIGENTA': { en: 'Daigenta Canyon Line', jp: '大源太線', zh_tr: '大源太峽谷線', zh_si: '大源太峡谷线', ko: '다이겐타선' },
       'TSUCHITARU': { en: 'Tsuchitaru Line', jp: '土樽線', zh_tr: '土樽線', zh_si: '土樽线', ko: '츠치타루선' },
-
-      // Winter Resort Shuttles & Expresses
       'BLUE': { en: 'Blue Line (GALA / NASPA)', jp: 'ブルーライン（GALA・NASPA）', zh_tr: '藍線（GALA・NASPA）', zh_si: '蓝线（GALA・NASPA）', ko: '블루 라인 (GALA・NASPA)' },
       'ORANGE': { en: 'Orange Line', jp: 'オレンジライン', zh_tr: '橘線', zh_si: '橙线', ko: '오렌지 라인' },
       'PURPLE': { en: 'Purple Line', jp: 'パープルライン', zh_tr: '紫線', zh_si: '紫线', ko: '퍼플 라인' },
@@ -284,40 +280,27 @@
       'PINK': { en: 'Pink Line', jp: 'ピンクライン', zh_tr: '粉紅線', zh_si: '粉红线', ko: '핑크 라인' },
       'YELLOW': { en: 'Yellow Line', jp: 'イエローライン', zh_tr: '黃線', zh_si: '黄线', ko: '옐로우 라인' },
       'RED': { en: 'Red Line', jp: 'レッドライン', zh_tr: '紅線', zh_si: '红线', ko: '레드 라인' },
-      'WHITE': { en: 'White Line', jp: 'ホワイトライン', zh_tr: '白線', zh_si: '白线', ko: '화이트 라인' },
+      'WHITE': { en: 'White Line', jp: 'ホワイトライン', zh_tr: '白線', zh_si: '白线', ko: '화이트 라イン' },
       'GALA_SPRING': { en: 'GALA Spring Shuttle', jp: 'GALA春便', zh_tr: 'GALA春季專車', zh_si: 'GALA春季专车', ko: 'GALA 봄 셔틀' },
       'ISHIUCHI_DIRECT': { en: 'Ishiuchi Direct Express', jp: '石打直行便', zh_tr: '石打直達專車', zh_si: '石打直达专车', ko: '이시우치 직행' },
       'ISHIUCHI_LOOP': { en: 'Ishiuchi Loop Shuttle', jp: '石打循環シャトル', zh_tr: '石打循環接駁車', zh_si: '石打循环接驳车', ko: '이시우치 순환 셔틀' },
       'ISHIUCHI_NIGHT': { en: 'Ishiuchi Night Shuttle', jp: '石打ナイターシャトル', zh_tr: '石打夜間接駁車', zh_si: '石打夜间接驳车', ko: '이시우치 야간 셔틀' },
       'DIRECT': { en: 'Direct Express Shuttle', jp: '直行便シャトル', zh_tr: '直達接駁專車', zh_si: '直达接驳专车', ko: '직행 셔틀' },
       'NIGHT': { en: 'Night Ski Shuttle', jp: 'ナイターシャトル', zh_tr: '夜間滑雪接駁車', zh_si: '夜间滑雪接驳车', ko: '야간 스키 셔틀' },
-      'IWAHARA': { en: 'Iwahara Line', jp: '岩原線', zh_tr: '岩原線', zh_si: '岩原线', ko: '이와하라선' },
-      'IWAPPARA': { en: 'Iwahara Line', jp: '岩原線', zh_tr: '岩原線', zh_si: '岩原线', ko: '이와하라선' },
-      'IWAHARA_JOKOKU': { en: 'Iwahara / Jokoku Shuttle', jp: '岩原・上国シャトル', zh_tr: '岩原・上國接駁車', zh_si: '岩原・上国接驳车', ko: '이와하라・조코쿠 셔틀' },
-      'IWAPPARA_JOKOKU': { en: 'Iwahara / Jokoku Shuttle', jp: '岩原・上国シャトル', zh_tr: '岩原・上國接駁車', zh_si: '岩原・上国接驳车', ko: '이와하라・조코쿠 셔틀' },
-      'IWAHARA_JOUKOKU': { en: 'Iwahara / Jokoku Shuttle', jp: '岩原・上国シャトル', zh_tr: '岩原・上國接駁車', zh_si: '岩原・上国接驳车', ko: '이와하라・조코쿠 셔틀' },
-      'IWAPPARA_JOUKOKU': { en: 'Iwahara / Jokoku Shuttle', jp: '岩原・上国シャトル', zh_tr: '岩原・上國接駁車', zh_si: '岩原・上国接驳车', ko: '이와하라・조코쿠 셔틀' },
-      'IWAHARA_JOETSU_KOKUSAI': { en: 'Iwahara / Jokoku Shuttle', jp: '岩原・上国シャトル', zh_tr: '岩原・上國接駁車', zh_si: '岩原・上国接驳车', ko: '이와하라・조코쿠 셔틀' },
-      'IWAPPARA_JOETSU_KOKUSAI': { en: 'Iwahara / Jokoku Shuttle', jp: '岩原・上国シャトル', zh_tr: '岩原・上國接駁車', zh_si: '岩原・上国接驳车', ko: '이와하라・조코쿠 셔틀' },
+      'IWAPPARA': { en: 'Iwappara Line', jp: '岩原線', zh_tr: '岩原線', zh_si: '岩原线', ko: '이와하라선' },
+      'IWAPPARA_JOKOKU': { en: 'Iwappara / Jokoku Shuttle', jp: '岩原・上国シャトル', zh_tr: '岩原・上國接駁車', zh_si: '岩原・上国接驳车', ko: '이와하라・조코쿠 셔틀' },
       'CHATEAU_SHIOZAWA': { en: 'Chateau Shiozawa Shuttle', jp: 'シャトー塩沢シャトル', zh_tr: '鹽澤城堡接駁車', zh_si: '盐泽城堡接驳车', ko: '샤토 시오자와 셔틀' },
-      'CHATEAU_SHIIOZAWA': { en: 'Chateau Shiozawa Shuttle', jp: 'シャトー塩沢シャトル', zh_tr: '鹽澤城堡接駁車', zh_si: '盐泽城堡接驳车', ko: '샤토 시オ沢シャトル' },
       'KAGURA_LOCAL': { en: 'Kagura Local Line', jp: 'かぐら各停便', zh_tr: '神樂各站停靠便', zh_si: '神乐各站停靠便', ko: '카구라 각역정차편' },
       'EXPRESS': { en: 'Express Shuttle', jp: '急行シャトル', zh_tr: '急行接駁專車', zh_si: '急行接驳专车', ko: '급행 셔틀' },
       'KAGURA_EXPRESS': { en: 'Kagura Express', jp: 'かぐら急行バス', zh_tr: '神樂急行巴士', zh_si: '神乐急行巴士', ko: '카구라 급행버스' },
       'MAIKO_HOTEL': { en: 'Maiko Hotel Shuttle', jp: '舞子高原ホテル便', zh_tr: '舞子高原飯店專車', zh_si: '舞子高原饭店专车', ko: '마이코 호텔 셔틀' },
       'MAIKO_DIRECT': { en: 'Maiko Direct Express', jp: '舞子直行便', zh_tr: '舞子直達專車', zh_si: '舞子直达专车', ko: '마이코 직행' },
-      'MAIKO': { en: 'Maiko Direct Express', jp: '舞子直行便', zh_tr: '舞子直達專車', zh_si: '舞子直达专车', ko: '마이코 직행' },
       'MUICA': { en: 'Muica Snow Resort Shuttle', jp: 'むいかスノーリゾート線', zh_tr: 'Muica滑雪度假村線', zh_si: 'Muica滑雪度假村线', ko: '무이카 스노우 리조트선' },
       'KANDATSU': { en: 'Kandatsu Shuttle', jp: '神立シャトル', zh_tr: '神立接駁車', zh_si: '神立接驳车', ko: '간다츠 셔틀' },
       'KAGURA_NAEBA': { en: 'Kagura / Naeba Express', jp: 'かぐら・苗場急行バス', zh_tr: '神樂・苗場急行巴士', zh_si: '神乐・苗场急行巴士', ko: '카구라・나에바 급행버스' },
-      'KAGURA': { en: 'Kagura Express', jp: 'かぐら急行バス', zh_tr: '神樂急行巴士', zh_si: '神乐急行巴士', ko: '카구라 급행버스' },
-      'NAEBA': { en: 'Naeba Express', jp: '苗場急行バス', zh_tr: '苗場急行巴士', zh_si: '苗场急行巴士', ko: '나에바 급행버스' },
       'YUZAWA_NAKASATO': { en: 'Yuzawa Nakazato Shuttle', jp: '湯沢中里シャトル', zh_tr: '湯澤中里接駁車', zh_si: '汤泽中里接驳车', ko: '유자와 나카자토 셔틀' },
-      'NAKASATO': { en: 'Yuzawa Nakazato Shuttle', jp: '湯沢中里シャトル', zh_tr: '湯澤中里接駁車', zh_si: '汤泽中里接驳车', ko: '유자와 나카자토 셔틀' },
       'YUZAWA_PARK': { en: 'Yuzawa Park Shuttle', jp: '湯沢パークシャトル', zh_tr: '湯澤公園接駁車', zh_si: '汤泽公园接驳车', ko: '유자와 파크 셔틀' },
-      'PARK': { en: 'Yuzawa Park Shuttle', jp: '湯沢パークシャトル', zh_tr: '湯澤公園接駁車', zh_si: '汤泽公园接驳车', ko: '유자와 파크 셔틀' },
       'ISHIUCHI_MARUYAMA': { en: 'Ishiuchi Maruyama Shuttle', jp: '石打丸山シャトル', zh_tr: '石打丸山接駁車', zh_si: '石打丸山接驳车', ko: '이시우치 마루야마 셔틀' },
-      'ISHIUCHI': { en: 'Ishiuchi Maruyama Shuttle', jp: '石打丸山シャトル', zh_tr: '石打丸山接駁車', zh_si: '石打丸山接驳车', ko: '이시우치 마루야마 셔틀' },
       'GALA': { en: 'GALA Shuttle', jp: 'GALAシャトル', zh_tr: 'GALA接駁車', zh_si: 'GALA接驳车', ko: 'GALA 셔틀' },
       'NASPA': { en: 'NASPA Shuttle', jp: 'NASPAシャトル', zh_tr: 'NASPA接駁車', zh_si: 'NASPA接驳车', ko: 'NASPA 셔틀' },
       'YUZAWA_KOGEN': { en: 'Yuzawa Kogen Shuttle', jp: '湯沢高原シャトル', zh_tr: '湯澤高原接駁車', zh_si: '汤泽高原接驳车', ko: '유자와 코겐 셔틀' }
@@ -354,7 +337,10 @@
     return (str || '')
       .trim()
       .toUpperCase()
-      .replace(/[\s\-\/&・·,._~～—–\+()（）\[\]【】]+/g, '_')
+      .replace(/IWAHARA/g, 'IWAPPARA')
+      .replace(/JOUKOKU/g, 'JOKOKU')
+      .replace(/TOUKAMACHI/g, 'TOKAMACHI')
+      .replace(/[\s/&・·,._~～—–+()（）[\]【】\-]+/g, '_')
       .replace(/^_+|_+$/g, '');
   }
 
@@ -391,12 +377,7 @@
     const map = cache[mode].stopsMap;
     const rKey = normalizeKey(routeCode);
     const sId = (stopId || '').trim();
-
-    return map[`${rKey}__${sId}`] ||
-           map[sId] ||
-           map[sId.replace(/^S-/, 'SC-')] ||
-           map[sId.replace(/^SC-/, 'S-')] ||
-           {};
+    return map[`${rKey}__${sId}`] || map[sId] || map[sId.replace(/^S-/, 'SC-')] || map[sId.replace(/^SC-/, 'S-')] || {};
   }
 
   function extractFare(stop) {
@@ -418,13 +399,10 @@
     const num = parseFloat(digits);
 
     if (currentMode === 'winter') {
-      if (!isNaN(num) && num > 0) {
-        return `<span class="fare-tag paid">¥${Math.round(num).toLocaleString()}</span>`;
-      }
+      if (!isNaN(num) && num > 0) return `<span class="fare-tag paid">¥${Math.round(num).toLocaleString()}</span>`;
       return `<span class="fare-tag">${freeText}</span>`;
     }
 
-    // Public Transit Mode:
     if (!isNaN(num) && num > 0) {
       const suffix = I18N.ui.toFromStation[currentLang] || '';
       return `<span class="fare-tag paid">¥${Math.round(num).toLocaleString()} <small style="font-size:0.7rem; opacity:0.8;">${suffix}</small></span>`;
@@ -435,7 +413,6 @@
       const termText = I18N.ui.terminal[currentLang] || 'Terminal';
       return `<span class="fare-tag" style="background: rgba(148, 163, 184, 0.15); color: var(--text-muted); font-weight: 500;">${termText}</span>`;
     }
-
     return `<span class="fare-tag">${freeText}</span>`;
   }
 
@@ -467,9 +444,7 @@
           const rCode = normalizeKey(row.Route_Code || row.Route_ID || '');
           if (sId) {
             cache[mode].stopsMap[sId] = row;
-            if (rCode) {
-              cache[mode].stopsMap[`${rCode}__${sId}`] = row;
-            }
+            if (rCode) cache[mode].stopsMap[`${rCode}__${sId}`] = row;
           }
         });
       }
@@ -526,10 +501,7 @@
       routeSelect.appendChild(opt);
     });
 
-    if (uniqueRoutes.includes(prevSelected)) {
-      routeSelect.value = prevSelected;
-    }
-
+    if (uniqueRoutes.includes(prevSelected)) routeSelect.value = prevSelected;
     routeSelect.onchange = populateDirections;
     populateDirections();
   }
@@ -549,10 +521,7 @@
       dirSelect.appendChild(opt);
     });
 
-    if (availableDirs.includes(prevSelected)) {
-      dirSelect.value = prevSelected;
-    }
-
+    if (availableDirs.includes(prevSelected)) dirSelect.value = prevSelected;
     dirSelect.onchange = populateDaysAndStops;
     populateDaysAndStops();
   }
@@ -576,9 +545,7 @@
       opt.textContent = translateDays(day);
       daySelect.appendChild(opt);
     });
-    if (prevDay && (availableDays.includes(prevDay) || prevDay === 'ALL')) {
-      daySelect.value = prevDay;
-    }
+    if (prevDay && (availableDays.includes(prevDay) || prevDay === 'ALL')) daySelect.value = prevDay;
 
     // Boarding Stop Filter
     const prevStop = stopSelect.value;
@@ -593,9 +560,7 @@
       opt.textContent = stopName;
       stopSelect.appendChild(opt);
     });
-    if (prevStop && (routeStopIds.includes(prevStop) || prevStop === 'ALL')) {
-      stopSelect.value = prevStop;
-    }
+    if (prevStop && (routeStopIds.includes(prevStop) || prevStop === 'ALL')) stopSelect.value = prevStop;
 
     daySelect.onchange = renderTimetable;
     stopSelect.onchange = renderTimetable;
@@ -612,12 +577,8 @@
 
     let filtered = activeSchedules.filter(s => s.routeCode === route && s.direction === dir);
 
-    if (selectedDay && selectedDay !== 'ALL') {
-      filtered = filtered.filter(s => s.operatingDays === selectedDay);
-    }
-    if (selectedStop && selectedStop !== 'ALL') {
-      filtered = filtered.filter(s => s.stopId === selectedStop);
-    }
+    if (selectedDay && selectedDay !== 'ALL') filtered = filtered.filter(s => s.operatingDays === selectedDay);
+    if (selectedStop && selectedStop !== 'ALL') filtered = filtered.filter(s => s.stopId === selectedStop);
 
     filtered.sort((a, b) => {
       const [aH, aM] = a.departureTime.split(':').map(Number);
@@ -662,14 +623,14 @@
     await Promise.all([loadDataForMode('winter'), loadDataForMode('public')]);
   }
 
-  // Multi-Language Universal Search Engine
+  // Multi-Language Universal Search Engine with Phonetic Aliasing
   const searchInput = document.getElementById('searchInput');
   const searchDropdown = document.getElementById('searchDropdown');
   const clearSearchBtn = document.getElementById('clearSearch');
 
   searchInput.addEventListener('input', async () => {
-    const q = searchInput.value.trim().toLowerCase();
-    if (!q) {
+    const rawQ = searchInput.value.trim().toLowerCase();
+    if (!rawQ) {
       searchDropdown.style.display = 'none';
       clearSearchBtn.style.display = 'none';
       return;
@@ -677,6 +638,12 @@
     clearSearchBtn.style.display = 'block';
 
     await preloadAll();
+
+    // Canonicalize phonetic variations in user query
+    const q = rawQ
+      .replace(/iwahara/g, 'iwappara')
+      .replace(/joukoku/g, 'jokoku')
+      .replace(/toukamachi/g, 'tokamachi');
 
     const matches = [];
     const seen = new Set();
@@ -691,7 +658,14 @@
           stop.Stop_Name_ZH_TR, stop.Stop_Name_ZH_SI, stop.Stop_Name_KO
         ].filter(Boolean);
 
-        const isMatch = names.some(n => n.toLowerCase().includes(q));
+        const isMatch = names.some(n => {
+          const canonicalName = n.toLowerCase()
+            .replace(/iwahara/g, 'iwappara')
+            .replace(/joukoku/g, 'jokoku')
+            .replace(/toukamachi/g, 'tokamachi');
+          return canonicalName.includes(q);
+        });
+
         if (isMatch) {
           const sId = (stop.Stop_ID || '').trim();
           const rCode = (stop.Route_Code || stop.Route_ID || '').trim();
@@ -717,7 +691,15 @@
           const entry = I18N.routes[normalizeKey(rCode)];
           return entry && entry[l] ? entry[l] : rCode;
         });
-        const isMatch = translatedNames.some(n => n.toLowerCase().includes(q)) || rCode.toLowerCase().includes(q);
+        
+        const isMatch = translatedNames.some(n => {
+          const canonicalRoute = n.toLowerCase()
+            .replace(/iwahara/g, 'iwappara')
+            .replace(/joukoku/g, 'jokoku')
+            .replace(/toukamachi/g, 'tokamachi');
+          return canonicalRoute.includes(q);
+        }) || rCode.toLowerCase().replace(/iwahara/g, 'iwappara').includes(q);
+
         if (isMatch) {
           const dedupKey = `${mode}_route_${rCode}`;
           if (!seen.has(dedupKey)) {
@@ -790,7 +772,6 @@
     populateRoutes();
   });
 
-  // URL Query Parameters Engine
   async function handleUrlParams() {
     const params = new URLSearchParams(window.location.search);
     const mode = params.get('mode');
@@ -800,9 +781,7 @@
     const day = params.get('day');
 
     if (mode && (mode === 'winter' || mode === 'public')) {
-      if (currentMode !== mode) {
-        await switchMode(mode);
-      }
+      if (currentMode !== mode) await switchMode(mode);
     }
 
     if (route) {
@@ -837,23 +816,18 @@
     if (stop) {
       const stopSelect = document.getElementById('stopSelect');
       const match = Array.from(stopSelect.options).find(opt => opt.value.trim() === stop.trim());
-      if (match) {
-        stopSelect.value = match.value;
-      }
+      if (match) stopSelect.value = match.value;
     }
 
     renderTimetable();
   }
 
-  // Offline Service Worker Registration
   if ('serviceWorker' in navigator) {
     window.addEventListener('load', () => {
-      navigator.serviceWorker.register('./sw.js')
-        .catch(err => console.error('Service Worker registration failed:', err));
+      navigator.serviceWorker.register('./sw.js').catch(err => console.error('Service Worker registration failed:', err));
     });
   }
 
-  // App Initialization
   updateStaticUI();
   switchMode('winter').then(() => {
     preloadAll().then(() => handleUrlParams());
