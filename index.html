@@ -440,6 +440,42 @@
     }
   }
 
+    // --- SCHEDULE AUTO-DETECTION ENGINE ---
+  const JAPAN_HOLIDAYS = [
+    "2026-01-01", "2026-01-12", "2026-02-11", "2026-02-23", "2026-03-20",
+    "2026-04-29", "2026-05-03", "2026-05-04", "2026-05-05", "2026-05-06",
+    "2026-07-20", "2026-08-11", "2026-09-21", "2026-09-22", "2026-09-23",
+    "2026-10-12", "2026-11-03", "2026-11-23",
+    "2027-01-01", "2027-01-11", "2027-02-11", "2027-02-23", "2027-03-21", "2027-03-22"
+  ];
+
+  function autoDetectScheduleDay(availableDays) {
+    // Force Japan Standard Time (JST) regardless of the user's device timezone
+    const jstString = new Date().toLocaleString("en-US", { timeZone: "Asia/Tokyo" });
+    const jstDate = new Date(jstString);
+    
+    const dayOfWeek = jstDate.getDay(); // 0 = Sunday, 6 = Saturday
+    const yyyy = jstDate.getFullYear();
+    const mm = String(jstDate.getMonth() + 1).padStart(2, '0');
+    const dd = String(jstDate.getDate()).padStart(2, '0');
+    const todayISO = `${yyyy}-${mm}-${dd}`;
+
+    const isWeekendOrHoliday = (dayOfWeek === 0 || dayOfWeek === 6 || JAPAN_HOLIDAYS.includes(todayISO));
+    const normAvailable = availableDays.map(d => String(d).toUpperCase());
+
+    // Try to match the exact string format found in the CSV
+    if (isWeekendOrHoliday) {
+      if (normAvailable.includes('WEEKEND/HOLIDAY')) return availableDays[normAvailable.indexOf('WEEKEND/HOLIDAY')];
+      if (normAvailable.includes('WEEKEND_HOLIDAY')) return availableDays[normAvailable.indexOf('WEEKEND_HOLIDAY')];
+    } else {
+      if (normAvailable.includes('WEEKDAY')) return availableDays[normAvailable.indexOf('WEEKDAY')];
+    }
+
+    // Fallbacks if the route doesn't have Weekday/Weekend splits
+    if (normAvailable.includes('DAILY')) return availableDays[normAvailable.indexOf('DAILY')];
+    return 'ALL';
+  }
+  
   function populateRoutes() {
     const routeSelect = document.getElementById('routeSelect');
     const uniqueRoutes = [...new Set(cache[currentMode].schedules.map(s => s.routeCode))];
