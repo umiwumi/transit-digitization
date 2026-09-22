@@ -26,7 +26,8 @@ SEIBU_CRYSTAL,SC-24,Asagai-shita,浅貝下,淺貝下,浅贝下,아사가이시�
 SEIBU_CRYSTAL,SC-25,Asagai,浅貝,淺貝,浅贝,아사가이,https://www.google.com/maps/search/?api=1&query=浅貝+バス停+新潟県湯沢町,25,700
 SEIBU_CRYSTAL,SC-26,Asagai-ue,浅貝上,淺貝上,浅贝上,아사가이우에,https://www.google.com/maps/search/?api=1&query=浅貝上+バス停+新潟県湯沢町,26,700
 SEIBU_CRYSTAL,SC-27,Seibu Crystal,西武クリスタル前,西武水晶前,西武水晶前,세이부 크리스탈 앞,https://www.google.com/maps/search/?api=1&query=西武クリスタル前+バス停,27,700
-KIYOTSU,K-01,Echigo-Yuzawa Sta. East Exit,越後湯沢駅,越後湯澤站東口,越后汤泽站东口,에치고유자와역 동쪽 출구,https://www.google.com/maps/search/?api=1&query=越後湯沢駅東口+バスのりば,1,0
+Route_Code,Stop_ID,Stop_Name_EN,Stop_Name_JP,Stop_Name_ZH_TR,Stop_Name_ZH_SI,Stop_Name_KO,Google_Maps_URL,Stop_Order,Fare
+KIYOTSU,K-01,Echigo-Yuzawa Sta. East Exit,湯沢駅前,越後湯澤站東口,越后汤泽站东口,에치고유자와역 동쪽 출구,https://www.google.com/maps/search/?api=1&query=越後湯沢駅東口+バスのりば,1,0
 KIYOTSU,K-02,Onsengai Entrance,温泉街入口,溫泉街入口,温泉街入口,온천거리 입구,https://www.google.com/maps/search/?api=1&query=温泉街入口+バス停+新潟県湯沢町,2,160
 KIYOTSU,K-03,Rakumachi,楽町,樂町,乐町,라쿠마치,https://www.google.com/maps/search/?api=1&query=楽町+バス停+新潟県湯沢町,3,160
 KIYOTSU,K-04,Shimonaka Entrance,下中入口,下中入口,下中入口,시모나카 입구,https://www.google.com/maps/search/?api=1&query=下中入口+バス停+新潟県湯沢町,4,160
@@ -39,6 +40,10 @@ KIYOTSU,K-10,Ueno,上野,上野,上野,우에노,https://www.google.com/maps/sea
 KIYOTSU,K-11,Ueno Kosen,上野鉱泉,上野礦泉,上野矿泉,우에노 온천,https://www.google.com/maps/search/?api=1&query=上野鉱泉+バス停,11,330
 KIYOTSU,K-12,Kurashita Entrance,倉下入口,倉下入口,仓下入口,쿠라시타 입구,https://www.google.com/maps/search/?api=1&query=倉下入口+バス停+新潟県十日町市,12,430
 KIYOTSU,K-13,Kiyotsukyo Gorge Entrance,清津峡入口,清津峽入口,清津峡入口,키요츠쿄 협곡 입구,https://www.google.com/maps/search/?api=1&query=清津峡入口+バス停+十日町市,13,500
+KIYOTSU,K-14,Nakashinden,中新田,中新田,中新田,나카신덴,https://www.google.com/maps/search/?api=1&query=中新田+バス停+新潟県十日町市,14,540
+KIYOTSU,K-15,Tsunan Town Center,津南町,津南町,津南町,쓰난마치,https://www.google.com/maps/search/?api=1&query=津南町+バス停,15,780
+KIYOTSU,K-16,Tsunan Sta. Corner,津南駅角,津南站角,津南站角,쓰난역 앞 사거리,https://www.google.com/maps/search/?api=1&query=津南駅角+バス停,16,830
+KIYOTSU,K-17,Morimiyanohara Sta.,森宮野原駅,森宮野原站,森宫野原站,모리미야노하라역,https://www.google.com/maps/search/?api=1&query=森宮野原駅+バス停,17,1020
 DAIGENTA,D-01,Echigo-Yuzawa Sta. East Exit,湯沢駅前,越後湯澤站東口,越后汤泽站东口,에치고유자와역 동쪽 출구,https://www.google.com/maps/search/?api=1&query=越後湯沢駅東口+バスのりば,1,0
 DAIGENTA,D-02,Yuzawa Medical Center,湯沢医療センター前,湯澤醫療中心前,汤泽医疗中心前,유자와 의료센터 앞,https://www.google.com/maps/search/?api=1&query=湯沢医療センター前+バス停,2,160
 DAIGENTA,D-03,Yuzawa Town Hall,湯沢役場前,湯澤町公所前,汤泽町公所前,유자와 정사무소 앞,https://www.google.com/maps/search/?api=1&query=湯沢役場前+バス停,3,160
