@@ -240,7 +240,7 @@
       allStops: { en: 'All Stops along Route', jp: '路線内のすべての停留所', zh_tr: '沿途所有站牌', zh_si: '沿途所有站牌', ko: '노선 내 모든 정류장' },
       free: { en: 'Free', jp: '無料', zh_tr: '免費', zh_si: '免费', ko: '무료' },
       terminal: { en: 'Terminal Station', jp: '発着拠点', zh_tr: '出發總站', zh_si: '始发总站', ko: '출발/도착역' },
-      toFromStation: { en: '(to/from Station)', jp: '(駅発着)', zh_tr: '(往返車站)', zh_si: '(往返车站)', ko: '(역 왕복)' },
+      toFromStation: { en: '(to/from Sta.)', jp: '(駅発着運賃)', zh_tr: '(往返車站票價)', zh_si: '(往返车站票价)', ko: '(역 왕복 요금)' },
       trip: { en: 'Trip', jp: '便', zh_tr: '班次', zh_si: '班次', ko: '운행편' },
       map: { en: 'Map ↗', jp: '地図 ↗', zh_tr: '地圖 ↗', zh_si: '地图 ↗', ko: '지도 ↗' },
       loading: { en: 'Loading timetables...', jp: '時刻表を読み込み中...', zh_tr: '正在載入時刻表...', zh_si: '正在加载时刻表...', ko: '시간표를 불러오는 중...' },
@@ -403,16 +403,19 @@
       return `<span class="fare-tag">${freeText}</span>`;
     }
 
-    if (!isNaN(num) && num > 0) {
-      const suffix = I18N.ui.toFromStation[currentLang] || '';
-      return `<span class="fare-tag paid">¥${Math.round(num).toLocaleString()} <small style="font-size:0.7rem; opacity:0.8;">${suffix}</small></span>`;
-    }
-
-    const isStation = /湯沢駅/i.test(stopNameJP || '');
+    // Public Transit: Terminal Station Check
+    const isStation = /湯沢駅|六日町駅/i.test(stopNameJP || '');
     if (isStation || num === 0) {
       const termText = I18N.ui.terminal[currentLang] || 'Terminal';
       return `<span class="fare-tag" style="background: rgba(148, 163, 184, 0.15); color: var(--text-muted); font-weight: 500;">${termText}</span>`;
     }
+
+    // Public Transit: Priced Stops
+    if (!isNaN(num) && num > 0) {
+      const suffix = I18N.ui.toFromStation[currentLang] || '';
+      return `<span class="fare-tag paid">¥${Math.round(num).toLocaleString()} <small style="font-size:0.72rem; opacity:0.85; font-weight:normal;">${suffix}</small></span>`;
+    }
+
     return `<span class="fare-tag">${freeText}</span>`;
   }
 
