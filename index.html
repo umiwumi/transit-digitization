@@ -367,12 +367,18 @@
     const stopsFile = DATA_CONFIG[mode].stops;
     const schedFile = DATA_CONFIG[mode].schedules;
 
-    const [stopsRes, schedRes] = await Promise.all([
-      fetch(stopsFile).then(r => r.ok ? r.text() : ""),
-      fetch(schedFile).then(r => r.ok ? r.text() : "")
-    ]);
+    console.log(`[${mode}] Attempting to load:`, stopsFile, 'and', schedFile);
 
-    if (!stopsRes || !schedRes) throw new Error(`Could not load CSV files for ${mode} mode.`);
+    const [stopsRes, schedRes] = await Promise.all([
+      fetch(stopsFile).then(r => {
+        if (!r.ok) throw new Error(`Missing Stops file: ${stopsFile}`);
+        return r.text();
+      }),
+      fetch(schedFile).then(r => {
+        if (!r.ok) throw new Error(`Missing Schedules file: ${schedFile}`);
+        return r.text();
+      })
+    ]);
 
     Papa.parse(stopsRes, {
       header: true, skipEmptyLines: 'greedy',
