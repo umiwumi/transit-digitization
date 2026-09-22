@@ -513,9 +513,11 @@
     
     const routeSchedules = cache[currentMode].schedules.filter(s => s.routeCode === route && s.direction === dir);
 
-    // Days
+    // --- DAYS ---
+    const prevDay = daySelect.value;
     const availableDays = [...new Set(routeSchedules.map(s => s.operatingDays))];
     daySelect.innerHTML = `<option value="ALL">${I18N.ui.allDays[currentLang] || I18N.ui.allDays.en}</option>`;
+    
     availableDays.forEach(day => {
       const opt = document.createElement('option');
       opt.value = day;
@@ -523,7 +525,17 @@
       daySelect.appendChild(opt);
     });
 
-    // Stops
+    // Auto-Select Logic: 
+    // If the user already made a manual choice that is still valid, keep it.
+    // Otherwise, auto-detect based on today's date in Japan.
+    if (prevDay && (availableDays.includes(prevDay) || prevDay === 'ALL')) {
+      daySelect.value = prevDay;
+    } else {
+      daySelect.value = autoDetectScheduleDay(availableDays);
+    }
+
+    // --- STOPS ---
+    const prevStop = stopSelect.value;
     const routeStopIds = [...new Set(routeSchedules.map(s => s.stopId))];
     stopSelect.innerHTML = `<option value="ALL">${I18N.ui.allStops[currentLang] || I18N.ui.allStops.en}</option>`;
     routeStopIds.forEach(sId => {
@@ -535,6 +547,7 @@
       opt.textContent = stopName;
       stopSelect.appendChild(opt);
     });
+    if (prevStop && (routeStopIds.includes(prevStop) || prevStop === 'ALL')) stopSelect.value = prevStop;
 
     daySelect.onchange = renderTimetable;
     stopSelect.onchange = renderTimetable;
