@@ -1,4 +1,27 @@
 Route_Code,Stop_ID,Stop_Name_EN,Stop_Name_JP,Stop_Name_ZH_TR,Stop_Name_ZH_SI,Stop_Name_KO,Google_Maps_URL,Stop_Order,Fare
+DAIGENTA,D-01,Echigo-Yuzawa Sta. East Exit,湯沢駅前,越後湯澤站東口,越后汤泽站东口,에치고유자와역 동쪽 출구,https://www.google.com/maps/search/?api=1&query=越後湯沢駅東口+バスのりば,1,0
+DAIGENTA,D-02,Yuzawa Medical Center,湯沢医療センター前,湯澤醫療中心前,汤泽医疗中心前,유자와 의료센터 앞,https://www.google.com/maps/search/?api=1&query=湯沢医療センター前+バス停,2,160
+DAIGENTA,D-03,Yuzawa Town Hall,湯沢役場前,湯澤町公所前,汤泽町公所前,유자와 정사무소 앞,https://www.google.com/maps/search/?api=1&query=湯沢役場前+バス停,3,160
+DAIGENTA,D-04,Miyabayashi,宮林,宮林,宫林,미야바야시,https://www.google.com/maps/search/?api=1&query=宮林+バス停+新潟県湯沢町,4,160
+DAIGENTA,D-05,Harashinden,原新田,原新田,原新田,하라신덴,https://www.google.com/maps/search/?api=1&query=原新田+バス停+新潟県湯沢町,5,160
+DAIGENTA,D-06,Yuzawa Gakuen,湯沢学園,湯澤學園,汤泽学园,유자와 학원,https://www.google.com/maps/search/?api=1&query=湯沢学園+バス停+新潟県湯沢町,6,200
+DAIGENTA,D-07,Yuzawa Gakuen Entrance,湯沢学園入口,湯澤學園入口,汤泽学园入口,유자와 학원 입구,https://www.google.com/maps/search/?api=1&query=湯沢学園入口+バス停,7,200
+DAIGENTA,D-08,Chuo Koen Entrance,中央公園入口,中央公園入口,中央公园入口,주오 공원 입구,https://www.google.com/maps/search/?api=1&query=中央公園入口+バス停+新潟県湯沢町,8,200
+DAIGENTA,D-09,Pool Aurora,プールオーロラ前,Aurora 泳池前,Aurora 泳池前,풀 오로라 앞,https://www.google.com/maps/search/?api=1&query=プールオーロラ前+バス停,9,200
+DAIGENTA,D-10,Iwappara (Iwahara),岩原,岩原,岩原,이와파라,https://www.google.com/maps/search/?api=1&query=岩原+バス停+新潟県湯沢町,10,260
+DAIGENTA,D-11,Iwappara Chuo,岩原中央,岩原中央,岩原中央,이와파라 중앙,https://www.google.com/maps/search/?api=1&query=岩原中央+バス停+新潟県湯沢町,11,260
+DAIGENTA,D-12,Iwappara Entrance,岩原入口,岩原入口,岩原入口,이와파라 입구,https://www.google.com/maps/search/?api=1&query=岩原入口+バス停+新潟県湯沢町,12,260
+DAIGENTA,D-13,Soena,添名,添名,添名,소에나,https://www.google.com/maps/search/?api=1&query=添名+バス停+新潟県湯沢町,13,330
+DAIGENTA,D-14,Hara,原,原,原,하라,https://www.google.com/maps/search/?api=1&query=原+バス停+新潟県湯沢町旭原,14,330
+DAIGENTA,D-15,Kosaka,小坂,小坂,小坂,고사카,https://www.google.com/maps/search/?api=1&query=小坂+バス停+新潟県湯沢町,15,370
+DAIGENTA,D-16,Takinomata Entrance,滝ノ又入口,瀧之又入口,泷之又入口,타키노마타 입구,https://www.google.com/maps/search/?api=1&query=滝ノ又入口+バス停+新潟県湯沢町,16,370
+DAIGENTA,D-17,Tanigo,谷後,谷後,谷后,타니고,https://www.google.com/maps/search/?api=1&query=谷後+バス停+新潟県湯沢町,17,390
+DAIGENTA,D-18,Kami-Tanigo,上谷後,上谷後,上谷后,가미타니고,https://www.google.com/maps/search/?api=1&query=上谷後+バス停+新潟県湯沢町,18,390
+DAIGENTA,D-19,Asahibara Hananosato,旭原花の郷,旭原花之鄉,旭原花之乡,아사히바라 하나노사토,https://www.google.com/maps/search/?api=1&query=旭原花の郷+バス停+新潟県湯沢町,19,410
+DAIGENTA,D-20,Taiken Kobo Daigenta,体験工房大源太前,體驗工房大源太前,体验工房大源太前,다이겐타 체험공방 앞,https://www.google.com/maps/search/?api=1&query=体験工房大源太前+バス停,20,410
+DAIGENTA,D-21,Asahibara,旭原,旭原,旭原,아사히바라,https://www.google.com/maps/search/?api=1&query=旭原+バス停+新潟県湯沢町,21,410
+DAIGENTA,D-22,Daigenta Canyon,大源太キャニオン,大源太峽谷,大源太峡谷,다이겐타 캐니언,https://www.google.com/maps/search/?api=1&query=大源太キャニオン+バス停,22,410
+
 SEIBU_CRYSTAL,SC-01,Echigo-Yuzawa Sta. East Exit,湯沢駅前,越後湯澤站東口,越后汤泽站东口,에치고유자와역 동쪽 출구,https://www.google.com/maps/search/?api=1&query=越後湯沢駅東口+バスのりば,1,0
 SEIBU_CRYSTAL,SC-02,Yuzawa Medical Center,湯沢医療センター前,湯澤醫療中心前,汤泽医疗中心前,유자와 의료센터 앞,https://www.google.com/maps/search/?api=1&query=湯沢町保健医療センター+バス停,2,160
 SEIBU_CRYSTAL,SC-03,Yuzawa Town Hall,湯沢役場前,湯澤町公所前,汤泽町公所前,유자와 정사무소 앞,https://www.google.com/maps/search/?api=1&query=湯沢町役場+バス停,3,160
@@ -26,7 +49,7 @@ SEIBU_CRYSTAL,SC-24,Asagai-shita,浅貝下,淺貝下,浅贝下,아사가이시�
 SEIBU_CRYSTAL,SC-25,Asagai,浅貝,淺貝,浅贝,아사가이,https://www.google.com/maps/search/?api=1&query=浅貝+バス停+新潟県湯沢町,25,700
 SEIBU_CRYSTAL,SC-26,Asagai-ue,浅貝上,淺貝上,浅贝上,아사가이우에,https://www.google.com/maps/search/?api=1&query=浅貝上+バス停+新潟県湯沢町,26,700
 SEIBU_CRYSTAL,SC-27,Seibu Crystal,西武クリスタル前,西武水晶前,西武水晶前,세이부 크리스탈 앞,https://www.google.com/maps/search/?api=1&query=西武クリスタル前+バス停,27,700
-Route_Code,Stop_ID,Stop_Name_EN,Stop_Name_JP,Stop_Name_ZH_TR,Stop_Name_ZH_SI,Stop_Name_KO,Google_Maps_URL,Stop_Order,Fare
+
 KIYOTSU,K-01,Echigo-Yuzawa Sta. East Exit,湯沢駅前,越後湯澤站東口,越后汤泽站东口,에치고유자와역 동쪽 출구,https://www.google.com/maps/search/?api=1&query=越後湯沢駅東口+バスのりば,1,0
 KIYOTSU,K-02,Onsengai Entrance,温泉街入口,溫泉街入口,温泉街入口,온천거리 입구,https://www.google.com/maps/search/?api=1&query=温泉街入口+バス停+新潟県湯沢町,2,160
 KIYOTSU,K-03,Rakumachi,楽町,樂町,乐町,라쿠마치,https://www.google.com/maps/search/?api=1&query=楽町+バス停+新潟県湯沢町,3,160
@@ -44,28 +67,7 @@ KIYOTSU,K-14,Nakashinden,中新田,中新田,中新田,나카신덴,https://www.
 KIYOTSU,K-15,Tsunan Town Center,津南町,津南町,津南町,쓰난마치,https://www.google.com/maps/search/?api=1&query=津南町+バス停,15,780
 KIYOTSU,K-16,Tsunan Sta. Corner,津南駅角,津南站角,津南站角,쓰난역 앞 사거리,https://www.google.com/maps/search/?api=1&query=津南駅角+バス停,16,830
 KIYOTSU,K-17,Morimiyanohara Sta.,森宮野原駅,森宮野原站,森宫野原站,모리미야노하라역,https://www.google.com/maps/search/?api=1&query=森宮野原駅+バス停,17,1020
-DAIGENTA,D-01,Echigo-Yuzawa Sta. East Exit,湯沢駅前,越後湯澤站東口,越后汤泽站东口,에치고유자와역 동쪽 출구,https://www.google.com/maps/search/?api=1&query=越後湯沢駅東口+バスのりば,1,0
-DAIGENTA,D-02,Yuzawa Medical Center,湯沢医療センター前,湯澤醫療中心前,汤泽医疗中心前,유자와 의료센터 앞,https://www.google.com/maps/search/?api=1&query=湯沢医療センター前+バス停,2,160
-DAIGENTA,D-03,Yuzawa Town Hall,湯沢役場前,湯澤町公所前,汤泽町公所前,유자와 정사무소 앞,https://www.google.com/maps/search/?api=1&query=湯沢役場前+バス停,3,160
-DAIGENTA,D-04,Miyabayashi,宮林,宮林,宫林,미야바야시,https://www.google.com/maps/search/?api=1&query=宮林+バス停+新潟県湯沢町,4,160
-DAIGENTA,D-05,Harashinden,原新田,原新田,原新田,하라신덴,https://www.google.com/maps/search/?api=1&query=原新田+バス停+新潟県湯沢町,5,160
-DAIGENTA,D-06,Yuzawa Gakuen,湯沢学園,湯澤學園,汤泽学园,유자와 학원,https://www.google.com/maps/search/?api=1&query=湯沢学園+バス停+新潟県湯沢町,6,200
-DAIGENTA,D-07,Yuzawa Gakuen Entrance,湯沢学園入口,湯澤學園入口,汤泽学园入口,유자와 학원 입구,https://www.google.com/maps/search/?api=1&query=湯沢学園入口+バス停,7,200
-DAIGENTA,D-08,Chuo Koen Entrance,中央公園入口,中央公園入口,中央公园入口,주오 공원 입구,https://www.google.com/maps/search/?api=1&query=中央公園入口+バス停+新潟県湯沢町,8,200
-DAIGENTA,D-09,Pool Aurora,プールオーロラ前,Aurora 泳池前,Aurora 泳池前,풀 오로라 앞,https://www.google.com/maps/search/?api=1&query=プールオーロラ前+バス停,9,200
-DAIGENTA,D-10,Iwappara (Iwahara),岩原,岩原,岩原,이와파라,https://www.google.com/maps/search/?api=1&query=岩原+バス停+新潟県湯沢町,10,260
-DAIGENTA,D-11,Iwappara Chuo,岩原中央,岩原中央,岩原中央,이와파라 중앙,https://www.google.com/maps/search/?api=1&query=岩原中央+バス停+新潟県湯沢町,11,260
-DAIGENTA,D-12,Iwappara Entrance,岩原入口,岩原入口,岩原入口,이와파라 입구,https://www.google.com/maps/search/?api=1&query=岩原入口+バス停+新潟県湯沢町,12,260
-DAIGENTA,D-13,Soena,添名,添名,添名,소에나,https://www.google.com/maps/search/?api=1&query=添名+バス停+新潟県湯沢町,13,330
-DAIGENTA,D-14,Hara,原,原,原,하라,https://www.google.com/maps/search/?api=1&query=原+バス停+新潟県湯沢町旭原,14,330
-DAIGENTA,D-15,Kosaka,小坂,小坂,小坂,고사카,https://www.google.com/maps/search/?api=1&query=小坂+バス停+新潟県湯沢町,15,370
-DAIGENTA,D-16,Takinomata Entrance,滝ノ又入口,瀧之又入口,泷之又入口,타키노마타 입구,https://www.google.com/maps/search/?api=1&query=滝ノ又入口+バス停+新潟県湯沢町,16,370
-DAIGENTA,D-17,Tanigo,谷後,谷後,谷后,타니고,https://www.google.com/maps/search/?api=1&query=谷後+バス停+新潟県湯沢町,17,390
-DAIGENTA,D-18,Kami-Tanigo,上谷後,上谷後,上谷后,가미타니고,https://www.google.com/maps/search/?api=1&query=上谷後+バス停+新潟県湯沢町,18,390
-DAIGENTA,D-19,Asahibara Hananosato,旭原花の郷,旭原花之鄉,旭原花之乡,아사히바라 하나노사토,https://www.google.com/maps/search/?api=1&query=旭原花の郷+バス停+新潟県湯沢町,19,410
-DAIGENTA,D-20,Taiken Kobo Daigenta,体験工房大源太前,體驗工房大源太前,体验工房大源太前,다이겐타 체험공방 앞,https://www.google.com/maps/search/?api=1&query=体験工房大源太前+バス停,20,410
-DAIGENTA,D-21,Asahibara,旭原,旭原,旭原,아사히바라,https://www.google.com/maps/search/?api=1&query=旭原+バス停+新潟県湯沢町,21,410
-DAIGENTA,D-22,Daigenta Canyon,大源太キャニオン,大源太峽谷,大源太峡谷,다이겐타 캐니언,https://www.google.com/maps/search/?api=1&query=大源太キャニオン+バス停,22,410
+
 MAIKO,YM-01,Yuzawa Depot,湯沢車庫前,湯澤車庫前,汤泽车库前,유자와 차고 앞,https://www.google.com/maps/search/?api=1&query=湯沢車庫前+バス停,1,160
 MAIKO,YM-02,Yuzawa Medical Center,湯沢医療センター前,湯澤醫療中心前,汤泽医疗中心前,유자와 의료센터 앞,https://www.google.com/maps/search/?api=1&query=湯沢医療センター前+バス停,2,160
 MAIKO,YM-03,Echigo-Yuzawa Sta. East Exit,湯沢駅前,越後湯澤站東口,越后汤泽站东口,에치고유자와역 동쪽 출구,https://www.google.com/maps/search/?api=1&query=越後湯沢駅東口+バスのりば,3,0
@@ -106,6 +108,7 @@ MAIKO,YM-37,Muikamachi Sta. Corner,六日町駅角,六日町站前十字路,六�
 MAIKO,YM-38,Hachiman,八幡,八幡,八幡,하치만,https://www.google.com/maps/search/?api=1&query=八幡+バス停+南魚沼市,38,520
 MAIKO,YM-39,Muikamachi Bus Office,六日町営業所前,六日町營業所前,六日町营业所前,무이카마치 영업소 앞,https://www.google.com/maps/search/?api=1&query=六日町営業所前+バス停,39,520
 MAIKO,YM-40,Muikamachi Depot,六日町車庫前,六日町車庫前,六日町车库前,무이카마치 차고 앞,https://www.google.com/maps/search/?api=1&query=六日町車庫前+バス停,40,520
+
 HAKKAISAN,H-01,Muikamachi Sta. East Exit,六日町駅前,六日町站東口,六日町站东口,무이카마치역 동쪽 출구,https://www.google.com/maps/search/?api=1&query=六日町駅前+バス停,1,0
 HAKKAISAN,H-02,Muikamachi Sta. Corner,六日町駅角,六日町站前十字路,六日町站前十字路,무이카마치역 앞 사거리,https://www.google.com/maps/search/?api=1&query=六日町駅角+バス停,2,160
 HAKKAISAN,H-03,Disport,ディスポート前,Disport前,Disport前,디스포트 앞,https://www.google.com/maps/search/?api=1&query=ディスポート前+バス停+南魚沼市,3,160
@@ -125,12 +128,14 @@ HAKKAISAN,H-16,Yamaguchi Naka,山口中,山口中,山口中,야마구치 나카,
 HAKKAISAN,H-17,Yamaguchi,山口,山口,山口,야마구치,https://www.google.com/maps/search/?api=1&query=山口+バス停+南魚沼市,17,420
 HAKKAISAN,H-18,Nakatehara,中手原,中手原,中手原,나카테하라,https://www.google.com/maps/search/?api=1&query=中手原+バス停+南魚沼市,18,450
 HAKKAISAN,H-19,Hakkaisan Ski Resort,八海山スキー場,八海山滑雪場,八海山滑雪场,핫카이산 스키장,https://www.google.com/maps/search/?api=1&query=八海山スキー場+バス停,19,450
+
 TOKAMACHIAEON,MA-01,Muikamachi Sta. East Exit,六日町駅前,六日町站東口,六日町站东口,무이카마치역 동쪽 출구,https://www.google.com/maps/search/?api=1&query=六日町駅前+バス停,1,0
 TOKAMACHIAEON,MA-02,Muikamachi Sta. Corner,六日町駅角,六日町站前十字路,六日町站前十字路,무이카마치역 앞 사거리,https://www.google.com/maps/search/?api=1&query=六日町駅角+バス停,2,160
 TOKAMACHIAEON,MA-03,Hachiman,八幡,八幡,八幡,하치만,https://www.google.com/maps/search/?api=1&query=八幡+バス停+南魚沼市,3,160
 TOKAMACHIAEON,MA-04,Aeon Muikamachi Store,イオン六日町店,永旺六日町店,永旺六日町店,이온 무이카마치점,https://www.google.com/maps/search/?api=1&query=イオン六日町店+バス停,4,160
 TOKAMACHIAEON,MA-05,Muikamachi Bus Office,六日町営業所前,六日町營業所前,六日町营业所前,무이카마치 영업소 앞,https://www.google.com/maps/search/?api=1&query=六日町営業所前+バス停,5,160
 TOKAMACHIAEON,MA-06,Muikamachi Depot,六日町車庫前,六日町車庫前,六日町车库前,무이카마치 차고 앞,https://www.google.com/maps/search/?api=1&query=六日町車庫前+バス停,6,160
+
 GALA_SPRING,GL-01,GALA Yuzawa Snow Resort,GALA湯沢,GALA湯澤滑雪場,GALA汤泽滑雪场,갈라 유자와,https://www.google.com/maps/search/?api=1&query=ガーラ湯沢駅+スキー場,1,0
 GALA_SPRING,GL-02,Echigo-Yuzawa Sta. East Exit,越後湯沢駅東口,越後湯澤站東口,越后汤泽站东口,에치고유자와역 동쪽 출구,https://www.google.com/maps/search/?api=1&query=越後湯沢駅東口+シャトルバスのりば,2,0
 GALA_SPRING,GL-03,Echigo-Yuzawa Sta. West Exit (Inamoto-mae),越後湯沢駅西口(いなもと前),越後湯澤站西口(稻本前),越后汤泽站西口(稻本前),에치고유자와역 서쪽 출구 (이나모토 앞),https://www.google.com/maps/search/?api=1&query=湯沢温泉通+いなもと前,3,0
