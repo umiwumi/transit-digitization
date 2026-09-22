@@ -648,112 +648,39 @@ function setMode(mode) {
   const searchDropdown = document.getElementById('searchDropdown');
   const clearSearchBtn = document.getElementById('clearSearch');
 
-  searchInput.addEventListener('input', async () => {
-    const rawQ = searchInput.value.trim().toLowerCase();
-    if (!rawQ) {
-      searchDropdown.style.display = 'none';
-      clearSearchBtn.style.display = 'none';
-      return;
-    }
-    clearSearchBtn.style.display = 'block';
+searchInput.addEventListener('input', async (e) => {
+  const rawQ = e.target.value.toLowerCase().trim();
+  if (!rawQ) {
+    searchResults.innerHTML = '';
+    return;
+  }
 
-    await preloadAll();
+  // Ensure data for the current active mode is loaded
+  await loadModeData(currentMode);
 
-    // Canonicalize phonetic variations in user query
-    const q = rawQ
-      .replace(/iwahara/g, 'iwappara')
-      .replace(/joukoku/g, 'jokoku')
-      .replace(/toukamachi/g, 'tokamachi');
+  // Strictly select stops belonging ONLY to the active mode
+  const activeStops = currentMode === 'winter' 
+    ? cache.winter.stops 
+    : cache.public.stops;
 
-    const matches = [];
-    const seen = new Set();
+  const q = rawQ
+    .replace(/iwahara/g, 'iwappara')
+    .replace(/joukoku/g, 'jokoku')
+    .replace(/toukamachi/g, 'tokamachi')
+    .replace(/이와하라/g, '이와파라');
 
-    ['winter', 'public'].forEach(mode => {
-      const rawStops = cache[mode].rawStops;
-      const schedules = cache[mode].schedules;
+  const matches = activeStops.filter(stop => {
+    const names = [
+      stop.Stop_Name_EN, stop.Stop_Name_JP,
+      stop.Stop_Name_ZH_TR, stop.Stop_Name_ZH_SI, stop.Stop_Name_KO
+    ].filter(Boolean);
 
-      rawStops.forEach(stop => {
-        const names = [
-          stop.Stop_Name_EN, stop.Stop_Name_JP,
-          stop.Stop_Name_ZH_TR, stop.Stop_Name_ZH_SI, stop.Stop_Name_KO
-        ].filter(Boolean);
-
-        const isMatch = names.some(n => {
-          const canonicalName = n.toLowerCase()
-            .replace(/iwahara/g, 'iwappara')
-            .replace(/joukoku/g, 'jokoku')
-            .replace(/toukamachi/g, 'tokamachi');
-          return canonicalName.includes(q);
-        });
-
-        if (isMatch) {
-          const sId = (stop.Stop_ID || '').trim();
-          const rCode = (stop.Route_Code || stop.Route_ID || '').trim();
-          const dedupKey = `${mode}_stop_${sId}_${rCode}`;
-          if (!seen.has(dedupKey)) {
-            seen.add(dedupKey);
-            const colKey = stopLangKeys[currentLang] || 'Stop_Name_EN';
-            matches.push({
-              type: 'stop',
-              mode,
-              routeCode: rCode,
-              stopId: sId,
-              title: stop[colKey] || stop.Stop_Name_EN || sId,
-              subtitle: `${mode === 'winter' ? '❄️ Winter' : '🚍 Public'} · ${translateRoute(rCode)}`
-            });
-          }
-        }
-      });
-
-      const uniqueRoutes = [...new Set(schedules.map(s => s.routeCode))];
-      uniqueRoutes.forEach(rCode => {
-        const translatedNames = ['en', 'jp', 'zh_tr', 'zh_si', 'ko'].map(l => {
-          const entry = I18N.routes[normalizeKey(rCode)];
-          return entry && entry[l] ? entry[l] : rCode;
-        });
-        
-        const isMatch = translatedNames.some(n => {
-          const canonicalRoute = n.toLowerCase()
-            .replace(/iwahara/g, 'iwappara')
-            .replace(/joukoku/g, 'jokoku')
-            .replace(/toukamachi/g, 'tokamachi');
-          return canonicalRoute.includes(q);
-        }) || rCode.toLowerCase().replace(/iwahara/g, 'iwappara').includes(q);
-
-        if (isMatch) {
-          const dedupKey = `${mode}_route_${rCode}`;
-          if (!seen.has(dedupKey)) {
-            seen.add(dedupKey);
-            matches.push({
-              type: 'route',
-              mode,
-              routeCode: rCode,
-              stopId: 'ALL',
-              title: translateRoute(rCode),
-              subtitle: mode === 'winter' ? '❄️ Winter Shuttles' : '🚍 Public Transit'
-            });
-          }
-        }
-      });
-    });
-
-    if (matches.length === 0) {
-      searchDropdown.innerHTML = `<div class="search-item" style="color: var(--text-muted); cursor: default;">No results found</div>`;
-      searchDropdown.style.display = 'block';
-      return;
-    }
-
-    searchDropdown.innerHTML = matches.slice(0, 10).map(m => `
-      <div class="search-item" onclick="selectSearchMatch('${m.mode}', '${m.routeCode}', '${m.stopId}')">
-        <div>
-          <div class="search-item-main">${m.title}</div>
-          <div class="search-item-sub">${m.subtitle}</div>
-        </div>
-        <span class="search-badge">${m.type.toUpperCase()}</span>
-      </div>
-    `).join('');
-    searchDropdown.style.display = 'block';
+    return names.some(n => n.toLowerCase().includes(q));
   });
+
+  renderSearchResults(matches);
+});
+
 
   window.selectSearchMatch = async function(mode, routeCode, stopId) {
     searchDropdown.style.display = 'none';
