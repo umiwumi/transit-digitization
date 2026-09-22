@@ -318,12 +318,29 @@
     }
   };
 
-  let currentMode = 'winter';
-  let cache = {
-    winter: { stopsMap: {}, rawStops: [], schedules: [] },
-    public: { stopsMap: {}, rawStops: [], schedules: [] }
-  };
-  let currentLang = 'en';
+let currentMode = window.location.hash === '#winter' ? 'winter' : 'public';
+
+function setMode(mode) {
+  currentMode = mode;
+  window.location.hash = mode === 'winter' ? '#winter' : '#public';
+  
+  // Clear search bar and active dropdowns immediately
+  const searchInput = document.getElementById('searchInput');
+  if (searchInput) searchInput.value = '';
+  const searchResults = document.getElementById('searchResults');
+  if (searchResults) searchResults.innerHTML = '';
+
+  // Reset route and stop filters so no orphaned state remains
+  resetDropdowns();
+  
+  // Update toggle buttons in UI
+  document.querySelectorAll('.mode-toggle-btn').forEach(btn => {
+    btn.classList.toggle('active', btn.dataset.mode === mode);
+  });
+
+  // Re-render UI strictly using currentMode's datasets
+  renderRouteSelector();
+}
 
   const stopLangKeys = {
     en: 'Stop_Name_EN',
