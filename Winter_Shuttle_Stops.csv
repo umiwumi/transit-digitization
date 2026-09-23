@@ -56,13 +56,15 @@ IWAHARA_LOOP_B,IW-15,Angel Plage,エンゼルプラージュ,Angel Plage,Angel P
 IWAHARA_LOOP_B,IW-16,Angel Grandia,エンゼルグランディア,Angel Grandia,Angel Grandia,엔젤 그란디아,https://www.google.com/maps/search/?api=1&query=エンゼルグランディア越後中里,12,0
 IWAHARA_LOOP_B,IW-17,Nakazato Sta. Intersection,中里駅前十字路,中里站前十字路,中里站前十字路,나카자토역 앞 사거리,https://www.google.com/maps/search/?api=1&query=越後中里駅,13,0
 IWAHARA_LOOP_B,IW-18,Watashi no Uchi Nakaya,私の家中屋,我的家中屋,我的家中屋,와타시노우치 나카야,https://www.google.com/maps/search/?api=1&query=私の家中屋,14,0
-
 NAKASATO,NK-01,Echigo-Yuzawa Sta. West Exit (Angel Grandia Desk),越後湯沢駅西口(エンゼルグランディア案内所),越後湯澤站西口(天使格蘭帝亞諮詢處),越后汤泽站西口(天使格兰帝亚问讯处),에치고유자와역-서구(엔젤그란디아-안내소),https://www.google.com/maps/search/?api=1&query=エンゼルグランディア越後中里+シャトルバス案内所,1,0
 NAKASATO,NK-02,Yuzawa Nakasato Snow Resort (Echigo-Nakasato Sta. West Exit),湯沢中里スノーリゾート(越後中里駅西口),湯澤中里滑雪度假村(越後中里站西口),汤泽中里滑雪度假村(越后中里站西口),유자와-나카사토-스노우리조트(에치고나카사토역-서구),https://www.google.com/maps/search/?api=1&query=越後中里駅西口+湯沢中里スノーリゾート,2,0
-CHATEAU_SHIOZAWA,CS-01,Echigo-Yuzawa Sta.,越後湯沢駅,越後湯澤站,越后汤泽站,에치고유자와역,https://www.google.com/maps/search/?api=1&query=越後湯沢駅+送迎バス,1,0
-CHATEAU_SHIOZAWA,CS-02,Shiozawa Sta.,塩沢駅,鹽澤站,盐泽站,시오자와역,https://www.google.com/maps/search/?api=1&query=塩沢駅,2,0
-CHATEAU_SHIOZAWA,CS-03,Chateau Tell Ipponsugi,一本杉,一本杉,一本杉,잇폰스기,https://www.google.com/maps/search/?api=1&query=シャトーテル一本杉,3,0
-CHATEAU_SHIOZAWA,CS-04,Chateau Tell Yoshizato,吉里,吉里,吉里,요시자토,https://www.google.com/maps/search/?api=1&query=シャトーテル吉里,4,0
+Route_Code,Stop_ID,Stop_Name_EN,Stop_Name_JP,Stop_Name_ZH_TR,Stop_Name_ZH_SI,Stop_Name_KO,Google_Maps_URL,Stop_Order,Fare
+CHATEAU_YUZAWA,CS-01,Echigo-Yuzawa Sta.,越後湯沢駅,越後湯澤站,越后汤泽站,에치고유자와역,https://www.google.com/maps/search/?api=1&query=越後湯沢駅,1,0
+CHATEAU_YUZAWA,CS-02,Chateau-tel Ipponsugi,シャトーテル一本杉,Chateau-tel一本杉,Chateau-tel一本杉,샤토텔 잇폰스기,https://www.google.com/maps/search/?api=1&query=シャトーテル一本杉,2,0
+CHATEAU_YUZAWA,CS-03,Chateau-tel Yoshisato,シャトーテル吉里,Chateau-tel吉里,Chateau-tel吉里,샤토텔 요시사토,https://www.google.com/maps/search/?api=1&query=シャトーテル吉里,3,0
+CHATEAU_SHIOZAWA,CS-04,Shiozawa Sta.,塩沢駅,塩沢站,盐泽站,시오자와역,https://www.google.com/maps/search/?api=1&query=塩沢駅,1,0
+CHATEAU_SHIOZAWA,CS-03,Chateau-tel Yoshisato,シャトーテル吉里,Chateau-tel吉里,Chateau-tel吉里,샤토텔 요시사토,https://www.google.com/maps/search/?api=1&query=シャトーテル吉里,2,0
+CHATEAU_SHIOZAWA,CS-02,Chateau-tel Ipponsugi,シャトーテル一本杉,Chateau-tel一本杉,Chateau-tel一本杉,샤토텔 잇폰스기,https://www.google.com/maps/search/?api=1&query=シャトーテル一本杉,3,0
 KAGURA_NAEBA,KN-01,Echigo-Yuzawa Sta. East Exit,越後湯沢駅前,越後湯澤站前,越后汤泽站前,에치고유자와역-앞,https://www.google.com/maps/search/?api=1&query=越後湯沢駅東口+バスのりば,1,0
 KAGURA_NAEBA,KN-02,Kagura Mitsumata Ski Resort,かぐら三俣スキー場,神樂三俁滑雪場,神乐三俣滑雪场,카구라-미츠마타-스키장,https://www.google.com/maps/search/?api=1&query=かぐらスキー場+みつまたステーション+バス停,2,400
 KAGURA_NAEBA,KN-03,Kaikake Onsen,貝掛温泉,貝掛溫泉,贝挂温泉,카이카케-온천,https://www.google.com/maps/search/?api=1&query=貝掛温泉口+バス停,3,460
