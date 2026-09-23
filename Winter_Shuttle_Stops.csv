@@ -78,5 +78,8 @@ MAIKO_HOTEL,MK-03,Maiko Parking,舞子パーキング,舞子停車場,舞子停�
 MAIKO_HOTEL,MK-04,Maiko Kogen Hotel,舞子高原ホテル,舞子高原飯店,舞子高原饭店,마이코-코겐-호텔,https://www.google.com/maps/search/?api=1&query=舞子高原ホテル,4,0
 MAIKO_DIRECT,MK-01,Echigo-Yuzawa Sta. East Exit,越後湯沢駅東口,越後湯澤站東口,越后汤泽站东口,에치고유자와역-동구,https://www.google.com/maps/search/?api=1&query=越後湯沢駅東口+舞子シャトルバスのりば,1,0
 MAIKO_DIRECT,MK-05,Maiko Day Ski Center (Gondola),日帰りスキーセンター,日帰り滑雪中心,日归滑雪中心,당일치기-스키센터(곤돌라),https://www.google.com/maps/search/?api=1&query=舞子スノーリゾート+日帰りスキーセンター,2,0
+Route_Code,Stop_ID,Stop_Name_EN,Stop_Name_JP,Stop_Name_ZH_TR,Stop_Name_ZH_SI,Stop_Name_KO,Google_Maps_URL,Stop_Order,Fare
+MAIKO_CONNECTION,MK-02,Maiko Day Trip Ski Center,舞子日帰りスキーセンター,舞子一日遊滑雪中心,舞子一日游滑雪中心,마이코 당일치기 스키 센터,https://www.google.com/maps/search/?api=1&query=舞子スノーリゾート+日帰りスキーセンター,1,0
+MAIKO_CONNECTION,MK-03,Maiko Kogen Hotel,舞子高原ホテル,舞子高原飯店,舞子高原饭店,마이코 고원 호텔,https://www.google.com/maps/search/?api=1&query=舞子高原ホテル,2,0
 MUICA,MC-01,Muikamachi Sta. East Exit,六日町駅東口,六日町站東口,六日町站东口,무이카마치역-동구,https://www.google.com/maps/search/?api=1&query=六日町駅東口,1,0
 MUICA,MC-02,Muica Snow Resort (Hotel Main Entrance),ムイカスノーリゾート(正面玄関前),Muica滑雪度假村(正面大門前),Muica滑雪度假村(正面大门前),무이카-스노우리조트(정문-앞),https://www.google.com/maps/search/?api=1&query=むいか温泉ホテル+正面玄関,2,0
