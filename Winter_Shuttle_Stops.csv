@@ -24,7 +24,6 @@ ORANGE,OL-10,Snow Country Museum,雪国資料館,雪國資料館,雪国资料馆
 ORANGE,OL-11,Kagetsu Hotel,松泉閣花月,松泉閣花月,松泉阁花月,쇼센카쿠-카게츠,https://www.google.com/maps/search/?api=1&query=松泉閣花月+湯沢町,11,0
 ORANGE,OL-12,Echigo-Yuzawa Sta. West Exit (Inamoto-mae),越後湯沢駅西口(いなもと前),越後湯澤站西口(稻本前),越后汤泽站西口(稻本前),에치고유자와역-서구(이나모토-앞),https://www.google.com/maps/search/?api=1&query=湯沢温泉通+いなもと前,12,0
 ORANGE,OL-13,Lions Mansion No. 3,ライオンズ第3,獅子大廈第3,狮子大厦第3,라이온스-제3,https://www.google.com/maps/search/?api=1&query=ライオンズマンション越後湯沢第3,13,0
-
 Route_Code,Stop_ID,Stop_Name_EN,Stop_Name_JP,Stop_Name_ZH_TR,Stop_Name_ZH_SI,Stop_Name_KO,Google_Maps_URL,Stop_Order,Fare
 ISHIUCHI_DIRECT,IM-01,Ishiuchi Maruyama (Resort Center),石打丸山(中央口リゾートセンター),石打丸山(中央口度假中心),石打丸山(中央口度假中心),이시우치 마루야마 (중앙구 리조트 센터),https://www.google.com/maps/search/?api=1&query=石打丸山スキー場+中央口,1,0
 ISHIUCHI_DIRECT,IM-02,Hatsukaishi Entrance,ハツカ石口,初日石口,初日石口,하츠카이시 입구,https://www.google.com/maps/search/?api=1&query=石打ハツカ石口,2,0
@@ -65,15 +64,16 @@ CHATEAU_YUZAWA,CS-03,Chateau-tel Yoshisato,シャトーテル吉里,Chateau-tel�
 CHATEAU_SHIOZAWA,CS-04,Shiozawa Sta.,塩沢駅,塩沢站,盐泽站,시오자와역,https://www.google.com/maps/search/?api=1&query=塩沢駅,1,0
 CHATEAU_SHIOZAWA,CS-03,Chateau-tel Yoshisato,シャトーテル吉里,Chateau-tel吉里,Chateau-tel吉里,샤토텔 요시사토,https://www.google.com/maps/search/?api=1&query=シャトーテル吉里,2,0
 CHATEAU_SHIOZAWA,CS-02,Chateau-tel Ipponsugi,シャトーテル一本杉,Chateau-tel一本杉,Chateau-tel一本杉,샤토텔 잇폰스기,https://www.google.com/maps/search/?api=1&query=シャトーテル一本杉,3,0
-KAGURA_NAEBA,KN-01,Echigo-Yuzawa Sta. East Exit,越後湯沢駅前,越後湯澤站前,越后汤泽站前,에치고유자와역-앞,https://www.google.com/maps/search/?api=1&query=越後湯沢駅東口+バスのりば,1,0
-KAGURA_NAEBA,KN-02,Kagura Mitsumata Ski Resort,かぐら三俣スキー場,神樂三俁滑雪場,神乐三俣滑雪场,카구라-미츠마타-스키장,https://www.google.com/maps/search/?api=1&query=かぐらスキー場+みつまたステーション+バス停,2,400
-KAGURA_NAEBA,KN-03,Kaikake Onsen,貝掛温泉,貝掛溫泉,贝挂温泉,카이카케-온천,https://www.google.com/maps/search/?api=1&query=貝掛温泉口+バス停,3,460
-KAGURA_NAEBA,KN-04,Futai Tashiro Ski Resort-mae,二居田代スキー場前,二居田代滑雪場前,二居田代滑雪场前,후타이-타시로-스키장-앞,https://www.google.com/maps/search/?api=1&query=二居田代スキー場前+バス停,4,570
-KAGURA_NAEBA,KN-05,Tashiro Ski Resort,田代スキー場,田代滑雪場,田代滑雪场,타시로-스키장,https://www.google.com/maps/search/?api=1&query=かぐらスキー場+田代ステーション+バス停,5,570
-KAGURA_NAEBA,KN-06,Naeba Ski Resort,苗場スキー場,苗場滑雪場,苗场滑雪场,나에바-스키장,https://www.google.com/maps/search/?api=1&query=苗場スキー場+日帰りスキーセンター+バス停,6,700
-KAGURA_NAEBA,KN-07,Seibu Villa-Iriguchi,西武ヴィラ入口,西武Villa入口,西武Villa入口,세이부-빌라-입구,https://www.google.com/maps/search/?api=1&query=西武ヴィラ入口+バス停,7,700
-KAGURA_NAEBA,KN-08,Naeba Prince Hotel-mae,苗場プリンスホテル前,苗場王子大飯店前,苗场王子大饭店前,나에바-프린스호텔-앞,https://www.google.com/maps/search/?api=1&query=苗場プリンスホテル+バス停,8,700
-KAGURA_NAEBA,KN-09,Seibu Crystal,西武クリスタル,西武水晶,西武水晶,세이부-크리스탈,https://www.google.com/maps/search/?api=1&query=西武クリスタル+バス停,9,700
+Route_Code,Stop_ID,Stop_Name_EN,Stop_Name_JP,Stop_Name_ZH_TR,Stop_Name_ZH_SI,Stop_Name_KO,Google_Maps_URL,Stop_Order,Fare
+KAGURA_NAEBA,KG-01,Echigo-Yuzawa Sta. East Exit,越後湯沢駅,越後湯澤站,越后汤泽站,에치고유자와역,https://www.google.com/maps/search/?api=1&query=越後湯沢駅東口,1,0
+KAGURA_NAEBA,KG-02,Kagura Mitsumata Ski Resort,かぐら三俣スキー場,Kagura三俣滑雪場,Kagura三俣滑雪场,카구라 미츠마타 스키장,https://www.google.com/maps/search/?api=1&query=かぐらスキー場+みつまたステーション,2,0
+KAGURA_NAEBA,KG-03,Kaikake Onsen,貝掛温泉,貝掛溫泉,贝挂温泉,카이카케 온천,https://www.google.com/maps/search/?api=1&query=貝掛温泉,3,0
+KAGURA_NAEBA,KG-04,Futai Tashiro Ski Resort (Hwy),二居田代スキー場前,二居田代滑雪場前,二居田代滑雪场前,후타이 타시로 스키장 앞,https://www.google.com/maps/search/?api=1&query=二居田代スキー場前,4,0
+KAGURA_NAEBA,KG-05,Tashiro Ski Resort (Rotary),田代スキー場,田代滑雪場,田代滑雪场,타시로 스키장,https://www.google.com/maps/search/?api=1&query=かぐらスキー場+田代ステーション,5,0
+KAGURA_NAEBA,KG-06,Naeba Ski Resort,苗場スキー場,苗場滑雪場,苗场滑雪场,나에바 스키장,https://www.google.com/maps/search/?api=1&query=苗場スキー場,6,0
+KAGURA_NAEBA,KG-07,Seibu Villa Entrance,西武ヴィラ入口,西武別墅入口,西武别墅入口,세이부 빌라 입구,https://www.google.com/maps/search/?api=1&query=西武ヴィラ入口,7,0
+KAGURA_NAEBA,KG-08,Naeba Prince Hotel,苗場プリンスホテル,苗場王子大飯店,苗场王子大饭店,나에바 프린스 호텔,https://www.google.com/maps/search/?api=1&query=苗場プリンスホテル,8,0
+KAGURA_NAEBA,KG-09,Seibu Crystal,西武クリスタル,西武水晶,西武水晶,세이부 크리스탈,https://www.google.com/maps/search/?api=1&query=西武クリスタル,9,0
 MAIKO_HOTEL,MK-01,Echigo-Yuzawa Sta. East Exit,越後湯沢駅東口,越後湯澤站東口,越后汤泽站东口,에치고유자와역-동구,https://www.google.com/maps/search/?api=1&query=越後湯沢駅東口+舞子シャトルバスのりば,1,0
 MAIKO_HOTEL,MK-02,Kadoya Rental-mae,レンタルかどや前,Kadoya雪具店前,Kadoya雪具店前,렌탈-카도야-앞,https://www.google.com/maps/search/?api=1&query=レンタルかどや+南魚沼市,2,0
 MAIKO_HOTEL,MK-03,Maiko Parking,舞子パーキング,舞子停車場,舞子停车场,마이코-주차장,https://www.google.com/maps/search/?api=1&query=舞子パーキング+南魚沼市,3,0
