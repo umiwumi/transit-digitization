@@ -32,7 +32,6 @@ ISHIUCHI_DIRECT,IM-03,Echigo-Yuzawa Sta. East Exit,越後湯沢駅東口,越後�
 ISHIUCHI_LOOP,IM-04,Yung Parnas (Spa),ユングパルナス,Yung Parnas溫泉飯店,Yung Parnas温泉饭店,융파르나스,https://www.google.com/maps/search/?api=1&query=ユングパルナス,4,0
 ISHIUCHI_LOOP,IM-05,Ishiuchi North Entrance,北口(観光口),北口(觀光口),北口(观光口),북구 (관광구),https://www.google.com/maps/search/?api=1&query=石打丸山スキー場+北口,5,0
 ISHIUCHI_LOOP,IM-06,Resort Center Annex,アネックス,附屬館 (Annex),附属馆 (Annex),리조트 센터 별관,https://www.google.com/maps/search/?api=1&query=石打丸山+アネックス,6,0
-
 ISHIUCHI_NIGHT,IM-01,Ishiuchi Maruyama Resort Center,中央口リゾートセンター,中央口度假中心,中央口度假中心,이시우치-마루ヤ마-리조트센터,https://www.google.com/maps/search/?api=1&query=石打丸山リゾートセンター,1,0
 ISHIUCHI_NIGHT,IM-02,Hatsukaishi-guchi,ハツカ石口,初卡石口,初卡石口,하츠카이시구치,https://www.google.com/maps/search/?api=1&query=石打丸山スキー場+ハツカ石口,2,0
 ISHIUCHI_NIGHT,IM-03,Echigo-Yuzawa Sta. East Exit,越後湯沢駅(東口),越後湯澤站(東口),越后汤泽站(东口),에치고유자와역-동구,https://www.google.com/maps/search/?api=1&query=越後湯沢駅東口+シャトルバスのりば,3,0
@@ -47,6 +46,16 @@ IWAHARA_JOKOKU,IW-07,White Plaza Yuzawa,ホワイトプラザ湯沢,White Plaza�
 IWAHARA_JOKOKU,IW-08,Kyu Est Club Iwappara,旧エストクラブ岩原,舊Est Club岩原,旧Est Club岩原,구-에스트클럽-이와파라,https://www.google.com/maps/search/?api=1&query=エストクラブ岩原,6,0
 IWAHARA_JOKOKU,IW-01,Echigo-Yuzawa Sta. East Exit Info Desk,越後湯沢駅東口案内所,越後湯澤站東口諮詢處,越后汤泽站东口问讯处,에치고유자와역-동구안내소,https://www.google.com/maps/search/?api=1&query=越後湯沢駅東口案内所,7,0
 IWAHARA_JOKOKU,IW-04,Joetsu Kokusai Ski Resort Sta.,上越国際スキー場駅,上越國際滑雪場站,上越国际滑雪场站,조에츠코쿠사이-스키장역,https://www.google.com/maps/search/?api=1&query=上越国際スキー場駅,8,0
+IWAPPARA_LOOP_A,IW-09,Former Sporia,旧スポーリア,舊Sporia,旧Sporia,구 스포리아,https://www.google.com/maps/search/?api=1&query=スポーリア湯沢,4,0
+IWAPPARA_LOOP_A,IW-10,Lions Mansion III,ライオンズマンションIII,獅子公寓III,狮子公寓III,라이온즈 맨션 3,https://www.google.com/maps/search/?api=1&query=ライオンズマンション第3,5,0
+IWAPPARA_LOOP_A,IW-11,Echigo no Yado Inamoto,越後の宿 いなもと,越後之宿 稻本,越后之宿 稻本,에치고노야도 이나모토,https://www.google.com/maps/search/?api=1&query=越後の宿+いなもと,6,0
+IWAPPARA_LOOP_A,IW-12,History & Folklore Museum,歴史民俗資料館,歷史民俗資料館,历史民俗资料馆,역사 민속 자료관,https://www.google.com/maps/search/?api=1&query=湯沢町歴史民俗資料館+雪国館,7,0
+IWAPPARA_LOOP_B,IW-13,Oshita Ryokan,大下旅館,大下旅館,大下旅馆,오시타 료칸,https://www.google.com/maps/search/?api=1&query=大下旅館,8,0
+IWAPPARA_LOOP_B,IW-14,Foret 1,フォーレ1,Foret 1,Foret 1,포레 1,https://www.google.com/maps/search/?api=1&query=フォーレ1,10,0
+IWAPPARA_LOOP_B,IW-15,Angel Plage,エンゼルプラージュ,Angel Plage,Angel Plage,엔젤 플라주,https://www.google.com/maps/search/?api=1&query=エンゼルプラージュ,11,0
+IWAPPARA_LOOP_B,IW-16,Angel Grandia,エンゼルグランディア,Angel Grandia,Angel Grandia,엔젤 그란디아,https://www.google.com/maps/search/?api=1&query=エンゼルグランディア越後中里,12,0
+IWAPPARA_LOOP_B,IW-17,Nakazato Sta. Intersection,中里駅前十字路,中里站前十字路,中里站前十字路,나카자토역 앞 사거리,https://www.google.com/maps/search/?api=1&query=越後中里駅,13,0
+IWAPPARA_LOOP_B,IW-18,Watashi no Uchi Nakaya,私の家中屋,我的家中屋,我的家中屋,와타시노우치 나카야,https://www.google.com/maps/search/?api=1&query=私の家中屋,14,0
 NAKASATO,NK-01,Echigo-Yuzawa Sta. West Exit (Angel Grandia Desk),越後湯沢駅西口(エンゼルグランディア案内所),越後湯澤站西口(天使格蘭帝亞諮詢處),越后汤泽站西口(天使格兰帝亚问讯处),에치고유자와역-서구(엔젤그란디아-안내소),https://www.google.com/maps/search/?api=1&query=エンゼルグランディア越後中里+シャトルバス案内所,1,0
 NAKASATO,NK-02,Yuzawa Nakasato Snow Resort (Echigo-Nakasato Sta. West Exit),湯沢中里スノーリゾート(越後中里駅西口),湯澤中里滑雪度假村(越後中里站西口),汤泽中里滑雪度假村(越后中里站西口),유자와-나카사토-스노우리조트(에치고나카사토역-서구),https://www.google.com/maps/search/?api=1&query=越後中里駅西口+湯沢中里スノーリゾート,2,0
 CHATEAU_SHIOZAWA,CS-01,Echigo-Yuzawa Sta.,越後湯沢駅,越後湯澤站,越后汤泽站,에치고유자와역,https://www.google.com/maps/search/?api=1&query=越後湯沢駅+送迎バス,1,0
