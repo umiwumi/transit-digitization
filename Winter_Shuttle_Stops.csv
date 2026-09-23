@@ -11,7 +11,6 @@ BLUE,B-09,GALA Yuzawa,GALA湯沢,GALA湯澤滑雪場,GALA汤泽滑雪场,갈라 
 BLUE,B-10,Ishiuchi Maruyama (Chuo),石打丸山(中央口),石打丸山(中央口),石打丸山(中央口),이시우치 마루야마 (중앙구),https://www.google.com/maps/search/?api=1&query=石打丸山スキー場+中央口,10,0
 BLUE,B-11,Echigo-Yuzawa Sta. East Exit,越後湯沢駅東口,越後湯澤站東口,越后汤泽站东口,에치고유자와역 동쪽 출구,https://www.google.com/maps/search/?api=1&query=越後湯沢駅東口,11,0
 BLUE,B-12,Sakura-tei,さくら亭前,櫻亭前,樱亭前,사쿠라테이 앞,https://www.google.com/maps/search/?api=1&query=さくら亭,12,0
-
 ORANGE,OL-01,NASPA Ski Garden,NASPA,NASPA滑雪花園,NASPA滑雪花园,나스파-스키가든,https://www.google.com/maps/search/?api=1&query=NASPAニューオータニ+シャトルバス,1,0
 ORANGE,OL-02,Hirokawa Hotel,広川ホテル,廣川飯店,广川饭店,히로카와-호텔,https://www.google.com/maps/search/?api=1&query=広川ホテル+湯沢町,2,0
 ORANGE,OL-03,Sakura-tei-mae,さくら亭前,櫻亭前,樱亭前,사쿠라테이-앞,https://www.google.com/maps/search/?api=1&query=湯沢スキーハウス+さくら亭,3,0
@@ -25,14 +24,15 @@ ORANGE,OL-10,Snow Country Museum,雪国資料館,雪國資料館,雪国资料馆
 ORANGE,OL-11,Kagetsu Hotel,松泉閣花月,松泉閣花月,松泉阁花月,쇼센카쿠-카게츠,https://www.google.com/maps/search/?api=1&query=松泉閣花月+湯沢町,11,0
 ORANGE,OL-12,Echigo-Yuzawa Sta. West Exit (Inamoto-mae),越後湯沢駅西口(いなもと前),越後湯澤站西口(稻本前),越后汤泽站西口(稻本前),에치고유자와역-서구(이나모토-앞),https://www.google.com/maps/search/?api=1&query=湯沢温泉通+いなもと前,12,0
 ORANGE,OL-13,Lions Mansion No. 3,ライオンズ第3,獅子大廈第3,狮子大厦第3,라이온스-제3,https://www.google.com/maps/search/?api=1&query=ライオンズマンション越後湯沢第3,13,0
-ISHIUCHI_DIRECT,IM-01,Ishiuchi Maruyama Resort Center,中央口リゾートセンター,中央口度假中心,中央口度假中心,이시우치-마루야마-리조트센터,https://www.google.com/maps/search/?api=1&query=石打丸山リゾートセンター,1,0
-ISHIUCHI_DIRECT,IM-02,Hatsukaishi-guchi,ハツカ石口,初卡石口,初卡石口,하츠카이시구치,https://www.google.com/maps/search/?api=1&query=石打丸山スキー場+ハツカ石口,2,0
-ISHIUCHI_DIRECT,IM-03,Echigo-Yuzawa Sta. East Exit,越後湯沢駅(東口),越後湯澤站(東口),越后汤泽站(东口),에치고유자와역-동구,https://www.google.com/maps/search/?api=1&query=越後湯沢駅東口+シャトルバスのりば,3,0
-ISHIUCHI_LOOP,IM-01,Ishiuchi Maruyama Resort Center,中央口リゾートセンター,中央口度假中心,中央口度假中心,이시우치-마루야마-리조트센터,https://www.google.com/maps/search/?api=1&query=石打丸山リゾートセンター,1,0
-ISHIUCHI_LOOP,IM-04,Yungparunas,ユングパルナス,榮格帕納斯,荣格帕纳斯,융파르나스,https://www.google.com/maps/search/?api=1&query=ハツカ石温泉+ホテルヤングパルナス,2,0
-ISHIUCHI_LOOP,IM-02,Hatsukaishi-guchi,ハツカ石口,初卡石口,初卡石口,하츠카이시구치,https://www.google.com/maps/search/?api=1&query=石打丸山スキー場+ハツカ石口,3,0
-ISHIUCHI_LOOP,IM-05,North Entrance (Kanko-guchi),北口(観光口),北口(觀光口),北口(观光口),북구(관광구),https://www.google.com/maps/search/?api=1&query=石打丸山スキー場+観光口,4,0
-ISHIUCHI_LOOP,IM-06,Resort Center ANNEX,アネックス,ANNEX,ANNEX,아넥스,https://www.google.com/maps/search/?api=1&query=石打丸山+アネックス,5,0
+
+Route_Code,Stop_ID,Stop_Name_EN,Stop_Name_JP,Stop_Name_ZH_TR,Stop_Name_ZH_SI,Stop_Name_KO,Google_Maps_URL,Stop_Order,Fare
+ISHIUCHI_DIRECT,IM-01,Ishiuchi Maruyama (Resort Center),石打丸山(中央口リゾートセンター),石打丸山(中央口度假中心),石打丸山(中央口度假中心),이시우치 마루야마 (중앙구 리조트 센터),https://www.google.com/maps/search/?api=1&query=石打丸山スキー場+中央口,1,0
+ISHIUCHI_DIRECT,IM-02,Hatsukaishi Entrance,ハツカ石口,初日石口,初日石口,하츠카이시 입구,https://www.google.com/maps/search/?api=1&query=石打ハツカ石口,2,0
+ISHIUCHI_DIRECT,IM-03,Echigo-Yuzawa Sta. East Exit,越後湯沢駅東口,越後湯澤站東口,越后汤泽站东口,에치고유자와역 동쪽 출구,https://www.google.com/maps/search/?api=1&query=越後湯沢駅東口,3,0
+ISHIUCHI_LOOP,IM-04,Yung Parnas (Spa),ユングパルナス,Yung Parnas溫泉飯店,Yung Parnas温泉饭店,융파르나스,https://www.google.com/maps/search/?api=1&query=ユングパルナス,4,0
+ISHIUCHI_LOOP,IM-05,Ishiuchi North Entrance,北口(観光口),北口(觀光口),北口(观光口),북구 (관광구),https://www.google.com/maps/search/?api=1&query=石打丸山スキー場+北口,5,0
+ISHIUCHI_LOOP,IM-06,Resort Center Annex,アネックス,附屬館 (Annex),附属馆 (Annex),리조트 센터 별관,https://www.google.com/maps/search/?api=1&query=石打丸山+アネックス,6,0
+
 ISHIUCHI_NIGHT,IM-01,Ishiuchi Maruyama Resort Center,中央口リゾートセンター,中央口度假中心,中央口度假中心,이시우치-마루ヤ마-리조트센터,https://www.google.com/maps/search/?api=1&query=石打丸山リゾートセンター,1,0
 ISHIUCHI_NIGHT,IM-02,Hatsukaishi-guchi,ハツカ石口,初卡石口,初卡石口,하츠카이시구치,https://www.google.com/maps/search/?api=1&query=石打丸山スキー場+ハツカ石口,2,0
 ISHIUCHI_NIGHT,IM-03,Echigo-Yuzawa Sta. East Exit,越後湯沢駅(東口),越後湯澤站(東口),越后汤泽站(东口),에치고유자와역-동구,https://www.google.com/maps/search/?api=1&query=越後湯沢駅東口+シャトルバスのりば,3,0
