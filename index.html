@@ -139,6 +139,7 @@
       display: flex;
       justify-content: space-between;
       align-items: center;
+      transition: all 0.3s ease;
     }
     .time-col { display: flex; flex-direction: column; align-items: flex-start; }
     .time { font-size: 1.35rem; font-weight: 700; color: var(--accent); }
@@ -226,7 +227,7 @@
   let currentMode = window.location.hash === '#public' ? 'public' : 'winter';
 
   const DATA_CONFIG = {
-    winter: { stops: 'Winter_Shuttle_Stops.csv', schedules: 'Winter_Shuttle_Schedules.csv' },
+    winter: { stops: 'Winter_Shuttles_Stops.csv', schedules: 'Winter_Shuttles_Schedule.csv' },
     public: { stops: 'Public_Transit_Stops.csv', schedules: 'Public_Transit_Schedule.csv' }
   };
 
@@ -246,6 +247,7 @@
       toFromStation: { en: '(to/from Sta.)', jp: '(駅発着運賃)', zh_tr: '(往返車站票價)', zh_si: '(往返车站票价)', ko: '(역 왕복 요금)' },
       trip: { en: 'Trip', jp: '便', zh_tr: '班次', zh_si: '班次', ko: '운행편' },
       map: { en: 'Map ↗', jp: '地図 ↗', zh_tr: '地圖 ↗', zh_si: '地图 ↗', ko: '지도 ↗' },
+      nextBus: { en: 'NEXT', jp: '次発', zh_tr: '下一班', zh_si: '下一班', ko: '다음 버스' },
       loading: { en: 'Loading timetables...', jp: '時刻表を読み込み中...', zh_tr: '正在載入時刻表...', zh_si: '正在加载时刻表...', ko: '시간표를 불러오는 중...' },
       noDepartures: { en: 'No departures found for this selection.', jp: '該当する運行便がありません。', zh_tr: '沒有找到符合條件的班次。', zh_si: '没有找到符合条件的班次。', ko: '해당 조건의 운행 정보가 없습니다.' },
       searchPlaceholder: {
@@ -269,11 +271,48 @@
       'TOKAMACHIAEON': { en: 'Tokamachi / Aeon Line', jp: '十日町・イオン線', zh_tr: '十日町・永旺線', zh_si: '十日町・永旺线', ko: '토카마치・이온선' },
       'MAIKO': { en: 'Maiko / Muikamachi Line', jp: '舞子・六日町線', zh_tr: '舞子・六日町線', zh_si: '舞子・六日町线', ko: '마이코・무이카마치선' },
       'DAIGENTA': { en: 'Daigenta Canyon Line', jp: '大源太線', zh_tr: '大源太峽谷線', zh_si: '大源太峡谷线', ko: '다이겐타선' },
-      'GALA_SPRING': { en: 'GALA Spring Shuttle', jp: 'GALA春便', zh_tr: 'GALA春季專車', zh_si: 'GALA春季专车', ko: 'GALA 봄 셔틀' }
+      'TOWN_LOOP': { en: 'Town Loop', jp: '町内循環線', zh_tr: '市區循環線', zh_si: '市区循环线', ko: '마을 순환선' },
+      'BLUE': { en: 'Blue Line (GALA / NASPA)', jp: 'ブルーライン（GALA・NASPA）', zh_tr: '藍線（GALA・NASPA）', zh_si: '蓝线（GALA・NASPA）', ko: '블루 라인 (GALA・NASPA)' },
+      'ORANGE': { en: 'Orange Line', jp: 'オレンジライン', zh_tr: '橘線', zh_si: '橙线', ko: '오렌지 라인' },
+      'PURPLE': { en: 'Purple Line', jp: 'パープルライン', zh_tr: '紫線', zh_si: '紫线', ko: '퍼플 라인' },
+      'GREEN': { en: 'Green Line', jp: 'グリーンライン', zh_tr: '綠線', zh_si: '绿线', ko: '그린 라인' },
+      'PINK': { en: 'Pink Line', jp: 'ピンクライン', zh_tr: '粉紅線', zh_si: '粉红线', ko: '핑크 라인' },
+      'YELLOW': { en: 'Yellow Line', jp: 'イエローライン', zh_tr: '黃線', zh_si: '黄线', ko: '옐로우 라인' },
+      'RED': { en: 'Red Line', jp: 'レッドライン', zh_tr: '紅線', zh_si: '红线', ko: '레드 라인' },
+      'GALA_SPRING': { en: 'GALA Spring Shuttle', jp: 'GALA春便', zh_tr: 'GALA春季專車', zh_si: 'GALA春季专车', ko: 'GALA 봄 셔틀' },
+      'ISHIUCHI_DIRECT': { en: 'Ishiuchi Direct Express', jp: '石打直行便', zh_tr: '石打直達專車', zh_si: '石打直达专车', ko: '이시우치 직행' },
+      'ISHIUCHI_LOOP': { en: 'Ishiuchi Loop Shuttle', jp: '石打循環シャトル', zh_tr: '石打循環接駁車', zh_si: '石打循环接驳车', ko: '이시우치 순환 셔틀' },
+      'ISHIUCHI_NIGHT': { en: 'Ishiuchi Night Shuttle', jp: '石打ナイターシャトル', zh_tr: '石打夜間接駁車', zh_si: '石打夜间接驳车', ko: '이시우치 야간 셔틀' },
+      'DIRECT': { en: 'Direct Express Shuttle', jp: '直行便シャトル', zh_tr: '直達接駁專車', zh_si: '直达接驳专车', ko: '직행 셔틀' },
+      'NIGHT': { en: 'Night Ski Shuttle', jp: 'ナイターシャトル', zh_tr: '夜間滑雪接駁車', zh_si: '夜间滑雪接驳车', ko: '야간 스키 셔틀' },
+      'IWAPPARA': { en: 'Iwappara Line', jp: '岩原線', zh_tr: '岩原線', zh_si: '岩原线', ko: '이와하라선' },
+      'IWAPPARA_JOKOKU': { en: 'Iwappara / Jokoku Shuttle', jp: '岩原・上国シャトル', zh_tr: '岩原・上國接駁車', zh_si: '岩原・上国接驳车', ko: '이와하라・조코쿠 셔틀' },
+      'CHATEAU_SHIOZAWA': { en: 'Chateau Shiozawa Shuttle', jp: 'シャトー塩沢シャトル', zh_tr: '鹽澤城堡接駁車', zh_si: '盐泽城堡接驳车', ko: '샤토 시오자와 셔틀' },
+      'KAGURA_LOCAL': { en: 'Kagura Local Line', jp: 'かぐら各停便', zh_tr: '神樂各站停靠便', zh_si: '神乐各站停靠便', ko: '카구라 각역정차편' },
+      'EXPRESS': { en: 'Express Shuttle', jp: '急行シャトル', zh_tr: '急行接駁專車', zh_si: '急行接驳专车', ko: '급행 셔틀' },
+      'KAGURA_EXPRESS': { en: 'Kagura Express', jp: 'かぐら急行バス', zh_tr: '神樂急行巴士', zh_si: '神乐急行巴士', ko: '카구라 급행버스' },
+      'MAIKO_HOTEL': { en: 'Maiko Hotel Shuttle', jp: '舞子高原ホテル便', zh_tr: '舞子高原飯店專車', zh_si: '舞子高原饭店专车', ko: '마이코 호텔 셔틀' },
+      'MAIKO_DIRECT': { en: 'Maiko Direct Express', jp: '舞子直行便', zh_tr: '舞子直達專車', zh_si: '舞子直达专车', ko: '마이코 직행' },
+      'MUICA': { en: 'Muica Snow Resort Shuttle', jp: 'むいかスノーリゾート線', zh_tr: 'Muica滑雪度假村線', zh_si: 'Muica滑雪度假村线', ko: '무이카 스노우 리조트선' },
+      'KANDATSU': { en: 'Kandatsu Shuttle', jp: '神立シャトル', zh_tr: '神立接駁車', zh_si: '神立接驳车', ko: '간다츠 셔틀' },
+      'KAGURA_NAEBA': { en: 'Kagura / Naeba Express', jp: 'かぐら・苗場急行バス', zh_tr: '神樂・苗場急行巴士', zh_si: '神乐・苗场急行巴士', ko: '카구라・나에바 급행버스' },
+      'YUZAWA_NAKASATO': { en: 'Yuzawa Nakazato Shuttle', jp: '湯沢中里シャトル', zh_tr: '湯澤中里接駁車', zh_si: '汤泽中里接驳车', ko: '유자와 나카자토 셔틀' },
+      'YUZAWA_PARK': { en: 'Yuzawa Park Shuttle', jp: '湯沢パークシャトル', zh_tr: '湯澤公園接駁車', zh_si: '汤泽公园接驳车', ko: '유자와 파크 셔틀' },
+      'ISHIUCHI_MARUYAMA': { en: 'Ishiuchi Maruyama Shuttle', jp: '石打丸山シャトル', zh_tr: '石打丸山接駁車', zh_si: '石打丸山接驳车', ko: '이시우치 마루야마 셔틀' },
+      'GALA': { en: 'GALA Shuttle', jp: 'GALAシャトル', zh_tr: 'GALA接駁車', zh_si: 'GALA接驳车', ko: 'GALA 셔틀' },
+      'NASPA': { en: 'NASPA Shuttle', jp: 'NASPAシャトル', zh_tr: 'NASPA接駁車', zh_si: 'NASPA接驳车', ko: 'NASPA 셔틀' },
+      'YUZAWA_KOGEN': { en: 'Yuzawa Kogen Shuttle', jp: '湯沢高原シャトル', zh_tr: '湯澤高原接駁車', zh_si: '汤泽高原接驳车', ko: '유자와 코겐 셔틀' }
     },
     directions: {
       'OUTBOUND': { en: 'Outbound (From Station)', jp: '下り（越後湯沢駅発）', zh_tr: '去程（越後湯澤站發車）', zh_si: '去程（越后汤泽站发车）', ko: '하행 (유자와역발)' },
-      'INBOUND': { en: 'Inbound (To Station)', jp: '上り（越後湯沢駅行）', zh_tr: '回程（往越後湯澤站）', zh_si: '回程（往越后汤泽站）', ko: '상행 (유자와역행)' }
+      'INBOUND': { en: 'Inbound (To Station)', jp: '上り（越後湯沢駅行）', zh_tr: '回程（往越後湯澤站）', zh_si: '回程（往越后汤泽站）', ko: '상행 (유자와역행)' },
+      'TO_CRYSTAL': { en: 'To Seibu Crystal', jp: '西武クリスタル前行', zh_tr: '往西武水晶前', zh_si: '往西武水晶前', ko: '세이부 크리스탈행' },
+      'TO_STATION': { en: 'To Echigo-Yuzawa Station', jp: '越後湯沢駅行', zh_tr: '往越後湯澤站', zh_si: '往越后汤泽站', ko: '에치고유자와역행' },
+      'FROM_STATION': { en: 'From Echigo-Yuzawa Station', jp: '越後湯沢駅発', zh_tr: '越後湯澤站發車', zh_si: '越后汤泽站发车', ko: '에치고유자와역발' },
+      'LOOP': { en: 'Loop', jp: '循環', zh_tr: '循環', zh_si: '循环', ko: '순환' },
+      'LOOP_RETURN': { en: 'Loop Return', jp: '循環（復路）', zh_tr: '循環（回程）', zh_si: '循环（回程）', ko: '순환 (복귀)' },
+      'LOOP_OUTBOUND': { en: 'Loop (Outbound)', jp: '循環（往路）', zh_tr: '循環（去程）', zh_si: '循环（去程）', ko: '순환 (가는편)' },
+      'RETURN': { en: 'Return', jp: '復路', zh_tr: '回程', zh_si: '回程', ko: '복귀' }
     }
   };
 
@@ -361,23 +400,30 @@
     return `<span class="fare-tag">${freeText}</span>`;
   }
 
+  async function fetchWithFallback(primaryPath, fallbackPath) {
+    let res = await fetch(primaryPath);
+    if (!res.ok) {
+      res = await fetch(fallbackPath);
+    }
+    if (!res.ok) {
+      throw new Error(`Failed to load ${primaryPath}`);
+    }
+    return res.text();
+  }
+
   async function loadDataForMode(mode) {
     if (cache[mode].loaded) return;
 
     const stopsFile = DATA_CONFIG[mode].stops;
     const schedFile = DATA_CONFIG[mode].schedules;
-
-    console.log(`[${mode}] Attempting to load:`, stopsFile, 'and', schedFile);
+    
+    // Resilient fallback naming in case local file naming drops the plural 's'
+    const stopsFallback = mode === 'winter' ? 'Winter_Shuttle_Stops.csv' : 'Public_Transit_Stops.csv';
+    const schedFallback = mode === 'winter' ? 'Winter_Shuttle_Schedules.csv' : 'Public_Transit_Schedule.csv';
 
     const [stopsRes, schedRes] = await Promise.all([
-      fetch(stopsFile).then(r => {
-        if (!r.ok) throw new Error(`Missing Stops file: ${stopsFile}`);
-        return r.text();
-      }),
-      fetch(schedFile).then(r => {
-        if (!r.ok) throw new Error(`Missing Schedules file: ${schedFile}`);
-        return r.text();
-      })
+      fetchWithFallback(stopsFile, stopsFallback),
+      fetchWithFallback(schedFile, schedFallback)
     ]);
 
     Papa.parse(stopsRes, {
@@ -446,42 +492,6 @@
     }
   }
 
-    // --- SCHEDULE AUTO-DETECTION ENGINE ---
-  const JAPAN_HOLIDAYS = [
-    "2026-01-01", "2026-01-12", "2026-02-11", "2026-02-23", "2026-03-20",
-    "2026-04-29", "2026-05-03", "2026-05-04", "2026-05-05", "2026-05-06",
-    "2026-07-20", "2026-08-11", "2026-09-21", "2026-09-22", "2026-09-23",
-    "2026-10-12", "2026-11-03", "2026-11-23",
-    "2027-01-01", "2027-01-11", "2027-02-11", "2027-02-23", "2027-03-21", "2027-03-22"
-  ];
-
-  function autoDetectScheduleDay(availableDays) {
-    // Force Japan Standard Time (JST) regardless of the user's device timezone
-    const jstString = new Date().toLocaleString("en-US", { timeZone: "Asia/Tokyo" });
-    const jstDate = new Date(jstString);
-    
-    const dayOfWeek = jstDate.getDay(); // 0 = Sunday, 6 = Saturday
-    const yyyy = jstDate.getFullYear();
-    const mm = String(jstDate.getMonth() + 1).padStart(2, '0');
-    const dd = String(jstDate.getDate()).padStart(2, '0');
-    const todayISO = `${yyyy}-${mm}-${dd}`;
-
-    const isWeekendOrHoliday = (dayOfWeek === 0 || dayOfWeek === 6 || JAPAN_HOLIDAYS.includes(todayISO));
-    const normAvailable = availableDays.map(d => String(d).toUpperCase());
-
-    // Try to match the exact string format found in the CSV
-    if (isWeekendOrHoliday) {
-      if (normAvailable.includes('WEEKEND/HOLIDAY')) return availableDays[normAvailable.indexOf('WEEKEND/HOLIDAY')];
-      if (normAvailable.includes('WEEKEND_HOLIDAY')) return availableDays[normAvailable.indexOf('WEEKEND_HOLIDAY')];
-    } else {
-      if (normAvailable.includes('WEEKDAY')) return availableDays[normAvailable.indexOf('WEEKDAY')];
-    }
-
-    // Fallbacks if the route doesn't have Weekday/Weekend splits
-    if (normAvailable.includes('DAILY')) return availableDays[normAvailable.indexOf('DAILY')];
-    return 'ALL';
-  }
-  
   function populateRoutes() {
     const routeSelect = document.getElementById('routeSelect');
     const uniqueRoutes = [...new Set(cache[currentMode].schedules.map(s => s.routeCode))];
@@ -519,11 +529,9 @@
     
     const routeSchedules = cache[currentMode].schedules.filter(s => s.routeCode === route && s.direction === dir);
 
-    // --- DAYS ---
-    const prevDay = daySelect.value;
+    // Days
     const availableDays = [...new Set(routeSchedules.map(s => s.operatingDays))];
     daySelect.innerHTML = `<option value="ALL">${I18N.ui.allDays[currentLang] || I18N.ui.allDays.en}</option>`;
-    
     availableDays.forEach(day => {
       const opt = document.createElement('option');
       opt.value = day;
@@ -531,17 +539,7 @@
       daySelect.appendChild(opt);
     });
 
-    // Auto-Select Logic: 
-    // If the user already made a manual choice that is still valid, keep it.
-    // Otherwise, auto-detect based on today's date in Japan.
-    if (prevDay && (availableDays.includes(prevDay) || prevDay === 'ALL')) {
-      daySelect.value = prevDay;
-    } else {
-      daySelect.value = autoDetectScheduleDay(availableDays);
-    }
-
-    // --- STOPS ---
-    const prevStop = stopSelect.value;
+    // Stops
     const routeStopIds = [...new Set(routeSchedules.map(s => s.stopId))];
     stopSelect.innerHTML = `<option value="ALL">${I18N.ui.allStops[currentLang] || I18N.ui.allStops.en}</option>`;
     routeStopIds.forEach(sId => {
@@ -553,7 +551,6 @@
       opt.textContent = stopName;
       stopSelect.appendChild(opt);
     });
-    if (prevStop && (routeStopIds.includes(prevStop) || prevStop === 'ALL')) stopSelect.value = prevStop;
 
     daySelect.onchange = renderTimetable;
     stopSelect.onchange = renderTimetable;
@@ -582,10 +579,23 @@
       return;
     }
 
+    // Determine the next upcoming bus
+    const now = new Date();
+    const currentMins = now.getHours() * 60 + now.getMinutes();
+    let nextBusIndex = -1;
+    for (let i = 0; i < filtered.length; i++) {
+      const [h, m] = filtered[i].departureTime.split(':').map(Number);
+      if ((h * 60 + m) >= currentMins) {
+        nextBusIndex = i;
+        break;
+      }
+    }
+
     const tripWord = I18N.ui.trip[currentLang] || I18N.ui.trip.en;
     const mapWord = I18N.ui.map[currentLang] || I18N.ui.map.en;
+    const nextText = I18N.ui.nextBus[currentLang] || I18N.ui.nextBus.en;
 
-    container.innerHTML = filtered.map(item => {
+    container.innerHTML = filtered.map((item, index) => {
       const stop = resolveStop(currentMode, item.routeCode, item.stopId);
       const colKey = stopLangKeys[currentLang] || 'Stop_Name_EN';
       const stopName = stop[colKey] || stop['Stop_Name_EN'] || item.stopId;
@@ -593,9 +603,14 @@
       const mapUrl = stop.Google_Maps_URL;
       const mapLink = mapUrl ? `<a class="map-link" href="${mapUrl}" target="_blank" rel="noopener">${mapWord}</a>` : '';
       
+      const isNext = index === nextBusIndex;
+      const cardStyle = isNext ? 'border: 2px solid var(--accent); box-shadow: 0 0 10px rgba(56, 189, 248, 0.2);' : '';
+      const nextBadge = isNext ? `<span style="background: var(--accent); color: #0f172a; padding: 2px 6px; border-radius: 4px; font-size: 0.7rem; font-weight: bold; margin-bottom: 4px; display: inline-block;">${nextText}</span><br>` : '';
+
       return `
-        <div class="card">
+        <div class="card" style="${cardStyle}" ${isNext ? 'id="next-bus"' : ''}>
           <div class="time-col">
+            ${nextBadge}
             <span class="time">${item.departureTime}</span>
             <span class="trip-badge">${tripWord} #${item.tripNumber} · ${translateDays(item.operatingDays)}</span>
           </div>
@@ -606,6 +621,12 @@
         </div>
       `;
     }).join('');
+
+    // Smooth auto-scroll to the next departure
+    setTimeout(() => {
+      const nextEl = document.getElementById('next-bus');
+      if (nextEl) nextEl.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    }, 150);
   }
 
   // --- 4. ISOLATED SEARCH ENGINE ---
@@ -623,9 +644,8 @@
     }
     clearSearchBtn.style.display = 'block';
 
-    await loadDataForMode(currentMode); // Ensure current mode data exists
+    await loadDataForMode(currentMode);
 
-    // Strictly restrict search to the currently active mode
     const activeStops = cache[currentMode].rawStops || [];
     
     const q = rawQ
@@ -649,7 +669,6 @@
       return;
     }
 
-    // Deduplicate by Stop_ID to avoid rendering the same stop 10 times
     const uniqueMatches = [];
     const seenIds = new Set();
     matches.forEach(m => {
@@ -702,6 +721,57 @@
     populateRoutes();
   });
 
+  // URL Query Parameters Engine for Deep-Linking 
+  async function handleUrlParams() {
+    const params = new URLSearchParams(window.location.search);
+    const mode = params.get('mode');
+    const route = params.get('route');
+    const stop = params.get('stop');
+    const dir = params.get('dir');
+    const day = params.get('day');
+
+    if (mode && (mode === 'winter' || mode === 'public')) {
+      if (currentMode !== mode) await switchMode(mode);
+    }
+
+    if (route) {
+      const routeSelect = document.getElementById('routeSelect');
+      const normRoute = normalizeKey(route);
+      const match = Array.from(routeSelect.options).find(opt => normalizeKey(opt.value) === normRoute);
+      if (match) {
+        routeSelect.value = match.value;
+        populateDirections();
+      }
+    }
+
+    if (dir) {
+      const dirSelect = document.getElementById('dirSelect');
+      const normDir = normalizeKey(dir);
+      const match = Array.from(dirSelect.options).find(opt => normalizeKey(opt.value) === normDir);
+      if (match) {
+        dirSelect.value = match.value;
+        populateDaysAndStops();
+      }
+    }
+
+    if (day) {
+      const daySelect = document.getElementById('daySelect');
+      const normDay = normalizeKey(day);
+      const match = Array.from(daySelect.options).find(opt => normalizeKey(opt.value) === normDay);
+      if (match) {
+        daySelect.value = match.value;
+      }
+    }
+
+    if (stop) {
+      const stopSelect = document.getElementById('stopSelect');
+      const match = Array.from(stopSelect.options).find(opt => opt.value.trim() === stop.trim());
+      if (match) stopSelect.value = match.value;
+    }
+
+    renderTimetable();
+  }
+
   // --- 5. INITIALIZATION ---
   if ('serviceWorker' in navigator) {
     window.addEventListener('load', () => {
@@ -710,7 +780,9 @@
   }
 
   updateStaticUI();
-  switchMode(currentMode);
+  switchMode(currentMode).then(() => {
+    handleUrlParams();
+  });
 
 </script>
 </body>
