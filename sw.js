@@ -1,4 +1,4 @@
-const CACHE_NAME = 'yuzawa-transit-v2';
+const CACHE_NAME = 'yuzawa-transit-v3';
 
 const STATIC_ASSETS = [
   './',
