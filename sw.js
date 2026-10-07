@@ -4,8 +4,8 @@ const STATIC_ASSETS = [
   './',
   'index.html',
   'https://cdn.jsdelivr.net/npm/papaparse@5.4.1/papaparse.min.js',
-  'Winter_Shuttle_Stops.csv',
-  'Winter_Shuttle_Schedules.csv',
+  'Winter_Transit_Stops.csv',
+  'Winter_Transit_Schedule.csv',
   'Public_Transit_Stops.csv',
   'Public_Transit_Schedule.csv'
 ];
