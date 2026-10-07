@@ -227,7 +227,7 @@
   let currentMode = window.location.hash === '#public' ? 'public' : 'winter';
 
   const DATA_CONFIG = {
-    winter: { stops: 'Winter_Shuttle_Stops.csv', schedules: 'Winter_Shuttle_Schedule.csv' },
+    winter: { stops: 'Winter_Transit_Stops.csv', schedules: 'Winter_Transit_Schedule.csv' },
     public: { stops: 'Public_Transit_Stops.csv', schedules: 'Public_Transit_Schedule.csv' }
   };
 
@@ -447,8 +447,8 @@
     const schedFile = DATA_CONFIG[mode].schedules;
     
     // Resilient fallback naming in case local file naming drops the plural 's'
-    const stopsFallback = mode === 'winter' ? 'Winter_Shuttle_Stops.csv' : 'Public_Transit_Stops.csv';
-    const schedFallback = mode === 'winter' ? 'Winter_Shuttle_Schedules.csv' : 'Public_Transit_Schedule.csv';
+    const stopsFallback = mode === 'winter' ? 'Winter_Transit_Stops.csv' : 'Public_Transit_Stops.csv';
+    const schedFallback = mode === 'winter' ? 'Winter_Transit_Schedule.csv' : 'Public_Transit_Schedule.csv';
 
     const [stopsRes, schedRes] = await Promise.all([
       fetchWithFallback(stopsFile, stopsFallback),
