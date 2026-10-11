@@ -972,9 +972,33 @@
     searchInput.value = '';
     clearSearchBtn.style.display = 'none';
 
+    // 1. Set the Route
     document.getElementById('routeSelect').value = routeCode;
+
+    // 2. Identify the direction that serves this stop
+    const sampleSched = cache[currentMode].schedules.find(s => s.routeCode === routeCode && s.stopId === stopId);
+    const targetDir = sampleSched ? sampleSched.direction : null;
+
     populateDirections();
-    document.getElementById('stopSelect').value = stopId;
+
+    // 3. Switch to the correct direction if it differs from default
+    if (targetDir) {
+      document.getElementById('dirSelect').value = targetDir;
+      populateDaysAndStops();
+    }
+
+    // 4. If the searched stop is an intermediate stop or terminus, set it as Destination
+    const destSelect = document.getElementById('destSelect');
+    const stopSelect = document.getElementById('stopSelect');
+
+    if (stopSelect.value !== stopId) {
+      // The searched stop is downstream: set as Destination (To)
+      destSelect.value = stopId;
+    } else {
+      // The user explicitly searched for the origin station itself
+      destSelect.value = 'TERMINUS';
+    }
+
     renderTimetable();
   };
 
