@@ -343,6 +343,27 @@
         zh_si: '🔍 搜索站牌或路线 (例如: 岩原, 清津峡, GALA)...',
         ko: '🔍 정류장 또는 노선 검색 (예: 이와하라, 키요츠쿄, GALA)...'
       },
+      servicesNavTitle: {
+        en: 'Station Services & Town Guide',
+        jp: '駅サービス＆観光案内',
+        zh_tr: '車站服務與觀光指南',
+        zh_si: '车站服务与观光指南',
+        ko: '역 편의시설 & 관광 안내'
+      },
+      servicesNavSub: {
+        en: 'Luggage lockers, day-use onsen, taxi plans & town guide',
+        jp: 'コインロッカー・日帰り温泉・定額タクシー・周辺案内',
+        zh_tr: '置物櫃・日歸溫泉・定額計程車・周邊景點',
+        zh_si: '行李柜・日归温泉・定额出租车・周边景点',
+        ko: '물품보관함・당일 온천・정액 택시・주변 관광'
+      },
+      servicesNavBtn: {
+        en: 'View Guide',
+        jp: '案内を見る',
+        zh_tr: '查看指南',
+        zh_si: '查看指南',
+        ko: '안내 보기'
+      }
     },
     days: {
       'DAILY': { en: 'Daily', jp: '毎日運行', zh_tr: '每日運行', zh_si: '每日运行', ko: '매일 운행' },
@@ -423,37 +444,9 @@
       'LOOP_RETURN': { en: 'Loop Return', jp: '循環（復路）', zh_tr: '循環（回程）', zh_si: '循环（回程）', ko: '순환 (복귀)' },
       'LOOP_OUTBOUND': { en: 'Loop (Outbound)', jp: '循環（往路）', zh_tr: '循環（去程）', zh_si: '循环（去程）', ko: '순환 (가는편)' },
       'RETURN': { en: 'Return', jp: '復路', zh_tr: '回程', zh_si: '回程', ko: '복귀' }
-    },
-      searchPlaceholder: {
-        en: '🔍 Search stop or route (e.g. Iwappara, 清津峡, GALA)...',
-        jp: '🔍 バス停・路線を検索 (例: 岩原, 清津峡, GALA)...',
-        zh_tr: '🔍 搜尋站牌或路線 (例如: 岩原, 清津峽, GALA)...',
-        zh_si: '🔍 搜索站牌或路线 (例如: 岩原, 清津峡, GALA)...',
-        ko: '🔍 정류장 또는 노선 검색 (예: 이와하라, 키요츠쿄, GALA)...'
-      },
-      servicesNavTitle: {
-        en: 'Station Services & Town Guide',
-        jp: '駅サービス＆観光案内',
-        zh_tr: '車站服務與觀光指南',
-        zh_si: '车站服务与观光指南',
-        ko: '역 편의시설 & 관광 안내'
-      },
-      servicesNavSub: {
-        en: 'Luggage lockers, day-use onsen, taxi plans & town guide',
-        jp: 'コインロッカー・日帰り温泉・定額タクシー・周辺案内',
-        zh_tr: '置物櫃・日歸溫泉・定額計程車・周邊景點',
-        zh_si: '行李柜・日归温泉・定额出租车・周边景点',
-        ko: '물품보관함・당일 온천・정액 택시・주변 관광'
-      },
-      servicesNavBtn: {
-        en: 'View Guide',
-        jp: '案内を見る',
-        zh_tr: '查看指南',
-        zh_si: '查看指南',
-        ko: '안내 보기'
-      }
-    };
-
+    }
+  };
+    
   const stopLangKeys = { en: 'Stop_Name_EN', jp: 'Stop_Name_JP', zh_tr: 'Stop_Name_ZH_TR', zh_si: 'Stop_Name_ZH_SI', ko: 'Stop_Name_KO' };
 
   // --- 2. CORE FUNCTIONS ---
@@ -511,16 +504,6 @@
     try {
       localStorage.setItem('yuzawa_lang', currentLang);
     } catch (e) {}
-  }
-
-    // Services Banner dynamic translations (safe check)
-    const titleEl = document.getElementById('servicesNavTitle');
-    const subEl = document.getElementById('servicesNavSub');
-    const btnEl = document.getElementById('servicesNavBtn');
-    if (titleEl && I18N.ui.servicesNavTitle) titleEl.textContent = I18N.ui.servicesNavTitle[currentLang] || I18N.ui.servicesNavTitle.en;
-    if (subEl && I18N.ui.servicesNavSub) subEl.textContent = I18N.ui.servicesNavSub[currentLang] || I18N.ui.servicesNavSub.en;
-    if (btnEl && I18N.ui.servicesNavBtn) btnEl.textContent = I18N.ui.servicesNavBtn[currentLang] || I18N.ui.servicesNavBtn.en;
-
   }
 
   function resolveStop(mode, routeCode, stopId) {
