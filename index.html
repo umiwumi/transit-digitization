@@ -674,6 +674,36 @@
     populateDaysAndStops();
   }
 
+    // National Holidays for the 2026–2027 operating season (YYYY-MM-DD)
+  const JP_HOLIDAYS_2026_2027 = new Set([
+    '2026-10-12', // Sports Day
+    '2026-11-03', // Culture Day
+    '2026-11-23', // Labor Thanksgiving
+    '2026-12-29', '2026-12-30', '2026-12-31', // Year-end transit adjustments
+    '2027-01-01', '2027-01-02', '2027-01-03', // New Year transit adjustments
+    '2027-01-11', // Coming of Age Day
+    '2027-02-11', // National Foundation Day
+    '2027-02-23', // Emperor's Birthday
+    '2027-03-21', '2027-03-22', // Vernal Equinox (and observed)
+    '2027-04-29', // Showa Day
+    '2027-05-03', '2027-05-04', '2027-05-05'  // Golden Week
+  ]);
+
+  function getTodayScheduleCategory() {
+    // Lock to Japan Standard Time regardless of user's home SIM / time zone
+    const jstDate = new Date(new Date().toLocaleString("en-US", { timeZone: "Asia/Tokyo" }));
+    const dayOfWeek = jstDate.getDay(); // 0 = Sun, 6 = Sat
+    const yyyy = jstDate.getFullYear();
+    const mm = String(jstDate.getMonth() + 1).padStart(2, '0');
+    const dd = String(jstDate.getDate()).padStart(2, '0');
+    const dateStr = `${yyyy}-${mm}-${dd}`;
+
+    const isWeekend = (dayOfWeek === 0 || dayOfWeek === 6);
+    const isHoliday = JP_HOLIDAYS_2026_2027.has(dateStr);
+
+    return (isWeekend || isHoliday) ? 'WEEKEND' : 'WEEKDAY';
+  }
+
   function populateDaysAndStops() {
     const route = document.getElementById('routeSelect').value;
     const dir = document.getElementById('dirSelect').value;
