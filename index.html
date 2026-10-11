@@ -498,6 +498,25 @@
     document.getElementById('lblStop').textContent = I18N.ui.stopLabel[currentLang] || I18N.ui.stopLabel.en;
     document.getElementById('searchInput').placeholder = I18N.ui.searchPlaceholder[currentLang] || I18N.ui.searchPlaceholder.en;
 
+    const titleEl = document.getElementById('servicesNavTitle');
+    const subEl = document.getElementById('servicesNavSub');
+    const btnEl = document.getElementById('servicesNavBtn');
+    const linkEl = document.getElementById('servicesNavBtnLink');
+
+    if (titleEl && I18N.ui.servicesNavTitle) titleEl.textContent = I18N.ui.servicesNavTitle[currentLang] || I18N.ui.servicesNavTitle.en;
+    if (subEl && I18N.ui.servicesNavSub) subEl.textContent = I18N.ui.servicesNavSub[currentLang] || I18N.ui.servicesNavSub.en;
+    if (btnEl && I18N.ui.servicesNavBtn) btnEl.textContent = I18N.ui.servicesNavBtn[currentLang] || I18N.ui.servicesNavBtn.en;
+
+    // Dynamically append the current language to the guide URL
+    if (linkEl) {
+      linkEl.href = `https://umiwumi.github.io/services/?lang=${currentLang}`;
+    }
+
+    try {
+      localStorage.setItem('yuzawa_lang', currentLang);
+    } catch (e) {}
+  }
+
     // Services Banner dynamic translations (safe check)
     const titleEl = document.getElementById('servicesNavTitle');
     const subEl = document.getElementById('servicesNavSub');
@@ -937,6 +956,14 @@
       navigator.serviceWorker.register('./sw.js').catch(err => console.error('SW Error:', err));
     });
   }
+
+    // Read incoming language from URL parameter or shared storage
+  const urlLang = new URLSearchParams(window.location.search).get('lang');
+  const savedLang = localStorage.getItem('yuzawa_lang');
+  const initialLang = [urlLang, savedLang].find(l => ['en', 'jp', 'zh_tr', 'zh_si', 'ko'].includes(l)) || 'en';
+
+  currentLang = initialLang;
+  document.getElementById('langSelect').value = initialLang;
 
   updateStaticUI();
   switchMode(currentMode).then(() => {
