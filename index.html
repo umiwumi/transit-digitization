@@ -341,7 +341,7 @@
         zh_tr: '🔍 搜尋站牌或路線 (例如: 岩原, 清津峽, GALA)...',
         zh_si: '🔍 搜索站牌或路线 (例如: 岩原, 清津峡, GALA)...',
         ko: '🔍 정류장 또는 노선 검색 (예: 이와하라, 키요츠쿄, GALA)...'
-      }
+      },
     },
     days: {
       'DAILY': { en: 'Daily', jp: '毎日運行', zh_tr: '每日運行', zh_si: '每日运行', ko: '매일 운행' },
@@ -451,8 +451,7 @@
         zh_si: '查看指南',
         ko: '안내 보기'
       }
-    }
-  };
+    };
 
   const stopLangKeys = { en: 'Stop_Name_EN', jp: 'Stop_Name_JP', zh_tr: 'Stop_Name_ZH_TR', zh_si: 'Stop_Name_ZH_SI', ko: 'Stop_Name_KO' };
 
@@ -495,13 +494,14 @@
     document.getElementById('lblStop').textContent = I18N.ui.stopLabel[currentLang] || I18N.ui.stopLabel.en;
     document.getElementById('searchInput').placeholder = I18N.ui.searchPlaceholder[currentLang] || I18N.ui.searchPlaceholder.en;
 
-    // Services Banner dynamic translations
+    // Services Banner dynamic translations (safe check)
     const titleEl = document.getElementById('servicesNavTitle');
     const subEl = document.getElementById('servicesNavSub');
     const btnEl = document.getElementById('servicesNavBtn');
-    if (titleEl) titleEl.textContent = I18N.ui.servicesNavTitle[currentLang] || I18N.ui.servicesNavTitle.en;
-    if (subEl) subEl.textContent = I18N.ui.servicesNavSub[currentLang] || I18N.ui.servicesNavSub.en;
-    if (btnEl) btnEl.textContent = I18N.ui.servicesNavBtn[currentLang] || I18N.ui.servicesNavBtn.en;
+    if (titleEl && I18N.ui.servicesNavTitle) titleEl.textContent = I18N.ui.servicesNavTitle[currentLang] || I18N.ui.servicesNavTitle.en;
+    if (subEl && I18N.ui.servicesNavSub) subEl.textContent = I18N.ui.servicesNavSub[currentLang] || I18N.ui.servicesNavSub.en;
+    if (btnEl && I18N.ui.servicesNavBtn) btnEl.textContent = I18N.ui.servicesNavBtn[currentLang] || I18N.ui.servicesNavBtn.en;
+
   }
 
   function resolveStop(mode, routeCode, stopId) {
