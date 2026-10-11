@@ -246,8 +246,7 @@
       <option value="ko">한국어</option>
     </select>
   </header>
-  
-  <!-- Station Services Triage Callout -->
+
   <!-- Station Services Triage Callout -->
   <div class="services-nav-banner">
     <div class="services-nav-content">
@@ -276,7 +275,7 @@
     <button class="mode-btn" id="btnPublic" onclick="switchMode('public')">🚍 Public Transit</button>
   </div>
 
-  <!-- Filter Grid -->
+   <!-- Filter Grid -->
   <div class="controls">
     <div class="control-group">
       <label id="lblRoute">Route</label>
@@ -287,12 +286,16 @@
       <select id="dirSelect"></select>
     </div>
     <div class="control-group">
-      <label id="lblDay">Schedule Type</label>
-      <select id="daySelect"></select>
+      <label id="lblStop">Boarding Stop (From)</label>
+      <select id="stopSelect"></select>
     </div>
     <div class="control-group">
-      <label id="lblStop">Boarding Stop</label>
-      <select id="stopSelect"></select>
+      <label id="lblDest">Get-Off Stop (To)</label>
+      <select id="destSelect"></select>
+    </div>
+    <div class="control-group" style="grid-column: span 2;">
+      <label id="lblDay">Schedule Type (Auto-detected)</label>
+      <select id="daySelect"></select>
     </div>
   </div>
 
@@ -325,7 +328,10 @@
       routeLabel: { en: 'Route', jp: '路線', zh_tr: '路線', zh_si: '路线', ko: '노선' },
       dirLabel: { en: 'Direction', jp: '方面 / 行き先', zh_tr: '方向', zh_si: '方向', ko: '방향' },
       dayLabel: { en: 'Schedule Type', jp: '運行区分', zh_tr: '運行類別', zh_si: '运行类别', ko: '운행 구분' },
-      stopLabel: { en: 'Boarding Stop', jp: '乗車バス停', zh_tr: '乘車站牌', zh_si: '乘车站牌', ko: '탑승 정류장' },
+      stopLabel: { en: 'Boarding Stop (From)', jp: '乗車バス停（出発）', zh_tr: '乘車站牌（起點）', zh_si: '乘车站牌（起点）', ko: '탑승 정류장 (출발)' },
+      destLabel: { en: 'Get-Off Stop (To)', jp: '降車バス停（行き先）', zh_tr: '下車站牌（目的地）', zh_si: '下车站牌（目的地）', ko: '하차 정류장 (도착)' },
+      terminusOption: { en: 'Final Terminus / End of Line', jp: '終点まで', zh_tr: '行駛至終點站', zh_si: '行驶至终点站', ko: '종점까지' },
+      mins: { en: 'min', jp: '分', zh_tr: '分鐘', zh_si: '分钟', ko: '분' },
       allDays: { en: 'All Operating Days', jp: 'すべての運行日', zh_tr: '所有運行日', zh_si: '所有运行日', ko: '모든 운행일' },
       allStops: { en: 'All Stops along Route', jp: '路線内のすべての停留所', zh_tr: '沿途所有站牌', zh_si: '沿途所有站牌', ko: '노선 내 모든 정류장' },
       free: { en: 'Free', jp: '無料', zh_tr: '免費', zh_si: '免费', ko: '무료' },
@@ -486,6 +492,10 @@
     document.getElementById('lblDir').textContent = I18N.ui.dirLabel[currentLang] || I18N.ui.dirLabel.en;
     document.getElementById('lblDay').textContent = I18N.ui.dayLabel[currentLang] || I18N.ui.dayLabel.en;
     document.getElementById('lblStop').textContent = I18N.ui.stopLabel[currentLang] || I18N.ui.stopLabel.en;
+    
+    const lblDest = document.getElementById('lblDest');
+    if (lblDest && I18N.ui.destLabel) lblDest.textContent = I18N.ui.destLabel[currentLang] || I18N.ui.destLabel.en;
+
     document.getElementById('searchInput').placeholder = I18N.ui.searchPlaceholder[currentLang] || I18N.ui.searchPlaceholder.en;
 
     const titleEl = document.getElementById('servicesNavTitle');
@@ -709,10 +719,11 @@
     const dir = document.getElementById('dirSelect').value;
     const daySelect = document.getElementById('daySelect');
     const stopSelect = document.getElementById('stopSelect');
+    const destSelect = document.getElementById('destSelect');
     
     const routeSchedules = cache[currentMode].schedules.filter(s => s.routeCode === route && s.direction === dir);
 
-    // Days setup
+    // 1. Operating Days setup & Auto-Detection
     const availableDays = [...new Set(routeSchedules.map(s => s.operatingDays))];
     daySelect.innerHTML = `<option value="ALL">${I18N.ui.allDays[currentLang] || I18N.ui.allDays.en}</option>`;
     
@@ -723,111 +734,172 @@
       daySelect.appendChild(opt);
     });
 
-    // AUTO-DETECT: Set today's schedule based on device calendar / JST
-    const todayCategory = getTodayScheduleCategory();
+    const todayCat = getTodayScheduleCategory();
     let bestDayMatch = 'ALL';
-
-    if (todayCategory === 'WEEKEND') {
+    if (todayCat === 'WEEKEND') {
       bestDayMatch = availableDays.find(d => /WEEKEND|HOLIDAY|土休/i.test(d)) || 'ALL';
     } else {
       bestDayMatch = availableDays.find(d => /WEEKDAY|平日/i.test(d)) || 'ALL';
     }
-
-    // Default dropdown to the matched schedule if available
     daySelect.value = bestDayMatch;
 
-    // Stops setup
+    // 2. Stop Options (Boarding & Destination)
     const routeStopIds = [...new Set(routeSchedules.map(s => s.stopId))];
-    stopSelect.innerHTML = `<option value="ALL">${I18N.ui.allStops[currentLang] || I18N.ui.allStops.en}</option>`;
+    const colKey = stopLangKeys[currentLang] || 'Stop_Name_EN';
+
+    stopSelect.innerHTML = '';
+    destSelect.innerHTML = `<option value="TERMINUS">${I18N.ui.terminusOption[currentLang] || I18N.ui.terminusOption.en}</option>`;
+
     routeStopIds.forEach(sId => {
       const stop = resolveStop(currentMode, route, sId);
-      const colKey = stopLangKeys[currentLang] || 'Stop_Name_EN';
       const stopName = stop[colKey] || stop['Stop_Name_EN'] || sId;
-      const opt = document.createElement('option');
-      opt.value = sId;
-      opt.textContent = stopName;
-      stopSelect.appendChild(opt);
+
+      const optFrom = document.createElement('option');
+      optFrom.value = sId;
+      optFrom.textContent = stopName;
+      stopSelect.appendChild(optFrom);
+
+      const optTo = document.createElement('option');
+      optTo.value = sId;
+      optTo.textContent = stopName;
+      destSelect.appendChild(optTo);
     });
+
+    // Default Boarding Stop to the origin (first stop in sequence)
+    if (routeStopIds.length > 0) {
+      stopSelect.value = routeStopIds[0];
+    }
 
     daySelect.onchange = renderTimetable;
     stopSelect.onchange = renderTimetable;
+    destSelect.onchange = renderTimetable;
     renderTimetable();
   }
-
   function renderTimetable() {
     const route = document.getElementById('routeSelect').value;
     const dir = document.getElementById('dirSelect').value;
     const selectedDay = document.getElementById('daySelect').value;
-    const selectedStop = document.getElementById('stopSelect').value;
+    const boardingStopId = document.getElementById('stopSelect').value;
+    const destStopId = document.getElementById('destSelect').value;
     const container = document.getElementById('scheduleContainer');
 
-    let filtered = cache[currentMode].schedules.filter(s => s.routeCode === route && s.direction === dir);
-    if (selectedDay && selectedDay !== 'ALL') filtered = filtered.filter(s => s.operatingDays === selectedDay);
-    if (selectedStop && selectedStop !== 'ALL') filtered = filtered.filter(s => s.stopId === selectedStop);
+    const routeSchedules = cache[currentMode].schedules.filter(s => s.routeCode === route && s.direction === dir);
 
-    filtered.sort((a, b) => {
-      const [aH, aM] = a.departureTime.split(':').map(Number);
-      const [bH, bM] = b.departureTime.split(':').map(Number);
-      return (aH * 60 + aM) - (bH * 60 + bM);
+    // Group schedule entries by Trip Number
+    const tripsMap = {};
+    routeSchedules.forEach(item => {
+      if (!tripsMap[item.tripNumber]) tripsMap[item.tripNumber] = [];
+      tripsMap[item.tripNumber].push(item);
     });
 
-    if (filtered.length === 0) {
+    const journeys = [];
+
+    Object.keys(tripsMap).forEach(tripNum => {
+      let tripStops = tripsMap[tripNum];
+      
+      // Day filter
+      if (selectedDay && selectedDay !== 'ALL' && tripStops[0].operatingDays !== selectedDay) {
+        return;
+      }
+
+      // Sort chronological sequence
+      tripStops.sort((a, b) => {
+        const [aH, aM] = a.departureTime.split(':').map(Number);
+        const [bH, bM] = b.departureTime.split(':').map(Number);
+        return (aH * 60 + aM) - (bH * 60 + bM);
+      });
+
+      // Verify origin stop
+      const fromIndex = tripStops.findIndex(s => s.stopId === boardingStopId);
+      if (fromIndex === -1) return;
+
+      const fromRecord = tripStops[fromIndex];
+      let toRecord = null;
+
+      if (destStopId === 'TERMINUS') {
+        toRecord = tripStops[tripStops.length - 1];
+      } else {
+        const toIndex = tripStops.findIndex(s => s.stopId === destStopId);
+        if (toIndex > fromIndex) {
+          toRecord = tripStops[toIndex];
+        }
+      }
+
+      if (toRecord) {
+        const [depH, depM] = fromRecord.departureTime.split(':').map(Number);
+        const [arrH, arrM] = toRecord.departureTime.split(':').map(Number);
+        const depTotal = depH * 60 + depM;
+        const arrTotal = arrH * 60 + arrM;
+        const durationMins = arrTotal >= depTotal ? arrTotal - depTotal : (arrTotal + 1440) - depTotal;
+
+        journeys.push({
+          tripNumber: tripNum,
+          operatingDays: fromRecord.operatingDays,
+          departureTime: fromRecord.departureTime,
+          arrivalTime: toRecord.departureTime,
+          duration: durationMins,
+          toStopId: toRecord.stopId,
+          depTotal: depTotal
+        });
+      }
+    });
+
+    journeys.sort((a, b) => a.depTotal - b.depTotal);
+
+    if (journeys.length === 0) {
       container.innerHTML = `<div class="notice">${I18N.ui.noDepartures[currentLang] || I18N.ui.noDepartures.en}</div>`;
       return;
     }
 
-    // Determine the next upcoming bus locked to Japan Standard Time
-    const jstString = new Date().toLocaleString("en-US", {timeZone: "Asia/Tokyo"});
-    const nowJST = new Date(jstString);
-    const currentMins = nowJST.getHours() * 60 + nowJST.getMinutes();
-    
-    let nextBusIndex = -1;
-    for (let i = 0; i < filtered.length; i++) {
-      const [h, m] = filtered[i].departureTime.split(':').map(Number);
-      if ((h * 60 + m) >= currentMins) {
-        nextBusIndex = i;
-        break;
-      }
-    }
+    // Determine NEXT bus relative to Japan Standard Time
+    const jstNow = new Date(new Date().toLocaleString("en-US", { timeZone: "Asia/Tokyo" }));
+    const currentMins = jstNow.getHours() * 60 + jstNow.getMinutes();
+    let nextIndex = journeys.findIndex(j => j.depTotal >= currentMins);
 
     const tripWord = I18N.ui.trip[currentLang] || I18N.ui.trip.en;
-    const mapWord = I18N.ui.map[currentLang] || I18N.ui.map.en;
-    const nextText = I18N.ui.nextBus[currentLang] || I18N.ui.nextBus.en;
+    const minWord = I18N.ui.mins[currentLang] || 'min';
+    const nextText = I18N.ui.nextBus[currentLang] || 'NEXT';
+    const mapWord = I18N.ui.map[currentLang] || 'Map ↗';
+    const colKey = stopLangKeys[currentLang] || 'Stop_Name_EN';
 
-    container.innerHTML = filtered.map((item, index) => {
-      const stop = resolveStop(currentMode, item.routeCode, item.stopId);
-      const colKey = stopLangKeys[currentLang] || 'Stop_Name_EN';
-      const stopName = stop[colKey] || stop['Stop_Name_EN'] || item.stopId;
-      const fareBadge = formatFareBadge(stop, stop['Stop_Name_JP']);
-      const mapUrl = stop.Google_Maps_URL;
-      const mapLink = mapUrl ? `<a class="map-link" href="${mapUrl}" target="_blank" rel="noopener">${mapWord}</a>` : '';
-      
-      const isNext = index === nextBusIndex;
+    container.innerHTML = journeys.map((j, index) => {
+      const isNext = index === nextIndex;
       const cardStyle = isNext ? 'border: 2px solid var(--accent); box-shadow: 0 0 10px rgba(56, 189, 248, 0.2);' : '';
       const nextBadge = isNext ? `<span style="background: var(--accent); color: #0f172a; padding: 2px 6px; border-radius: 4px; font-size: 0.7rem; font-weight: bold; margin-bottom: 4px; display: inline-block;">${nextText}</span><br>` : '';
+
+      const destStop = resolveStop(currentMode, route, j.toStopId);
+      const destName = destStop[colKey] || destStop['Stop_Name_EN'] || j.toStopId;
+      const fareBadge = formatFareBadge(destStop, destStop['Stop_Name_JP']);
+      const mapUrl = destStop.Google_Maps_URL;
+      const mapLink = mapUrl ? `<a class="map-link" href="${mapUrl}" target="_blank" rel="noopener">${mapWord}</a>` : '';
 
       return `
         <div class="card" style="${cardStyle}" ${isNext ? 'id="next-bus"' : ''}>
           <div class="time-col">
             ${nextBadge}
-            <span class="time">${item.departureTime}</span>
-            <span class="trip-badge">${tripWord} #${item.tripNumber} · ${translateDays(item.operatingDays)}</span>
+            <div style="display: flex; align-items: baseline; gap: 6px;">
+              <span class="time">${j.departureTime}</span>
+              <span style="color: var(--text-muted); font-size: 0.85rem;">➔</span>
+              <span style="font-size: 1.15rem; font-weight: 600; color: #e2e8f0;">${j.arrivalTime}</span>
+            </div>
+            <span class="trip-badge">
+              ${j.duration > 0 ? `⏱ ${j.duration}${minWord} · ` : ''}${tripWord} #${j.tripNumber} · ${translateDays(j.operatingDays)}
+            </span>
           </div>
           <div class="info-col">
-            <div class="stop-name">${stopName}</div>
+            <div class="stop-name">➔ ${destName}</div>
             <div class="details">${fareBadge} ${mapLink}</div>
           </div>
         </div>
       `;
     }).join('');
 
-    // Smooth auto-scroll to the next departure
     setTimeout(() => {
       const nextEl = document.getElementById('next-bus');
       if (nextEl) nextEl.scrollIntoView({ behavior: 'smooth', block: 'center' });
     }, 150);
   }
-
+  
   // --- 4. ISOLATED SEARCH ENGINE ---
 
   const searchInput = document.getElementById('searchInput');
