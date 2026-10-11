@@ -682,9 +682,10 @@
     
     const routeSchedules = cache[currentMode].schedules.filter(s => s.routeCode === route && s.direction === dir);
 
-    // Days
+    // Days setup
     const availableDays = [...new Set(routeSchedules.map(s => s.operatingDays))];
     daySelect.innerHTML = `<option value="ALL">${I18N.ui.allDays[currentLang] || I18N.ui.allDays.en}</option>`;
+    
     availableDays.forEach(day => {
       const opt = document.createElement('option');
       opt.value = day;
@@ -692,7 +693,20 @@
       daySelect.appendChild(opt);
     });
 
-    // Stops
+    // AUTO-DETECT: Set today's schedule based on device calendar / JST
+    const todayCategory = getTodayScheduleCategory();
+    let bestDayMatch = 'ALL';
+
+    if (todayCategory === 'WEEKEND') {
+      bestDayMatch = availableDays.find(d => /WEEKEND|HOLIDAY|土休/i.test(d)) || 'ALL';
+    } else {
+      bestDayMatch = availableDays.find(d => /WEEKDAY|平日/i.test(d)) || 'ALL';
+    }
+
+    // Default dropdown to the matched schedule if available
+    daySelect.value = bestDayMatch;
+
+    // Stops setup
     const routeStopIds = [...new Set(routeSchedules.map(s => s.stopId))];
     stopSelect.innerHTML = `<option value="ALL">${I18N.ui.allStops[currentLang] || I18N.ui.allStops.en}</option>`;
     routeStopIds.forEach(sId => {
