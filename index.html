@@ -231,6 +231,22 @@
         margin-top: 4px;
       }
     }
+
+    /* Bus Stop / Pole Badge */
+    .platform-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      font-size: 0.72rem;
+      font-weight: 700;
+      color: #38bdf8;
+      background: rgba(56, 189, 248, 0.12);
+      border: 1px solid rgba(56, 189, 248, 0.28);
+      padding: 2px 8px;
+      border-radius: 6px;
+      margin-top: 5px;
+      letter-spacing: 0.02em;
+    }
   </style>
 </head>
 <body>
@@ -327,7 +343,7 @@
       publicBtn: { en: '🚍 Public Transit', jp: '🚍 路線バス', zh_tr: '🚍 路線公車', zh_si: '🚍 路线公交', ko: '🚍 일반 노선버스' },
       routeLabel: { en: 'Route', jp: '路線', zh_tr: '路線', zh_si: '路线', ko: '노선' },
       dirLabel: { en: 'Direction', jp: '方面 / 行き先', zh_tr: '方向', zh_si: '方向', ko: '방향' },
-      dayLabel: { en: 'Schedule Type', jp: '運行区分', zh_tr: '運行類別', zh_si: '运行类别', ko: '운행 구분' },
+      dayLabel: { en: 'Schedule Type (Auto-detected)', jp: '運行区分（自動判別）', zh_tr: '運行類別（自動判別）', zh_si: '运行类别（自动判别）', ko: '운행 구분 (자동 감지)' },
       stopLabel: { en: 'Boarding Stop (From)', jp: '乗車バス停（出発）', zh_tr: '乘車站牌（起點）', zh_si: '乘车站牌（起点）', ko: '탑승 정류장 (출발)' },
       destLabel: { en: 'Get-Off Stop (To)', jp: '降車バス停（行き先）', zh_tr: '下車站牌（目的地）', zh_si: '下车站牌（目的地）', ko: '하차 정류장 (도착)' },
       terminusOption: { en: 'Final Terminus / End of Line', jp: '終点まで', zh_tr: '行駛至終點站', zh_si: '行驶至终点站', ko: '종점까지' },
@@ -379,7 +395,6 @@
       'DESIGNATED_FRIDAYS_ONLY': { en: 'Designated Fridays Only', jp: '特定金曜日運行', zh_tr: '特定週五運行', zh_si: '特定周五运行', ko: '특정 금요일 운행' }
     },
     routes: {
-      // Public Transit Lines
       'SEIBU_CRYSTAL': { en: 'Seibu Crystal Line', jp: '西武クリスタル線', zh_tr: '西武水晶線', zh_si: '西武水晶线', ko: '세이부 크리스탈선' },
       'CRYSTAL': { en: 'Seibu Crystal Line', jp: '西武クリスタル線', zh_tr: '西武水晶線', zh_si: '西武水晶线', ko: '세이부 크리스탈선' },
       'R_01': { en: 'Seibu Crystal Line', jp: '西武クリスタル線', zh_tr: '西武水晶線', zh_si: '西武水晶线', ko: '세이부 크리스탈선' },
@@ -393,8 +408,6 @@
       'MUIKAMACHI': { en: 'Muikamachi Line', jp: '六日町線', zh_tr: '六日町線', zh_si: '六日町线', ko: '무이카마치선' },
       'DAIGENTA': { en: 'Daigenta Canyon Line', jp: '大源太線', zh_tr: '大源太峽谷線', zh_si: '大源太峡谷线', ko: '다이겐타선' },
       'TSUCHITARU': { en: 'Tsuchitaru Line', jp: '土樽線', zh_tr: '土樽線', zh_si: '土樽线', ko: '츠치타루선' },
-
-      // Winter Resort Shuttles & Expresses
       'BLUE': { en: 'Blue Line (GALA / NASPA)', jp: 'ブルーライン（GALA・NASPA）', zh_tr: '藍線（GALA・NASPA）', zh_si: '蓝线（GALA・NASPA）', ko: '블루 라인 (GALA・NASPA)' },
       'ORANGE': { en: 'Orange Line', jp: 'オレンジライン', zh_tr: '橘線', zh_si: '橙线', ko: '오렌지 라인' },
       'PURPLE': { en: 'Purple Line', jp: 'パープルライン', zh_tr: '紫線', zh_si: '紫线', ko: '퍼플 라인' },
@@ -402,7 +415,7 @@
       'PINK': { en: 'Pink Line', jp: 'ピンクライン', zh_tr: '粉紅線', zh_si: '粉红线', ko: '핑크 라인' },
       'YELLOW': { en: 'Yellow Line', jp: 'イエローライン', zh_tr: '黃線', zh_si: '黄线', ko: '옐로우 라인' },
       'RED': { en: 'Red Line', jp: 'レッドライン', zh_tr: '紅線', zh_si: '红线', ko: '레드 라인' },
-      'WHITE': { en: 'White Line', jp: 'ホワイトライン', zh_tr: '白線', zh_si: '白线', ko: '화이트 라인' },
+      'WHITE': { en: 'White Line', jp: 'ホワイトライン', zh_tr: '白線', zh_si: '白线', ko: '화이트 라イン' },
       'GALA_SPRING': { en: 'GALA Spring Shuttle', jp: 'GALA春便', zh_tr: 'GALA春季專車', zh_si: 'GALA春季专车', ko: 'GALA 봄 셔틀' },
       'ISHIUCHI_DIRECT': { en: 'Ishiuchi Direct Express', jp: '石打直行便', zh_tr: '石打直達專車', zh_si: '石打直达专车', ko: '이시우치 직행' },
       'ISHIUCHI_LOOP': { en: 'Ishiuchi Loop Shuttle', jp: '石打循環シャトル', zh_tr: '石打循環接駁車', zh_si: '石打循环接驳车', ko: '이시우치 순환 셔틀' },
@@ -452,8 +465,63 @@
       'RETURN': { en: 'Return', jp: '復路', zh_tr: '回程', zh_si: '回程', ko: '복귀' }
     }
   };
-    
+
   const stopLangKeys = { en: 'Stop_Name_EN', jp: 'Stop_Name_JP', zh_tr: 'Stop_Name_ZH_TR', zh_si: 'Stop_Name_ZH_SI', ko: 'Stop_Name_KO' };
+
+  // 2026–2027 Season Japanese Public Holidays (YYYY-MM-DD)
+  const JP_HOLIDAYS = new Set([
+    '2026-10-12', // Sports Day
+    '2026-11-03', // Culture Day
+    '2026-11-23', // Labor Thanksgiving
+    '2026-12-29', '2026-12-30', '2026-12-31', // Year-end transit adjustments
+    '2027-01-01', '2027-01-02', '2027-01-03', // New Year transit adjustments
+    '2027-01-11', // Coming of Age Day
+    '2027-02-11', // National Foundation Day
+    '2027-02-23', // Emperor's Birthday
+    '2027-03-21', '2027-03-22', // Vernal Equinox (and observed)
+    '2027-04-29', // Showa Day
+    '2027-05-03', '2027-05-04', '2027-05-05'  // Golden Week
+  ]);
+
+  // Echigo-Yuzawa Station Boarding Pole Mapping
+  const STATION_POLE_MAP = {
+    // East Exit - Minami Echigo Bus Poles & Express Lines
+    'KAGURA_EXPRESS': { en: 'East Exit #1', jp: '東口 1番', zh_tr: '東口 1號月台', zh_si: '东口 1号站台', ko: '동쪽 출구 1번' },
+    'NAEBA':          { en: 'East Exit #1', jp: '東口 1番', zh_tr: '東口 1號月台', zh_si: '东口 1号站台', ko: '동쪽 출구 1번' },
+    'KIYOTSU':        { en: 'East Exit #2', jp: '東口 2番', zh_tr: '東口 2號月台', zh_si: '东口 2号站台', ko: '동쪽 출구 2番' },
+    'KIYOTSUKYO':     { en: 'East Exit #2', jp: '東口 2番', zh_tr: '東口 2號月台', zh_si: '东口 2号站台', ko: '동쪽 출구 2番' },
+    'TOKAMACHI_AEON': { en: 'East Exit #2', jp: '東口 2番', zh_tr: '東口 2號月台', zh_si: '东口 2号站台', ko: '동쪽 출구 2番' },
+    'TOKAMACHIAEON':  { en: 'East Exit #2', jp: '東口 2番', zh_tr: '東口 2號月台', zh_si: '东口 2号站台', ko: '동쪽 출구 2番' },
+    'MUIKAMACHI':     { en: 'East Exit #2', jp: '東口 2番', zh_tr: '東口 2號月台', zh_si: '东口 2号站台', ko: '동쪽 출구 2番' },
+    'HAKKAISAN':      { en: 'East Exit #2', jp: '東口 2番', zh_tr: '東口 2號月台', zh_si: '东口 2号站台', ko: '동쪽 출구 2番' },
+    'DAIGENTA':       { en: 'East Exit #3', jp: '東口 3番', zh_tr: '東口 3號月台', zh_si: '东口 3号站台', ko: '동쪽 출구 3番' },
+    'TSUCHITARU':     { en: 'East Exit #3', jp: '東口 3番', zh_tr: '東口 3號月台', zh_si: '东口 3号站台', ko: '동쪽 출구 3番' },
+    'SEIBU_CRYSTAL':  { en: 'East Exit #1', jp: '東口 1番', zh_tr: '東口 1號月台', zh_si: '东口 1号站台', ko: '동쪽 출구 1번' },
+    'CRYSTAL':        { en: 'East Exit #1', jp: '東口 1番', zh_tr: '東口 1號月台', zh_si: '东口 1号站台', ko: '동쪽 출구 1번' },
+
+    // East Exit - Resort Shuttles
+    'KANDATSU':       { en: 'East Exit Rotary', jp: '東口 ロータリー', zh_tr: '東口 接駁專區', zh_si: '东口 接驳专区', ko: '동쪽 출구 로터리' },
+    'YUZAWA_NAKASATO':{ en: 'East Exit Rotary', jp: '東口 ロータリー', zh_tr: '東口 接駁專區', zh_si: '东口 接驳专区', ko: '동쪽 출구 로터리' },
+    'NAKASATO':       { en: 'East Exit Rotary', jp: '東口 ロータリー', zh_tr: '東口 接駁專區', zh_si: '东口 接驳专区', ko: '동쪽 출구 로터리' },
+    'YUZAWA_PARK':    { en: 'East Exit Rotary', jp: '東口 ロータリー', zh_tr: '東口 接駁專區', zh_si: '东口 接驳专区', ko: '동쪽 출구 로터리' },
+    'PARK':           { en: 'East Exit Rotary', jp: '東口 ロータリー', zh_tr: '東口 接駁專區', zh_si: '东口 接驳专区', ko: '동쪽 출구 로터리' },
+    'MAIKO':          { en: 'East Exit Rotary', jp: '東口 ロータリー', zh_tr: '東口 接駁專區', zh_si: '东口 接驳专区', ko: '동쪽 출구 로터리' },
+    'MAIKO_DIRECT':   { en: 'East Exit Rotary', jp: '東口 ロータリー', zh_tr: '東口 接駁專區', zh_si: '东口 接驳专区', ko: '동쪽 출구 로터리' },
+    'IWAPPARA':       { en: 'East Exit Rotary', jp: '東口 ロータリー', zh_tr: '東口 接駁專區', zh_si: '东口 接驳专区', ko: '동쪽 출구 로터리' },
+    'IWAHARA':        { en: 'East Exit Rotary', jp: '東口 ロータリー', zh_tr: '東口 接駁專區', zh_si: '东口 接驳专区', ko: '동쪽 출구 로터리' },
+
+    // West Exit - Town Loop & Free Shuttles
+    'BLUE':           { en: 'West Exit Rotary', jp: '西口 ロータリー', zh_tr: '西口 接駁專區', zh_si: '西口 接驳专区', ko: '서쪽 출구 로터리' },
+    'YELLOW':         { en: 'West Exit Rotary', jp: '西口 ロータリー', zh_tr: '西口 接駁專區', zh_si: '西口 接驳专区', ko: '서쪽 출구 로터리' },
+    'ORANGE':         { en: 'West Exit Rotary', jp: '西口 ロータリー', zh_tr: '西口 接駁專區', zh_si: '西口 接驳专区', ko: '서쪽 출구 로터리' },
+    'PURPLE':         { en: 'West Exit Rotary', jp: '西口 ロータリー', zh_tr: '西口 接駁專區', zh_si: '西口 接驳专区', ko: '서쪽 출구 로터리' },
+    'GREEN':          { en: 'West Exit Rotary', jp: '西口 ロータリー', zh_tr: '西口 接駁專區', zh_si: '西口 接驳专区', ko: '서쪽 출구 로터리' },
+    'GALA':           { en: 'West Exit Rotary', jp: '西口 ロータリー', zh_tr: '西口 接駁專區', zh_si: '西口 接驳专区', ko: '서쪽 출구 로터리' },
+    'NASPA':          { en: 'West Exit Rotary', jp: '西口 ロータリー', zh_tr: '西口 接駁專區', zh_si: '西口 接驳专区', ko: '서쪽 출구 로터리' },
+    'YUZAWA_KOGEN':   { en: 'West Exit Rotary', jp: '西口 ロータリー', zh_tr: '西口 接駁專區', zh_si: '西口 接驳专区', ko: '서쪽 출구 로터리' },
+    'TOWN_LOOP':      { en: 'West Exit Rotary', jp: '西口 ロータリー', zh_tr: '西口 接駁專區', zh_si: '西口 接驳专区', ko: '서쪽 출구 로터리' },
+    'LOOP':           { en: 'West Exit Rotary', jp: '西口 ロータリー', zh_tr: '西口 接駁專區', zh_si: '西口 接驳专区', ko: '서쪽 출구 로터리' }
+  };
 
   // --- 2. CORE FUNCTIONS ---
 
@@ -484,6 +552,20 @@
     return (entry && entry[currentLang]) ? entry[currentLang] : rawDays.replace(/_/g, ' ');
   }
 
+  function getTodayScheduleCategory() {
+    const jstDate = new Date(new Date().toLocaleString("en-US", { timeZone: "Asia/Tokyo" }));
+    const dayOfWeek = jstDate.getDay(); // 0 = Sun, 6 = Sat
+    const yyyy = jstDate.getFullYear();
+    const mm = String(jstDate.getMonth() + 1).padStart(2, '0');
+    const dd = String(jstDate.getDate()).padStart(2, '0');
+    const dateStr = `${yyyy}-${mm}-${dd}`;
+
+    const isWeekend = (dayOfWeek === 0 || dayOfWeek === 6);
+    const isHoliday = JP_HOLIDAYS.has(dateStr);
+
+    return (isWeekend || isHoliday) ? 'WEEKEND' : 'WEEKDAY';
+  }
+
   function updateStaticUI() {
     document.getElementById('appTitle').textContent = I18N.ui.title[currentLang] || I18N.ui.title.en;
     document.getElementById('btnWinter').textContent = I18N.ui.winterBtn[currentLang] || I18N.ui.winterBtn.en;
@@ -492,7 +574,7 @@
     document.getElementById('lblDir').textContent = I18N.ui.dirLabel[currentLang] || I18N.ui.dirLabel.en;
     document.getElementById('lblDay').textContent = I18N.ui.dayLabel[currentLang] || I18N.ui.dayLabel.en;
     document.getElementById('lblStop').textContent = I18N.ui.stopLabel[currentLang] || I18N.ui.stopLabel.en;
-    
+
     const lblDest = document.getElementById('lblDest');
     if (lblDest && I18N.ui.destLabel) lblDest.textContent = I18N.ui.destLabel[currentLang] || I18N.ui.destLabel.en;
 
@@ -579,8 +661,6 @@
 
     const stopsFile = DATA_CONFIG[mode].stops;
     const schedFile = DATA_CONFIG[mode].schedules;
-    
-    // Resilient fallback naming in case local file naming drops the plural 's'
     const stopsFallback = mode === 'winter' ? 'Winter_Transit_Stops.csv' : 'Public_Transit_Stops.csv';
     const schedFallback = mode === 'winter' ? 'Winter_Transit_Schedule.csv' : 'Public_Transit_Schedule.csv';
 
@@ -632,11 +712,9 @@
     currentMode = mode;
     window.location.hash = `#${mode}`;
     
-    // Toggle Active Buttons
     document.getElementById('btnWinter').classList.toggle('active', mode === 'winter');
     document.getElementById('btnPublic').classList.toggle('active', mode === 'public');
     
-    // Aggressive UI Flush to prevent mode bleeding
     document.getElementById('searchInput').value = '';
     document.getElementById('searchDropdown').style.display = 'none';
     document.getElementById('clearSearch').style.display = 'none';
@@ -644,6 +722,8 @@
     document.getElementById('dirSelect').innerHTML = '';
     document.getElementById('daySelect').innerHTML = '';
     document.getElementById('stopSelect').innerHTML = '';
+    const destSelect = document.getElementById('destSelect');
+    if (destSelect) destSelect.innerHTML = '';
 
     document.getElementById('scheduleContainer').innerHTML = `<div class="notice">${I18N.ui.loading[currentLang] || I18N.ui.loading.en}</div>`;
 
@@ -684,36 +764,6 @@
     populateDaysAndStops();
   }
 
-    // National Holidays for the 2026–2027 operating season (YYYY-MM-DD)
-  const JP_HOLIDAYS_2026_2027 = new Set([
-    '2026-10-12', // Sports Day
-    '2026-11-03', // Culture Day
-    '2026-11-23', // Labor Thanksgiving
-    '2026-12-29', '2026-12-30', '2026-12-31', // Year-end transit adjustments
-    '2027-01-01', '2027-01-02', '2027-01-03', // New Year transit adjustments
-    '2027-01-11', // Coming of Age Day
-    '2027-02-11', // National Foundation Day
-    '2027-02-23', // Emperor's Birthday
-    '2027-03-21', '2027-03-22', // Vernal Equinox (and observed)
-    '2027-04-29', // Showa Day
-    '2027-05-03', '2027-05-04', '2027-05-05'  // Golden Week
-  ]);
-
-  function getTodayScheduleCategory() {
-    // Lock to Japan Standard Time regardless of user's home SIM / time zone
-    const jstDate = new Date(new Date().toLocaleString("en-US", { timeZone: "Asia/Tokyo" }));
-    const dayOfWeek = jstDate.getDay(); // 0 = Sun, 6 = Sat
-    const yyyy = jstDate.getFullYear();
-    const mm = String(jstDate.getMonth() + 1).padStart(2, '0');
-    const dd = String(jstDate.getDate()).padStart(2, '0');
-    const dateStr = `${yyyy}-${mm}-${dd}`;
-
-    const isWeekend = (dayOfWeek === 0 || dayOfWeek === 6);
-    const isHoliday = JP_HOLIDAYS_2026_2027.has(dateStr);
-
-    return (isWeekend || isHoliday) ? 'WEEKEND' : 'WEEKDAY';
-  }
-
   function populateDaysAndStops() {
     const route = document.getElementById('routeSelect').value;
     const dir = document.getElementById('dirSelect').value;
@@ -752,7 +802,9 @@
     const colKey = stopLangKeys[currentLang] || 'Stop_Name_EN';
 
     stopSelect.innerHTML = '';
-    destSelect.innerHTML = `<option value="TERMINUS">${I18N.ui.terminusOption[currentLang] || I18N.ui.terminusOption.en}</option>`;
+    if (destSelect) {
+      destSelect.innerHTML = `<option value="TERMINUS">${I18N.ui.terminusOption[currentLang] || I18N.ui.terminusOption.en}</option>`;
+    }
 
     routeStopIds.forEach(sId => {
       const stop = resolveStop(currentMode, route, sId);
@@ -763,22 +815,24 @@
       optFrom.textContent = stopName;
       stopSelect.appendChild(optFrom);
 
-      const optTo = document.createElement('option');
-      optTo.value = sId;
-      optTo.textContent = stopName;
-      destSelect.appendChild(optTo);
+      if (destSelect) {
+        const optTo = document.createElement('option');
+        optTo.value = sId;
+        optTo.textContent = stopName;
+        destSelect.appendChild(optTo);
+      }
     });
 
-    // Default Boarding Stop to the origin (first stop in sequence)
     if (routeStopIds.length > 0) {
       stopSelect.value = routeStopIds[0];
     }
 
     daySelect.onchange = renderTimetable;
     stopSelect.onchange = renderTimetable;
-    destSelect.onchange = renderTimetable;
+    if (destSelect) destSelect.onchange = renderTimetable;
     renderTimetable();
   }
+
   function matchesDayFilter(tripDaysRaw, selectedDayRaw) {
     if (!selectedDayRaw || selectedDayRaw === 'ALL') return true;
     const tripNorm = normalizeKey(tripDaysRaw);
@@ -812,12 +866,13 @@
     const dir = document.getElementById('dirSelect').value;
     const selectedDay = document.getElementById('daySelect').value;
     const boardingStopId = document.getElementById('stopSelect').value;
-    const destStopId = document.getElementById('destSelect').value;
+    const destSelect = document.getElementById('destSelect');
+    const destStopId = destSelect ? destSelect.value : 'TERMINUS';
     const container = document.getElementById('scheduleContainer');
 
     const routeSchedules = cache[currentMode].schedules.filter(s => s.routeCode === route && s.direction === dir);
 
-    // Group by operatingDays + tripNumber to prevent schedule collision
+    // Group by operatingDays + tripNumber to prevent trip number collisions across service schedules
     const tripsMap = {};
     routeSchedules.forEach(item => {
       const key = `${normalizeKey(item.operatingDays)}__${item.tripNumber}`;
@@ -843,7 +898,7 @@
         return (aH * 60 + aM) - (bH * 60 + bM);
       });
 
-      // Verify origin stop
+      // Verify boarding stop
       const fromIndex = tripStops.findIndex(s => s.stopId === boardingStopId);
       if (fromIndex === -1) return;
 
@@ -898,161 +953,18 @@
     const mapWord = I18N.ui.map[currentLang] || 'Map ↗';
     const colKey = stopLangKeys[currentLang] || 'Stop_Name_EN';
 
-    container.innerHTML = journeys.map((j, index) => {
-      const isNext = index === nextIndex;
-      const cardStyle = isNext ? 'border: 2px solid var(--accent); box-shadow: 0 0 10px rgba(56, 189, 248, 0.2);' : '';
-      const nextBadge = isNext ? `<span style="background: var(--accent); color: #0f172a; padding: 2px 6px; border-radius: 4px; font-size: 0.7rem; font-weight: bold; margin-bottom: 4px; display: inline-block;">${nextText}</span><br>` : '';
+    // Platform / Bay evaluation (only active when boarding at Echigo-Yuzawa Station)
+    const fromStopObj = resolveStop(currentMode, route, boardingStopId);
+    const isStationOrigin = /湯沢駅|S-01/i.test(boardingStopId) || /湯沢駅/i.test(fromStopObj.Stop_Name_JP || '') || /Yuzawa Sta/i.test(fromStopObj.Stop_Name_EN || '');
 
-      const destStop = resolveStop(currentMode, route, j.toStopId);
-      const destName = destStop[colKey] || destStop['Stop_Name_EN'] || j.toStopId;
-      const fareBadge = formatFareBadge(destStop, destStop['Stop_Name_JP']);
-      const mapUrl = destStop.Google_Maps_URL;
-      const mapLink = mapUrl ? `<a class="map-link" href="${mapUrl}" target="_blank" rel="noopener">${mapWord}</a>` : '';
-
-      return `
-        <div class="card" style="${cardStyle}" ${isNext ? 'id="next-bus"' : ''}>
-          <div class="time-col">
-            ${nextBadge}
-            <div style="display: flex; align-items: baseline; gap: 6px;">
-              <span class="time">${j.departureTime}</span>
-              <span style="color: var(--text-muted); font-size: 0.85rem;">➔</span>
-              <span style="font-size: 1.15rem; font-weight: 600; color: #e2e8f0;">${j.arrivalTime}</span>
-            </div>
-            <span class="trip-badge">
-              ${j.duration > 0 ? `⏱ ${j.duration}${minWord} · ` : ''}${tripWord} #${j.tripNumber} · ${translateDays(j.operatingDays)}
-            </span>
-          </div>
-          <div class="info-col">
-            <div class="stop-name">➔ ${destName}</div>
-            <div class="details">${fareBadge} ${mapLink}</div>
-          </div>
-        </div>
-      `;
-    }).join('');
-
-    setTimeout(() => {
-      const nextEl = document.getElementById('next-bus');
-      if (nextEl) nextEl.scrollIntoView({ behavior: 'smooth', block: 'center' });
-    }, 150);
-  }
-  function matchesDayFilter(tripDaysRaw, selectedDayRaw) {
-    if (!selectedDayRaw || selectedDayRaw === 'ALL') return true;
-    const tripNorm = normalizeKey(tripDaysRaw);
-    const selNorm = normalizeKey(selectedDayRaw);
-
-    if (tripNorm === selNorm) return true;
-
-    // Daily buses run every day (both weekdays and weekends/holidays)
-    if (tripNorm === 'DAILY') {
-      if (selNorm.includes('WEEKEND') || selNorm.includes('HOLIDAY') || selNorm.includes('WEEKDAY')) {
-        return true;
+    let platformBadge = '';
+    if (isStationOrigin) {
+      const poleData = STATION_POLE_MAP[normalizeKey(route)] || STATION_POLE_MAP[route];
+      if (poleData) {
+        const poleText = poleData[currentLang] || poleData.en;
+        platformBadge = `<div class="platform-badge">🚏 ${poleText}</div>`;
       }
     }
-
-    // Weekend/Holiday grouping check
-    if ((selNorm.includes('WEEKEND') || selNorm.includes('HOLIDAY')) &&
-        (tripNorm.includes('WEEKEND') || tripNorm.includes('HOLIDAY'))) {
-      return true;
-    }
-
-    // Weekday grouping check
-    if (selNorm.includes('WEEKDAY') && tripNorm.includes('WEEKDAY')) {
-      return true;
-    }
-
-    return false;
-  }
-
-  function renderTimetable() {
-    const route = document.getElementById('routeSelect').value;
-    const dir = document.getElementById('dirSelect').value;
-    const selectedDay = document.getElementById('daySelect').value;
-    const boardingStopId = document.getElementById('stopSelect').value;
-    const destStopId = document.getElementById('destSelect').value;
-    const container = document.getElementById('scheduleContainer');
-
-    const routeSchedules = cache[currentMode].schedules.filter(s => s.routeCode === route && s.direction === dir);
-
-    // Group by operatingDays + tripNumber to prevent schedule collision
-    const tripsMap = {};
-    routeSchedules.forEach(item => {
-      const key = `${normalizeKey(item.operatingDays)}__${item.tripNumber}`;
-      if (!tripsMap[key]) tripsMap[key] = [];
-      tripsMap[key].push(item);
-    });
-
-    const journeys = [];
-
-    Object.keys(tripsMap).forEach(key => {
-      let tripStops = tripsMap[key];
-      if (!tripStops || tripStops.length === 0) return;
-
-      // Day filter with Daily compatibility
-      if (!matchesDayFilter(tripStops[0].operatingDays, selectedDay)) {
-        return;
-      }
-
-      // Sort chronological sequence
-      tripStops.sort((a, b) => {
-        const [aH, aM] = a.departureTime.split(':').map(Number);
-        const [bH, bM] = b.departureTime.split(':').map(Number);
-        return (aH * 60 + aM) - (bH * 60 + bM);
-      });
-
-      // Verify origin stop
-      const fromIndex = tripStops.findIndex(s => s.stopId === boardingStopId);
-      if (fromIndex === -1) return;
-
-      const fromRecord = tripStops[fromIndex];
-      let toRecord = null;
-
-      if (destStopId === 'TERMINUS') {
-        if (tripStops.length - 1 > fromIndex) {
-          toRecord = tripStops[tripStops.length - 1];
-        }
-      } else {
-        const toIndex = tripStops.findIndex(s => s.stopId === destStopId);
-        if (toIndex > fromIndex) {
-          toRecord = tripStops[toIndex];
-        }
-      }
-
-      if (toRecord) {
-        const [depH, depM] = fromRecord.departureTime.split(':').map(Number);
-        const [arrH, arrM] = toRecord.departureTime.split(':').map(Number);
-        const depTotal = depH * 60 + depM;
-        const arrTotal = arrH * 60 + arrM;
-        const durationMins = arrTotal >= depTotal ? arrTotal - depTotal : (arrTotal + 1440) - depTotal;
-
-        journeys.push({
-          tripNumber: fromRecord.tripNumber,
-          operatingDays: fromRecord.operatingDays,
-          departureTime: fromRecord.departureTime,
-          arrivalTime: toRecord.departureTime,
-          duration: durationMins,
-          toStopId: toRecord.stopId,
-          depTotal: depTotal
-        });
-      }
-    });
-
-    journeys.sort((a, b) => a.depTotal - b.depTotal);
-
-    if (journeys.length === 0) {
-      container.innerHTML = `<div class="notice">${I18N.ui.noDepartures[currentLang] || I18N.ui.noDepartures.en}</div>`;
-      return;
-    }
-
-    // Determine NEXT bus relative to Japan Standard Time
-    const jstNow = new Date(new Date().toLocaleString("en-US", { timeZone: "Asia/Tokyo" }));
-    const currentMins = jstNow.getHours() * 60 + jstNow.getMinutes();
-    let nextIndex = journeys.findIndex(j => j.depTotal >= currentMins);
-
-    const tripWord = I18N.ui.trip[currentLang] || I18N.ui.trip.en;
-    const minWord = I18N.ui.mins[currentLang] || 'min';
-    const nextText = I18N.ui.nextBus[currentLang] || 'NEXT';
-    const mapWord = I18N.ui.map[currentLang] || 'Map ↗';
-    const colKey = stopLangKeys[currentLang] || 'Stop_Name_EN';
 
     container.innerHTML = journeys.map((j, index) => {
       const isNext = index === nextIndex;
@@ -1077,6 +989,7 @@
             <span class="trip-badge">
               ${j.duration > 0 ? `⏱ ${j.duration}${minWord} · ` : ''}${tripWord} #${j.tripNumber} · ${translateDays(j.operatingDays)}
             </span>
+            ${platformBadge}
           </div>
           <div class="info-col">
             <div class="stop-name">➔ ${destName}</div>
@@ -1091,8 +1004,8 @@
       if (nextEl) nextEl.scrollIntoView({ behavior: 'smooth', block: 'center' });
     }, 150);
   }
-  
-  // --- 4. ISOLATED SEARCH ENGINE ---
+
+  // --- 4. SEARCH ENGINE ---
 
   const searchInput = document.getElementById('searchInput');
   const searchDropdown = document.getElementById('searchDropdown');
@@ -1107,11 +1020,9 @@
     }
     clearSearchBtn.style.display = 'block';
 
-    await loadDataForMode(currentMode); // Ensure current mode data exists
+    await loadDataForMode(currentMode);
 
-    // Strictly restrict search to the currently active mode
     const activeStops = cache[currentMode].rawStops || [];
-    
     const q = rawQ
       .replace(/iwahara/g, 'iwappara')
       .replace(/joukoku/g, 'jokoku')
@@ -1133,7 +1044,6 @@
       return;
     }
 
-    // Deduplicate by Stop_ID to avoid rendering the same stop 10 times
     const uniqueMatches = [];
     const seenIds = new Set();
     matches.forEach(m => {
@@ -1164,31 +1074,29 @@
     searchInput.value = '';
     clearSearchBtn.style.display = 'none';
 
-    // 1. Set the Route
     document.getElementById('routeSelect').value = routeCode;
 
-    // 2. Identify the direction that serves this stop
+    // Detect direction serving the searched stop
     const sampleSched = cache[currentMode].schedules.find(s => s.routeCode === routeCode && s.stopId === stopId);
     const targetDir = sampleSched ? sampleSched.direction : null;
 
     populateDirections();
 
-    // 3. Switch to the correct direction if it differs from default
     if (targetDir) {
       document.getElementById('dirSelect').value = targetDir;
       populateDaysAndStops();
     }
 
-    // 4. If the searched stop is an intermediate stop or terminus, set it as Destination
+    // Set destination to the searched stop
     const destSelect = document.getElementById('destSelect');
     const stopSelect = document.getElementById('stopSelect');
 
-    if (stopSelect.value !== stopId) {
-      // The searched stop is downstream: set as Destination (To)
-      destSelect.value = stopId;
-    } else {
-      // The user explicitly searched for the origin station itself
-      destSelect.value = 'TERMINUS';
+    if (destSelect && stopSelect) {
+      if (stopSelect.value !== stopId) {
+        destSelect.value = stopId;
+      } else {
+        destSelect.value = 'TERMINUS';
+      }
     }
 
     renderTimetable();
@@ -1210,12 +1118,13 @@
     populateRoutes();
   });
 
-  // URL Query Parameters Engine for Deep-Linking 
+  // URL Deep-Linking
   async function handleUrlParams() {
     const params = new URLSearchParams(window.location.search);
     const mode = params.get('mode');
     const route = params.get('route');
     const stop = params.get('stop');
+    const dest = params.get('dest');
     const dir = params.get('dir');
     const day = params.get('day');
 
@@ -1247,15 +1156,21 @@
       const daySelect = document.getElementById('daySelect');
       const normDay = normalizeKey(day);
       const match = Array.from(daySelect.options).find(opt => normalizeKey(opt.value) === normDay);
-      if (match) {
-        daySelect.value = match.value;
-      }
+      if (match) daySelect.value = match.value;
     }
 
     if (stop) {
       const stopSelect = document.getElementById('stopSelect');
       const match = Array.from(stopSelect.options).find(opt => opt.value.trim() === stop.trim());
       if (match) stopSelect.value = match.value;
+    }
+
+    if (dest) {
+      const destSelect = document.getElementById('destSelect');
+      if (destSelect) {
+        const match = Array.from(destSelect.options).find(opt => opt.value.trim() === dest.trim());
+        if (match) destSelect.value = match.value;
+      }
     }
 
     renderTimetable();
