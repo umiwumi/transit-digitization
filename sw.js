@@ -1,3 +1,16 @@
+// 1. Resolve Language: URL parameter -> LocalStorage -> Browser default -> English fallback
+const urlLang = new URLSearchParams(window.location.search).get('lang');
+const savedLang = localStorage.getItem('yuzawa_lang');
+const browserLang = navigator.language.slice(0, 2);
+
+const SUPPORTED_LANGS = ['en', 'jp', 'zh_tr', 'zh_si', 'ko'];
+let currentLang = SUPPORTED_LANGS.includes(urlLang) 
+  ? urlLang 
+  : (SUPPORTED_LANGS.includes(savedLang) ? savedLang : 'en');
+
+// Save preference
+localStorage.setItem('yuzawa_lang', currentLang);
+
 const CACHE_NAME = 'yuzawa-transit-v3';
 
 const STATIC_ASSETS = [
