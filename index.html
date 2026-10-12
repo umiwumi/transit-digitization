@@ -737,9 +737,13 @@
     const todayCat = getTodayScheduleCategory();
     let bestDayMatch = 'ALL';
     if (todayCat === 'WEEKEND') {
-      bestDayMatch = availableDays.find(d => /WEEKEND|HOLIDAY|土休/i.test(d)) || 'ALL';
+      bestDayMatch = availableDays.find(d => /WEEKEND|HOLIDAY|土休/i.test(d)) ||
+                     availableDays.find(d => /DAILY|毎日/i.test(d)) ||
+                     'ALL';
     } else {
-      bestDayMatch = availableDays.find(d => /WEEKDAY|平日/i.test(d)) || 'ALL';
+      bestDayMatch = availableDays.find(d => /WEEKDAY|平日/i.test(d)) ||
+                     availableDays.find(d => /DAILY|毎日/i.test(d)) ||
+                     'ALL';
     }
     daySelect.value = bestDayMatch;
 
@@ -775,6 +779,34 @@
     destSelect.onchange = renderTimetable;
     renderTimetable();
   }
+  function matchesDayFilter(tripDaysRaw, selectedDayRaw) {
+    if (!selectedDayRaw || selectedDayRaw === 'ALL') return true;
+    const tripNorm = normalizeKey(tripDaysRaw);
+    const selNorm = normalizeKey(selectedDayRaw);
+
+    if (tripNorm === selNorm) return true;
+
+    // Daily buses run every day (both weekdays and weekends/holidays)
+    if (tripNorm === 'DAILY') {
+      if (selNorm.includes('WEEKEND') || selNorm.includes('HOLIDAY') || selNorm.includes('WEEKDAY')) {
+        return true;
+      }
+    }
+
+    // Weekend/Holiday grouping check
+    if ((selNorm.includes('WEEKEND') || selNorm.includes('HOLIDAY')) &&
+        (tripNorm.includes('WEEKEND') || tripNorm.includes('HOLIDAY'))) {
+      return true;
+    }
+
+    // Weekday grouping check
+    if (selNorm.includes('WEEKDAY') && tripNorm.includes('WEEKDAY')) {
+      return true;
+    }
+
+    return false;
+  }
+
   function renderTimetable() {
     const route = document.getElementById('routeSelect').value;
     const dir = document.getElementById('dirSelect').value;
@@ -785,20 +817,22 @@
 
     const routeSchedules = cache[currentMode].schedules.filter(s => s.routeCode === route && s.direction === dir);
 
-    // Group schedule entries by Trip Number
+    // Group by operatingDays + tripNumber to prevent schedule collision
     const tripsMap = {};
     routeSchedules.forEach(item => {
-      if (!tripsMap[item.tripNumber]) tripsMap[item.tripNumber] = [];
-      tripsMap[item.tripNumber].push(item);
+      const key = `${normalizeKey(item.operatingDays)}__${item.tripNumber}`;
+      if (!tripsMap[key]) tripsMap[key] = [];
+      tripsMap[key].push(item);
     });
 
     const journeys = [];
 
-    Object.keys(tripsMap).forEach(tripNum => {
-      let tripStops = tripsMap[tripNum];
-      
-      // Day filter
-      if (selectedDay && selectedDay !== 'ALL' && tripStops[0].operatingDays !== selectedDay) {
+    Object.keys(tripsMap).forEach(key => {
+      let tripStops = tripsMap[key];
+      if (!tripStops || tripStops.length === 0) return;
+
+      // Day filter with Daily compatibility
+      if (!matchesDayFilter(tripStops[0].operatingDays, selectedDay)) {
         return;
       }
 
@@ -817,7 +851,9 @@
       let toRecord = null;
 
       if (destStopId === 'TERMINUS') {
-        toRecord = tripStops[tripStops.length - 1];
+        if (tripStops.length - 1 > fromIndex) {
+          toRecord = tripStops[tripStops.length - 1];
+        }
       } else {
         const toIndex = tripStops.findIndex(s => s.stopId === destStopId);
         if (toIndex > fromIndex) {
@@ -833,7 +869,163 @@
         const durationMins = arrTotal >= depTotal ? arrTotal - depTotal : (arrTotal + 1440) - depTotal;
 
         journeys.push({
-          tripNumber: tripNum,
+          tripNumber: fromRecord.tripNumber,
+          operatingDays: fromRecord.operatingDays,
+          departureTime: fromRecord.departureTime,
+          arrivalTime: toRecord.departureTime,
+          duration: durationMins,
+          toStopId: toRecord.stopId,
+          depTotal: depTotal
+        });
+      }
+    });
+
+    journeys.sort((a, b) => a.depTotal - b.depTotal);
+
+    if (journeys.length === 0) {
+      container.innerHTML = `<div class="notice">${I18N.ui.noDepartures[currentLang] || I18N.ui.noDepartures.en}</div>`;
+      return;
+    }
+
+    // Determine NEXT bus relative to Japan Standard Time
+    const jstNow = new Date(new Date().toLocaleString("en-US", { timeZone: "Asia/Tokyo" }));
+    const currentMins = jstNow.getHours() * 60 + jstNow.getMinutes();
+    let nextIndex = journeys.findIndex(j => j.depTotal >= currentMins);
+
+    const tripWord = I18N.ui.trip[currentLang] || I18N.ui.trip.en;
+    const minWord = I18N.ui.mins[currentLang] || 'min';
+    const nextText = I18N.ui.nextBus[currentLang] || 'NEXT';
+    const mapWord = I18N.ui.map[currentLang] || 'Map ↗';
+    const colKey = stopLangKeys[currentLang] || 'Stop_Name_EN';
+
+    container.innerHTML = journeys.map((j, index) => {
+      const isNext = index === nextIndex;
+      const cardStyle = isNext ? 'border: 2px solid var(--accent); box-shadow: 0 0 10px rgba(56, 189, 248, 0.2);' : '';
+      const nextBadge = isNext ? `<span style="background: var(--accent); color: #0f172a; padding: 2px 6px; border-radius: 4px; font-size: 0.7rem; font-weight: bold; margin-bottom: 4px; display: inline-block;">${nextText}</span><br>` : '';
+
+      const destStop = resolveStop(currentMode, route, j.toStopId);
+      const destName = destStop[colKey] || destStop['Stop_Name_EN'] || j.toStopId;
+      const fareBadge = formatFareBadge(destStop, destStop['Stop_Name_JP']);
+      const mapUrl = destStop.Google_Maps_URL;
+      const mapLink = mapUrl ? `<a class="map-link" href="${mapUrl}" target="_blank" rel="noopener">${mapWord}</a>` : '';
+
+      return `
+        <div class="card" style="${cardStyle}" ${isNext ? 'id="next-bus"' : ''}>
+          <div class="time-col">
+            ${nextBadge}
+            <div style="display: flex; align-items: baseline; gap: 6px;">
+              <span class="time">${j.departureTime}</span>
+              <span style="color: var(--text-muted); font-size: 0.85rem;">➔</span>
+              <span style="font-size: 1.15rem; font-weight: 600; color: #e2e8f0;">${j.arrivalTime}</span>
+            </div>
+            <span class="trip-badge">
+              ${j.duration > 0 ? `⏱ ${j.duration}${minWord} · ` : ''}${tripWord} #${j.tripNumber} · ${translateDays(j.operatingDays)}
+            </span>
+          </div>
+          <div class="info-col">
+            <div class="stop-name">➔ ${destName}</div>
+            <div class="details">${fareBadge} ${mapLink}</div>
+          </div>
+        </div>
+      `;
+    }).join('');
+
+    setTimeout(() => {
+      const nextEl = document.getElementById('next-bus');
+      if (nextEl) nextEl.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    }, 150);
+  }
+  function matchesDayFilter(tripDaysRaw, selectedDayRaw) {
+    if (!selectedDayRaw || selectedDayRaw === 'ALL') return true;
+    const tripNorm = normalizeKey(tripDaysRaw);
+    const selNorm = normalizeKey(selectedDayRaw);
+
+    if (tripNorm === selNorm) return true;
+
+    // Daily buses run every day (both weekdays and weekends/holidays)
+    if (tripNorm === 'DAILY') {
+      if (selNorm.includes('WEEKEND') || selNorm.includes('HOLIDAY') || selNorm.includes('WEEKDAY')) {
+        return true;
+      }
+    }
+
+    // Weekend/Holiday grouping check
+    if ((selNorm.includes('WEEKEND') || selNorm.includes('HOLIDAY')) &&
+        (tripNorm.includes('WEEKEND') || tripNorm.includes('HOLIDAY'))) {
+      return true;
+    }
+
+    // Weekday grouping check
+    if (selNorm.includes('WEEKDAY') && tripNorm.includes('WEEKDAY')) {
+      return true;
+    }
+
+    return false;
+  }
+
+  function renderTimetable() {
+    const route = document.getElementById('routeSelect').value;
+    const dir = document.getElementById('dirSelect').value;
+    const selectedDay = document.getElementById('daySelect').value;
+    const boardingStopId = document.getElementById('stopSelect').value;
+    const destStopId = document.getElementById('destSelect').value;
+    const container = document.getElementById('scheduleContainer');
+
+    const routeSchedules = cache[currentMode].schedules.filter(s => s.routeCode === route && s.direction === dir);
+
+    // Group by operatingDays + tripNumber to prevent schedule collision
+    const tripsMap = {};
+    routeSchedules.forEach(item => {
+      const key = `${normalizeKey(item.operatingDays)}__${item.tripNumber}`;
+      if (!tripsMap[key]) tripsMap[key] = [];
+      tripsMap[key].push(item);
+    });
+
+    const journeys = [];
+
+    Object.keys(tripsMap).forEach(key => {
+      let tripStops = tripsMap[key];
+      if (!tripStops || tripStops.length === 0) return;
+
+      // Day filter with Daily compatibility
+      if (!matchesDayFilter(tripStops[0].operatingDays, selectedDay)) {
+        return;
+      }
+
+      // Sort chronological sequence
+      tripStops.sort((a, b) => {
+        const [aH, aM] = a.departureTime.split(':').map(Number);
+        const [bH, bM] = b.departureTime.split(':').map(Number);
+        return (aH * 60 + aM) - (bH * 60 + bM);
+      });
+
+      // Verify origin stop
+      const fromIndex = tripStops.findIndex(s => s.stopId === boardingStopId);
+      if (fromIndex === -1) return;
+
+      const fromRecord = tripStops[fromIndex];
+      let toRecord = null;
+
+      if (destStopId === 'TERMINUS') {
+        if (tripStops.length - 1 > fromIndex) {
+          toRecord = tripStops[tripStops.length - 1];
+        }
+      } else {
+        const toIndex = tripStops.findIndex(s => s.stopId === destStopId);
+        if (toIndex > fromIndex) {
+          toRecord = tripStops[toIndex];
+        }
+      }
+
+      if (toRecord) {
+        const [depH, depM] = fromRecord.departureTime.split(':').map(Number);
+        const [arrH, arrM] = toRecord.departureTime.split(':').map(Number);
+        const depTotal = depH * 60 + depM;
+        const arrTotal = arrH * 60 + arrM;
+        const durationMins = arrTotal >= depTotal ? arrTotal - depTotal : (arrTotal + 1440) - depTotal;
+
+        journeys.push({
+          tripNumber: fromRecord.tripNumber,
           operatingDays: fromRecord.operatingDays,
           departureTime: fromRecord.departureTime,
           arrivalTime: toRecord.departureTime,
