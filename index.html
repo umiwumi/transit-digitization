@@ -673,8 +673,13 @@
       header: true, skipEmptyLines: 'greedy',
       transformHeader: h => h.trim().replace(/^\ufeff/, ''),
       complete: (results) => {
-        cache[mode].rawStops = results.data;
-        results.data.forEach(row => {
+        // Filter out empty rows and duplicate header rows
+        cache[mode].rawStops = results.data.filter(row => {
+          const sId = (row.Stop_ID || row.stop_id || '').trim();
+          return sId && !/^stop_?id$/i.test(sId);
+        });
+
+        cache[mode].rawStops.forEach(row => {
           const sId = (row.Stop_ID || row.stop_id || '').trim();
           const rCode = normalizeKey(row.Route_Code || row.Route_ID || '');
           if (sId) {
@@ -689,8 +694,14 @@
       header: true, skipEmptyLines: 'greedy',
       transformHeader: h => h.trim().replace(/^\ufeff/, ''),
       complete: (results) => {
+        // Reject any row where the values are the column header names
         cache[mode].schedules = results.data
-          .filter(r => (r.Route_Code || r.Route_ID) && r.Departure_Time)
+          .filter(r => {
+            const rc = (r.Route_Code || r.Route_ID || '').trim();
+            const dt = (r.Departure_Time || '').trim();
+            const isHeader = /^route_?(code|id)$/i.test(rc) \vert{}\vert{} /^departure_?time$/i.test(dt);
+            return rc && dt && !isHeader;
+          })
           .map(r => ({
             scheduleId: (r.Schedule_ID || '').trim(),
             routeCode: (r.Route_Code || r.Route_ID || '').trim(),
