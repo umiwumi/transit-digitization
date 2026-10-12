@@ -699,7 +699,7 @@
           .filter(r => {
             const rc = (r.Route_Code || r.Route_ID || '').trim();
             const dt = (r.Departure_Time || '').trim();
-            const isHeader = /^route_?(code|id)$/i.test(rc) \vert{}\vert{} /^departure_?time$/i.test(dt);
+            const isHeader = /^route_?(code|id)$/i.test(rc) || /^departure_?time$/i.test(dt);
             return rc && dt && !isHeader;
           })
           .map(r => ({
