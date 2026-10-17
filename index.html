@@ -287,8 +287,8 @@
 
   <!-- Mode Toggle -->
   <div class="mode-toggle">
-    <button class="mode-btn active" id="btnWinter" onclick="switchMode('winter')">❄️ Winter Shuttles</button>
-    <button class="mode-btn" id="btnPublic" onclick="switchMode('public')">🚍 Public Transit</button>
+    <button class="mode-btn" id="btnWinter" onclick="switchMode('winter')">❄️ Winter Shuttles</button>
+    <button class="mode-btn active" id="btnPublic" onclick="switchMode('public')">🚍 Public Transit</button>
   </div>
 
    <!-- Filter Grid -->
@@ -329,7 +329,7 @@
   };
 
   let currentLang = 'en';
-  let currentMode = window.location.hash === '#public' ? 'public' : 'winter';
+  let currentMode = window.location.hash === '#winter' ? 'winter' : 'public';
 
   const DATA_CONFIG = {
     winter: { stops: 'Winter_Transit_Stops.csv', schedules: 'Winter_Transit_Schedule.csv' },
