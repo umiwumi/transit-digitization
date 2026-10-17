@@ -780,18 +780,19 @@
   
   // --- 3. UI STATE & FILTERING ---
 
-  async function switchMode(mode) {
+    async function switchMode(mode) {
     currentMode = mode;
     window.location.hash = `#${mode}`;
     
     document.getElementById('btnWinter').classList.toggle('active', mode === 'winter');
     document.getElementById('btnPublic').classList.toggle('active', mode === 'public');
     
-    // Toggle Hakkaisan alert visibility based on mode
-    const alertBox = document.querySelector('.transit-alert-box');
-    if (alertBox) {
-      alertBox.style.display = (mode === 'public') ? 'flex' : 'none';
-    }
+    // Toggle Alert Banners by Mode
+    const hakkaisanEl = document.getElementById('hakkaisanAlert');
+    const winterEl = document.getElementById('winterAlert');
+    if (hakkaisanEl) hakkaisanEl.style.display = (mode === 'public') ? 'flex' : 'none';
+    if (winterEl) winterEl.style.display = (mode === 'winter') ? 'flex' : 'none';
+
     document.getElementById('searchInput').value = '';
     document.getElementById('searchDropdown').style.display = 'none';
     document.getElementById('clearSearch').style.display = 'none';
