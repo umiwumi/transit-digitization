@@ -765,7 +765,7 @@
 
     cache[mode].loaded = true;
   }
-
+  
   // --- 3. UI STATE & FILTERING ---
 
   async function switchMode(mode) {
@@ -775,6 +775,11 @@
     document.getElementById('btnWinter').classList.toggle('active', mode === 'winter');
     document.getElementById('btnPublic').classList.toggle('active', mode === 'public');
     
+    // Toggle Hakkaisan alert visibility based on mode
+    const alertBox = document.querySelector('.transit-alert-box');
+    if (alertBox) {
+      alertBox.style.display = (mode === 'public') ? 'flex' : 'none';
+    }
     document.getElementById('searchInput').value = '';
     document.getElementById('searchDropdown').style.display = 'none';
     document.getElementById('clearSearch').style.display = 'none';
