@@ -807,40 +807,38 @@
 
     cache[mode].loaded = true;
   }
-  
-  // --- 3. UI STATE & FILTERING ---
+   // --- ALERT DISMISSAL LOGIC ---
+  function dismissAlert(alertId) {
+    const el = document.getElementById(alertId);
+    if (el) el.style.display = 'none';
+    localStorage.setItem(`${alertId}_dismissed`, 'true');
+  }
 
-    async function switchMode(mode) {
+  // --- UI STATE & FILTERING ---
+  async function switchMode(mode) {
     currentMode = mode;
     window.location.hash = `#${mode}`;
     
     document.getElementById('btnWinter').classList.toggle('active', mode === 'winter');
     document.getElementById('btnPublic').classList.toggle('active', mode === 'public');
     
-    // Toggle Alert Banners by Mode
+    // Toggle Alert Banners by Mode & Persistent Dismissal State
     const hakkaisanEl = document.getElementById('hakkaisanAlert');
     const winterEl = document.getElementById('winterAlert');
-    if (hakkaisanEl) hakkaisanEl.style.display = (mode === 'public') ? 'flex' : 'none';
-    if (winterEl) winterEl.style.display = (mode === 'winter') ? 'flex' : 'none';
+    const isHakkaisanDismissed = localStorage.getItem('hakkaisanAlert_dismissed') === 'true';
+
+    if (hakkaisanEl) {
+      hakkaisanEl.style.display = (mode === 'public' && !isHakkaisanDismissed) ? 'flex' : 'none';
+    }
+    if (winterEl) {
+      winterEl.style.display = (mode === 'winter') ? 'flex' : 'none';
+    }
 
     document.getElementById('searchInput').value = '';
-    document.getElementById('searchDropdown').style.display = 'none';
-    document.getElementById('clearSearch').style.display = 'none';
-    document.getElementById('routeSelect').innerHTML = '';
-    document.getElementById('dirSelect').innerHTML = '';
-    document.getElementById('daySelect').innerHTML = '';
-    document.getElementById('stopSelect').innerHTML = '';
-    const destSelect = document.getElementById('destSelect');
-    if (destSelect) destSelect.innerHTML = '';
-
-    document.getElementById('scheduleContainer').innerHTML = `<div class="notice">${I18N.ui.loading[currentLang] || I18N.ui.loading.en}</div>`;
-
-    try {
-      await loadDataForMode(mode);
-      populateRoutes();
-    } catch (err) {
-      document.getElementById('scheduleContainer').innerHTML = `<div class="notice" style="color: #f87171;">Error: ${err.message}</div>`;
-    }
+    
+    await loadDataForMode(mode);
+    populateDropdowns();
+    filterSchedules();
   }
 
   function populateRoutes() {
