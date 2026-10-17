@@ -284,6 +284,36 @@
       font-size: 0.8rem;
       color: #94a3b8;
     }
+    /* --- TRANSIT ALERT & DISMISS BUTTON --- */
+.transit-alert-box {
+  position: relative;
+  padding-right: 44px; /* Prevents text from colliding with the dismiss button on small screens */
+}
+
+.alert-close-btn {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  background: transparent;
+  border: none;
+  color: #94a3b8;
+  font-size: 22px;
+  line-height: 1;
+  cursor: pointer;
+  padding: 6px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 6px;
+  touch-action: manipulation;
+  transition: color 0.15s ease, background-color 0.15s ease;
+}
+
+.alert-close-btn:hover,
+.alert-close-btn:active {
+  color: #f8fafc;
+  background: rgba(255, 255, 255, 0.12);
+}
   </style>
 </head>
 <body>
@@ -352,29 +382,29 @@
     </div>
   </div>
 
-  <!-- Inside index.html, above the route selector or schedule container -->
-<div class="transit-alert-box">
-  <div class="alert-icon">⚠️</div>
-  <div class="alert-content">
-    <p class="alert-title"><strong>八海山ロープウェー方面 路線バス運行終了のお知らせ</strong> / Service Notice: Hakkaisan Ropeway</p>
-    <p class="alert-desc">
-      2026年10月1日をもって六日町駅〜八海山スキー場間の路線バス運行は終了しました。平日はAIオンデマンド交通「MOSS」（要予約）、土日祝日はタクシーをご利用ください。<br>
-      <span class="alert-en">Direct bus service from Muikamachi Station to Hakkaisan Ropeway ended on Oct 1, 2026. On weekdays, use on-demand bus "MOSS" (booking required); on weekends/holidays, take a taxi.</span>
-    </p>
+  <!-- Route Alerts (Toggled via JS) -->
+  <div id="hakkaisanAlert" class="transit-alert-box" style="display: none;">
+    <div class="alert-icon">⚠️</div>
+    <div class="alert-content">
+      <p class="alert-title"><strong>八海山ロープウェー方面 路線バス運行終了のお知らせ</strong> / Service Notice: Hakkaisan Ropeway</p>
+      <p class="alert-desc">
+        2026年10月1日をもって六日町駅〜八海山スキー場間の路線バス運行は終了しました。平日はAIオンデマンド交通「MOSS」（要予約）、土日祝日はタクシーをご利用ください。<br>
+        <span class="alert-en">Direct bus service from Muikamachi Station to Hakkaisan Ropeway ended on Oct 1, 2026. On weekdays, use on-demand bus "MOSS" (booking required); on weekends/holidays, take a taxi.</span>
+      </p>
+    </div>
+    <button type="button" class="alert-close-btn" onclick="dismissAlert('hakkaisanAlert')" aria-label="Dismiss alert">&times;</button>
   </div>
-</div>
 
-  <!-- Winter Notice -->
-<div class="transit-alert-box winter-provisional-alert" style="display: none;">
-  <div class="alert-icon">ℹ️</div>
-  <div class="alert-content">
-    <p class="alert-title"><strong>2026–2027 冬季シャトルバス運行情報について</strong> / 2026–2027 Winter Shuttles Notice</p>
-    <p class="alert-desc">
-      現在表示されているダイヤは前シーズン実績に基づく暫定情報です。今シーズンの公式運行計画は11月下旬〜12月上旬の各スキー場オープンに合わせて確定次第更新されます。<br>
-      <span class="alert-en">Schedules currently shown reflect provisional/previous season data. Official 2026–2027 timetables will be finalized upon ski resort openings in late November/December.</span>
-    </p>
+  <div id="winterAlert" class="transit-alert-box" style="display: none;">
+    <div class="alert-icon">ℹ️</div>
+    <div class="alert-content">
+      <p class="alert-title"><strong>2026–2027 冬季シャトルバス運行情報について</strong> / 2026–2027 Winter Shuttles Notice</p>
+      <p class="alert-desc">
+        現在表示されているダイヤは前シーズン実績に基づく暫定情報です。今シーズンの公式運行計画は11月下旬〜12月上旬の各スキー場オープンに合わせて確定次第更新されます。<br>
+        <span class="alert-en">Schedules currently shown reflect provisional/previous season data. Official 2026–2027 timetables will be finalized upon ski resort openings in late November/December.</span>
+      </p>
+    </div>
   </div>
-</div>
 
   <!-- Timetable List -->
   <div id="scheduleContainer">
