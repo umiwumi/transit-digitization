@@ -834,10 +834,11 @@
     }
 
     document.getElementById('searchInput').value = '';
+    document.getElementById('clearSearch').style.display = 'none';
+    document.getElementById('searchDropdown').style.display = 'none';
     
     await loadDataForMode(mode);
-    populateDropdowns();
-    filterSchedules();
+    populateRoutes();
   }
 
   function populateRoutes() {
