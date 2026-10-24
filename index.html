@@ -422,9 +422,15 @@
   let currentMode = window.location.hash === '#winter' ? 'winter' : 'public';
 
   const DATA_CONFIG = {
-    winter: { stops: 'Winter_Transit_Stops.csv', schedules: 'Winter_Transit_Schedule.csv' },
-    public: { stops: 'Public_Transit_Stops.csv', schedules: 'Public_Transit_Schedule.csv' }
-  };
+  winter: {
+    stops: 'https://docs.google.com/spreadsheets/d/e/2PACX-1vT4XgepABOjpsBX4-KSJ93em-AETYmfY-1VLszziG7MuluSKtLLCG-MYlaTD5hY6t5WZTvx46RBtXep/pub?gid=1435758286&single=true&output=csv',
+    schedules: 'https://docs.google.com/spreadsheets/d/e/2PACX-1vT4XgepABOjpsBX4-KSJ93em-AETYmfY-1VLszziG7MuluSKtLLCG-MYlaTD5hY6t5WZTvx46RBtXep/pub?gid=1362971870&single=true&output=csv'
+  },
+  public: {
+    stops: ' https://docs.google.com/spreadsheets/d/e/2PACX-1vT4XgepABOjpsBX4-KSJ93em-AETYmfY-1VLszziG7MuluSKtLLCG-MYlaTD5hY6t5WZTvx46RBtXep/pub?gid=1059473422&single=true&output=csv',
+    schedules: 'https://docs.google.com/spreadsheets/d/e/2PACX-1vT4XgepABOjpsBX4-KSJ93em-AETYmfY-1VLszziG7MuluSKtLLCG-MYlaTD5hY6t5WZTvx46RBtXep/pub?gid=0&single=true&output=csv'
+  }
+};
 
   const I18N = {
     ui: {
