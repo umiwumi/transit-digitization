@@ -760,14 +760,21 @@
   }
 
   async function fetchWithFallback(primaryPath, fallbackPath) {
-    let res = await fetch(primaryPath);
-    if (!res.ok) {
-      res = await fetch(fallbackPath);
+    try {
+      const res = await fetch(primaryPath);
+      if (res.ok) return await res.text();
+    } catch (e) {
+      console.warn(`Primary fetch failed for ${primaryPath}, trying fallback...`);
     }
-    if (!res.ok) {
-      throw new Error(`Failed to load ${primaryPath}`);
+
+    try {
+      const resFallback = await fetch(fallbackPath);
+      if (resFallback.ok) return await resFallback.text();
+    } catch (e) {
+      console.warn(`Fallback fetch failed for ${fallbackPath}.`);
     }
-    return res.text();
+
+    return ''; // Return empty string rather than crashing the entire app
   }
 
   async function loadDataForMode(mode) {
@@ -991,7 +998,7 @@
     return false;
   }
 
-  function renderTimetable() {
+   function renderTimetable() {
     const route = document.getElementById('routeSelect').value;
     const dir = document.getElementById('dirSelect').value;
     const selectedDay = document.getElementById('daySelect').value;
@@ -1002,7 +1009,6 @@
 
     const routeSchedules = cache[currentMode].schedules.filter(s => s.routeCode === route && s.direction === dir);
 
-    // Group by operatingDays + tripNumber to prevent trip number collisions across service schedules
     const tripsMap = {};
     routeSchedules.forEach(item => {
       const key = `${normalizeKey(item.operatingDays)}__${item.tripNumber}`;
@@ -1016,40 +1022,40 @@
       let tripStops = tripsMap[key];
       if (!tripStops || tripStops.length === 0) return;
 
-      // Day filter with Daily compatibility
       if (!matchesDayFilter(tripStops[0].operatingDays, selectedDay)) {
         return;
       }
 
-      // Sort chronological sequence
       tripStops.sort((a, b) => {
         const [aH, aM] = a.departureTime.split(':').map(Number);
         const [bH, bM] = b.departureTime.split(':').map(Number);
         return (aH * 60 + aM) - (bH * 60 + bM);
       });
 
-      // Verify boarding stop
       const fromIndex = tripStops.findIndex(s => s.stopId === boardingStopId);
       if (fromIndex === -1) return;
 
       const fromRecord = tripStops[fromIndex];
-      let toRecord = null;
+      const [depH, depM] = fromRecord.departureTime.split(':').map(Number);
+      const depTotal = depH * 60 + depM;
 
-      if (destStopId === 'TERMINUS') {
-        if (tripStops.length - 1 > fromIndex) {
-          toRecord = tripStops[tripStops.length - 1];
-        }
-      } else {
-        const toIndex = tripStops.findIndex(s => s.stopId === destStopId);
-        if (toIndex > fromIndex) {
-          toRecord = tripStops[toIndex];
+      let toRecord = null;
+      if (tripStops.length > 1) {
+        if (destStopId === 'TERMINUS') {
+          if (tripStops.length - 1 > fromIndex) {
+            toRecord = tripStops[tripStops.length - 1];
+          }
+        } else {
+          const toIndex = tripStops.findIndex(s => s.stopId === destStopId);
+          if (toIndex > fromIndex) {
+            toRecord = tripStops[toIndex];
+          }
         }
       }
 
       if (toRecord) {
-        const [depH, depM] = fromRecord.departureTime.split(':').map(Number);
+        // Multi-stop bus line (shows departure and arrival times)
         const [arrH, arrM] = toRecord.departureTime.split(':').map(Number);
-        const depTotal = depH * 60 + depM;
         const arrTotal = arrH * 60 + arrM;
         const durationMins = arrTotal >= depTotal ? arrTotal - depTotal : (arrTotal + 1440) - depTotal;
 
@@ -1060,6 +1066,19 @@
           arrivalTime: toRecord.departureTime,
           duration: durationMins,
           toStopId: toRecord.stopId,
+          direction: fromRecord.direction,
+          depTotal: depTotal
+        });
+      } else if (tripStops.length === 1 || destStopId === 'TERMINUS') {
+        // Single-stop shuttle departure
+        journeys.push({
+          tripNumber: fromRecord.tripNumber,
+          operatingDays: fromRecord.operatingDays,
+          departureTime: fromRecord.departureTime,
+          arrivalTime: null,
+          duration: 0,
+          toStopId: fromRecord.stopId,
+          direction: fromRecord.direction,
           depTotal: depTotal
         });
       }
@@ -1072,7 +1091,6 @@
       return;
     }
 
-    // Determine NEXT bus relative to Japan Standard Time
     const jstNow = new Date(new Date().toLocaleString("en-US", { timeZone: "Asia/Tokyo" }));
     const currentMins = jstNow.getHours() * 60 + jstNow.getMinutes();
     let nextIndex = journeys.findIndex(j => j.depTotal >= currentMins);
@@ -1083,7 +1101,6 @@
     const mapWord = I18N.ui.map[currentLang] || 'Map ↗';
     const colKey = stopLangKeys[currentLang] || 'Stop_Name_EN';
 
-    // Platform / Bay evaluation (only active when boarding at Echigo-Yuzawa Station)
     const fromStopObj = resolveStop(currentMode, route, boardingStopId);
     const isStationOrigin = /湯沢駅|S-01/i.test(boardingStopId) || /湯沢駅/i.test(fromStopObj.Stop_Name_JP || '') || /Yuzawa Sta/i.test(fromStopObj.Stop_Name_EN || '');
 
@@ -1102,20 +1119,29 @@
       const nextBadge = isNext ? `<span style="background: var(--accent); color: #0f172a; padding: 2px 6px; border-radius: 4px; font-size: 0.7rem; font-weight: bold; margin-bottom: 4px; display: inline-block;">${nextText}</span><br>` : '';
 
       const destStop = resolveStop(currentMode, route, j.toStopId);
-      const destName = destStop[colKey] || destStop['Stop_Name_EN'] || j.toStopId;
+      const destName = j.arrivalTime
+        ? (destStop[colKey] || destStop['Stop_Name_EN'] || j.toStopId)
+        : translateDirection(j.direction);
+
       const fareBadge = formatFareBadge(destStop, destStop['Stop_Name_JP']);
       const mapUrl = destStop.Google_Maps_URL;
       const mapLink = mapUrl ? `<a class="map-link" href="${mapUrl}" target="_blank" rel="noopener">${mapWord}</a>` : '';
+
+      const timeHtml = j.arrivalTime
+        ? `<div style="display: flex; align-items: baseline; gap: 6px;">
+             <span class="time">${j.departureTime}</span>
+             <span style="color: var(--text-muted); font-size: 0.85rem;">➔</span>
+             <span style="font-size: 1.15rem; font-weight: 600; color: #e2e8f0;">${j.arrivalTime}</span>
+           </div>`
+        : `<div style="display: flex; align-items: baseline; gap: 6px;">
+             <span class="time">${j.departureTime}</span>
+           </div>`;
 
       return `
         <div class="card" style="${cardStyle}" ${isNext ? 'id="next-bus"' : ''}>
           <div class="time-col">
             ${nextBadge}
-            <div style="display: flex; align-items: baseline; gap: 6px;">
-              <span class="time">${j.departureTime}</span>
-              <span style="color: var(--text-muted); font-size: 0.85rem;">➔</span>
-              <span style="font-size: 1.15rem; font-weight: 600; color: #e2e8f0;">${j.arrivalTime}</span>
-            </div>
+            ${timeHtml}
             <span class="trip-badge">
               ${j.duration > 0 ? `⏱ ${j.duration}${minWord} · ` : ''}${tripWord} #${j.tripNumber} · ${translateDays(j.operatingDays)}
             </span>
@@ -1134,6 +1160,7 @@
       if (nextEl) nextEl.scrollIntoView({ behavior: 'smooth', block: 'center' });
     }, 150);
   }
+
 
   // --- 4. SEARCH ENGINE ---
 
