@@ -11,7 +11,7 @@ let currentLang = SUPPORTED_LANGS.includes(urlLang)
 // Save preference
 localStorage.setItem('yuzawa_lang', currentLang);
 
-const CACHE_NAME = 'yuzawa-transit-v3.1.1';
+const CACHE_NAME = 'yuzawa-transit-v3.1.2';
 
 const STATIC_ASSETS = [
   './',
