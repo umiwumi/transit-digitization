@@ -413,11 +413,29 @@
 
 <script>
   // 1. Resolve Language: URL parameter -> LocalStorage -> Browser default -> English fallback
-  const urlLang = new URLSearchParams(window.location.search).get('lang');
-  const savedLang = localStorage.getItem('yuzawa_lang');
-  const browserLang = navigator.language.slice(0, 2);
-
   const SUPPORTED_LANGS = ['en', 'jp', 'zh_tr', 'zh_si', 'ko'];
+
+  // localStorage can throw (private mode, blocked site data), so never let it stop the page
+  function safeGetItem(key) {
+    try { return localStorage.getItem(key); } catch (e) { return null; }
+  }
+  function safeSetItem(key, value) {
+    try { localStorage.setItem(key, value); } catch (e) {}
+  }
+
+  // Browser codes differ from this page's codes: "ja" -> jp, "zh-TW/HK/Hant" -> zh_tr, other "zh" -> zh_si
+  function detectBrowserLang() {
+    const full = (navigator.language || '').toLowerCase();
+    if (full.startsWith('ja')) return 'jp';
+    if (full.startsWith('ko')) return 'ko';
+    if (full.startsWith('zh')) return /tw|hk|mo|hant/.test(full) ? 'zh_tr' : 'zh_si';
+    if (full.startsWith('en')) return 'en';
+    return null;
+  }
+
+  const urlLang = new URLSearchParams(window.location.search).get('lang');
+  const savedLang = safeGetItem('yuzawa_lang');
+  const browserLang = detectBrowserLang();
 
   let currentLang = 'en';
   if (SUPPORTED_LANGS.includes(urlLang)) {
@@ -429,15 +447,14 @@
   }
 
   // Persist preference for future visits
-  localStorage.setItem('yuzawa_lang', currentLang);
-  
+  safeSetItem('yuzawa_lang', currentLang);
+
   // --- 2. GLOBAL STATE & CACHE (Strictly Isolated) ---
   const cache = {
     winter: { rawStops: [], schedules: [], stopsMap: {}, loaded: false },
     public: { rawStops: [], schedules: [], stopsMap: {}, loaded: false }
   };
 
-  let currentLang = 'en';
   let currentMode = window.location.hash === '#winter' ? 'winter' : 'public';
 
   // Base CSV URLs for Google Sheets
@@ -533,7 +550,7 @@
       'NIGHT_SKI_DAYS': { en: 'Night Ski Days', jp: 'ナイター営業日', zh_tr: '夜間滑雪營業日', zh_si: '夜间滑雪营业日', ko: '야간 스키 영업일' },
       'DAILY_RESERVATION': { en: 'Daily (Reservation Req.)', jp: '毎日運行（要予約）', zh_tr: '每日運行（需預約）', zh_si: '每日运行（需预约）', ko: '매일 운행 (예약 필수)' },
       'DAILY_DIRECT': { en: 'Daily (Direct)', jp: '毎日運行（直行）', zh_tr: '每日運行（直達）', zh_si: '每日运行（直达）', ko: '매일 운행 (직행)' },
-      'DAILY_GUESTS_ONLY': { en: 'Daily (Hotel Guests Only)', jp: '毎日運行（宿泊者専用）', zh_tr: '每日運行（僅限房客）', zh_si: '仅限房客（仅限房客）', ko: '매일 운행 (투숙객 전용)' },
+      'DAILY_GUESTS_ONLY': { en: 'Daily (Hotel Guests Only)', jp: '毎日運行（宿泊者専用）', zh_tr: '每日運行（僅限房客）', zh_si: '每日运行（仅限房客）', ko: '매일 운행 (투숙객 전용)' },
       'GUESTS_ONLY_RESERVATION': { en: 'Hotel Guests Only (Reservation)', jp: '宿泊者専用（要予約）', zh_tr: '僅限房客（需預約）', zh_si: '仅限房客（需预约）', ko: '투숙객 전용 (예약 필수)' },
       'NIGHT_SUN_HOLIDAY': { en: 'Sun & Holidays (Night)', jp: '日曜・祝日（夜便）', zh_tr: '週日・國定假日（夜班）', zh_si: '周日・节假日（夜班）', ko: '일요일・공휴일 (야간편)' },
       'NIGHT_SAT_SPECIAL': { en: 'Sat & Designated Days (Night)', jp: '土曜・特定日（夜便）', zh_tr: '週六・特定日（夜班）', zh_si: '周六・特定日（夜班）', ko: '토요일・특정일 (야간편)' }
@@ -560,7 +577,7 @@
       'PINK': { en: 'Pink Line', jp: 'ピンクライン', zh_tr: '粉紅線', zh_si: '粉红线', ko: '핑크 라인' },
       'YELLOW': { en: 'Yellow Line', jp: 'イエローライン', zh_tr: '黃線', zh_si: '黄线', ko: '옐로우 라인' },
       'RED': { en: 'Red Line', jp: 'レッドライン', zh_tr: '紅線', zh_si: '红线', ko: '레드 라인' },
-      'WHITE': { en: 'White Line', jp: 'ホワイトライン', zh_tr: '白線', zh_si: '白线', ko: '화이트 라イン' },
+      'WHITE': { en: 'White Line', jp: 'ホワイトライン', zh_tr: '白線', zh_si: '白线', ko: '화이트 라인' },
       'GALA_SPRING': { en: 'GALA Spring Shuttle', jp: 'GALA春便', zh_tr: 'GALA春季專車', zh_si: 'GALA春季专车', ko: 'GALA 봄 셔틀' },
       'ISHIUCHI_DIRECT': { en: 'Ishiuchi Direct Express', jp: '石打直行便', zh_tr: '石打直達專車', zh_si: '石打直达专车', ko: '이시우치 직행' },
       'ISHIUCHI_LOOP': { en: 'Ishiuchi Loop Shuttle', jp: '石打循環シャトル', zh_tr: '石打循環接駁車', zh_si: '石打循环接驳车', ko: '이시우치 순환 셔틀' },
@@ -746,9 +763,7 @@
       linkEl.href = `https://umiwumi.github.io/services/?lang=${currentLang}`;
     }
 
-    try {
-      localStorage.setItem('yuzawa_lang', currentLang);
-    } catch (e) {}
+    safeSetItem('yuzawa_lang', currentLang);
   }
 
   function resolveStop(mode, routeCode, stopId) {
@@ -888,7 +903,7 @@
   function dismissAlert(alertId) {
     const el = document.getElementById(alertId);
     if (el) el.style.display = 'none';
-    localStorage.setItem(`${alertId}_dismissed`, 'true');
+    safeSetItem(`${alertId}_dismissed`, 'true');
   }
 
   // --- UI STATE & FILTERING ---
@@ -902,7 +917,7 @@
     // Toggle Alert Banners by Mode & Persistent Dismissal State
     const hakkaisanEl = document.getElementById('hakkaisanAlert');
     const winterEl = document.getElementById('winterAlert');
-    const isHakkaisanDismissed = localStorage.getItem('hakkaisanAlert_dismissed') === 'true';
+    const isHakkaisanDismissed = safeGetItem('hakkaisanAlert_dismissed') === 'true';
 
     if (hakkaisanEl) {
       hakkaisanEl.style.display = (mode === 'public' && !isHakkaisanDismissed) ? 'flex' : 'none';
@@ -1387,12 +1402,8 @@
     });
   }
 
-  const urlLang = new URLSearchParams(window.location.search).get('lang');
-  const savedLang = localStorage.getItem('yuzawa_lang');
-  const initialLang = [urlLang, savedLang].find(l => ['en', 'jp', 'zh_tr', 'zh_si', 'ko'].includes(l)) || 'en';
-
-  currentLang = initialLang;
-  document.getElementById('langSelect').value = initialLang;
+  // currentLang was already resolved at the top of this script
+  document.getElementById('langSelect').value = currentLang;
 
   updateStaticUI();
   switchMode(currentMode).then(() => {
