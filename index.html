@@ -421,16 +421,36 @@
   let currentLang = 'en';
   let currentMode = window.location.hash === '#winter' ? 'winter' : 'public';
 
+  // Base CSV URLs for Google Sheets
+  const SHEET_BASE_WORK = 'PLACEHOLDER_WORK_URL'; 
+  const SHEET_BASE_PERSONAL = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vT4XgepABOjpsBX4-KSJ93em-AETYmfY-1VLszziG7MuluSKtLLCG-MYlaTD5hY6t5WZTvx46RBtXep/pub';
+  
   const DATA_CONFIG = {
-  winter: {
-    stops: 'https://docs.google.com/spreadsheets/d/e/2PACX-1vT4XgepABOjpsBX4-KSJ93em-AETYmfY-1VLszziG7MuluSKtLLCG-MYlaTD5hY6t5WZTvx46RBtXep/pub?gid=1435758286&single=true&output=csv',
-    schedules: 'https://docs.google.com/spreadsheets/d/e/2PACX-1vT4XgepABOjpsBX4-KSJ93em-AETYmfY-1VLszziG7MuluSKtLLCG-MYlaTD5hY6t5WZTvx46RBtXep/pub?gid=1362971870&single=true&output=csv'
-  },
-  public: {
-    stops: 'https://docs.google.com/spreadsheets/d/e/2PACX-1vT4XgepABOjpsBX4-KSJ93em-AETYmfY-1VLszziG7MuluSKtLLCG-MYlaTD5hY6t5WZTvx46RBtXep/pub?gid=1059473422&single=true&output=csv',
-    schedules: 'https://docs.google.com/spreadsheets/d/e/2PACX-1vT4XgepABOjpsBX4-KSJ93em-AETYmfY-1VLszziG7MuluSKtLLCG-MYlaTD5hY6t5WZTvx46RBtXep/pub?gid=0&single=true&output=csv'
-  }
-};
+    winter: {
+      stops: [
+        `${SHEET_BASE_WORK}?gid=1435758286&single=true&output=csv`,      // Tier 1: Work Account
+        `${SHEET_BASE_PERSONAL}?gid=1435758286&single=true&output=csv`,  // Tier 2: Personal Account
+        'Winter_Transit_Stops.csv'                                      // Tier 3: Local Static Backup
+      ],
+      schedules: [
+        `${SHEET_BASE_WORK}?gid=1362971870&single=true&output=csv`,      // Tier 1: Work Account
+        `${SHEET_BASE_PERSONAL}?gid=1362971870&single=true&output=csv`,  // Tier 2: Personal Account
+        'Winter_Transit_Schedule.csv'                                   // Tier 3: Local Static Backup
+      ]
+    },
+    public: {
+      stops: [
+        `${SHEET_BASE_WORK}?gid=1059473422&single=true&output=csv`,      // Tier 1: Work Account
+        `${SHEET_BASE_PERSONAL}?gid=1059473422&single=true&output=csv`,  // Tier 2: Personal Account
+        'Public_Transit_Stops.csv'                                      // Tier 3: Local Static Backup
+      ],
+      schedules: [
+        `${SHEET_BASE_WORK}?gid=0&single=true&output=csv`,               // Tier 1: Work Account
+        `${SHEET_BASE_PERSONAL}?gid=0&single=true&output=csv`,           // Tier 2: Personal Account
+        'Public_Transit_Schedule.csv'                                    // Tier 3: Local Static Backup
+      ]
+    }
+  };
 
   const I18N = {
     ui: {
@@ -790,14 +810,12 @@
   async function loadDataForMode(mode) {
     if (cache[mode].loaded) return;
 
-    const stopsFile = DATA_CONFIG[mode].stops;
-    const schedFile = DATA_CONFIG[mode].schedules;
-    const stopsFallback = mode === 'winter' ? 'Winter_Transit_Stops.csv' : 'Public_Transit_Stops.csv';
-    const schedFallback = mode === 'winter' ? 'Winter_Transit_Schedule.csv' : 'Public_Transit_Schedule.csv';
+    const stopsSources = DATA_CONFIG[mode].stops;
+    const schedSources = DATA_CONFIG[mode].schedules;
 
     const [stopsRes, schedRes] = await Promise.all([
-      fetchWithFallback(stopsFile, stopsFallback),
-      fetchWithFallback(schedFile, schedFallback)
+      fetchWithFallback(stopsSources),
+      fetchWithFallback(schedSources)
     ]);
 
     Papa.parse(stopsRes, {
