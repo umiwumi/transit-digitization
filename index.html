@@ -759,19 +759,29 @@
     return `<span class="fare-tag">${freeText}</span>`;
   }
 
-  async function fetchWithFallback(primaryPath, fallbackPath) {
-    try {
-      const res = await fetch(primaryPath);
-      if (res.ok) return await res.text();
-    } catch (e) {
-      console.warn(`Primary fetch failed for ${primaryPath}, trying fallback...`);
-    }
+  async function fetchWithFallback(...sources) {
+    // Flatten arrays/strings and skip unconfigured placeholders
+    const urls = sources
+      .flat()
+      .filter(url => url && typeof url === 'string' && !url.startsWith('PLACEHOLDER'));
 
-    try {
-      const resFallback = await fetch(fallbackPath);
-      if (resFallback.ok) return await resFallback.text();
-    } catch (e) {
-      console.warn(`Fallback fetch failed for ${fallbackPath}.`);
+    for (let i = 0; i < urls.length; i++) {
+      const url = urls[i];
+      try {
+        const res = await fetch(url, { cache: 'no-cache' });
+        if (!res.ok) throw new Error(`HTTP ${res.status}`);
+
+        const text = await res.text();
+
+        // Guard against Google Sheets returning a login redirect or HTML error page
+        const isHtml = text.trim().startsWith('<!DOCTYPE') || text.includes('<html');
+        if (text && text.length > 50 && !isHtml) {
+          return text;
+        }
+        throw new Error('Response is HTML or malformed CSV');
+      } catch (err) {
+        console.warn(`[Data Tier ${i + 1} Failed] ${url}: ${err.message}`);
+      }
     }
 
     return ''; // Return empty string rather than crashing the entire app
