@@ -412,7 +412,26 @@
 </div>
 
 <script>
-  // --- 1. GLOBAL STATE & CACHE (Strictly Isolated) ---
+  // 1. Resolve Language: URL parameter -> LocalStorage -> Browser default -> English fallback
+  const urlLang = new URLSearchParams(window.location.search).get('lang');
+  const savedLang = localStorage.getItem('yuzawa_lang');
+  const browserLang = navigator.language.slice(0, 2);
+
+  const SUPPORTED_LANGS = ['en', 'jp', 'zh_tr', 'zh_si', 'ko'];
+
+  let currentLang = 'en';
+  if (SUPPORTED_LANGS.includes(urlLang)) {
+    currentLang = urlLang;
+  } else if (SUPPORTED_LANGS.includes(savedLang)) {
+    currentLang = savedLang;
+  } else if (SUPPORTED_LANGS.includes(browserLang)) {
+    currentLang = browserLang;
+  }
+
+  // Persist preference for future visits
+  localStorage.setItem('yuzawa_lang', currentLang);
+  
+  // --- 2. GLOBAL STATE & CACHE (Strictly Isolated) ---
   const cache = {
     winter: { rawStops: [], schedules: [], stopsMap: {}, loaded: false },
     public: { rawStops: [], schedules: [], stopsMap: {}, loaded: false }
@@ -622,14 +641,14 @@
     // East Exit - Minami Echigo Bus Poles & Express Lines
     'KAGURA_EXPRESS': { en: 'East Exit #1', jp: '東口 1番', zh_tr: '東口 1號月台', zh_si: '东口 1号站台', ko: '동쪽 출구 1번' },
     'NAEBA':          { en: 'East Exit #1', jp: '東口 1番', zh_tr: '東口 1號月台', zh_si: '东口 1号站台', ko: '동쪽 출구 1번' },
-    'KIYOTSU':        { en: 'East Exit #2', jp: '東口 2番', zh_tr: '東口 2號月台', zh_si: '东口 2号站台', ko: '동쪽 출구 2番' },
-    'KIYOTSUKYO':     { en: 'East Exit #2', jp: '東口 2番', zh_tr: '東口 2號月台', zh_si: '东口 2号站台', ko: '동쪽 출구 2番' },
-    'TOKAMACHI_AEON': { en: 'East Exit #2', jp: '東口 2番', zh_tr: '東口 2號月台', zh_si: '东口 2号站台', ko: '동쪽 출구 2番' },
-    'TOKAMACHIAEON':  { en: 'East Exit #2', jp: '東口 2番', zh_tr: '東口 2號月台', zh_si: '东口 2号站台', ko: '동쪽 출구 2番' },
-    'MUIKAMACHI':     { en: 'East Exit #2', jp: '東口 2番', zh_tr: '東口 2號月台', zh_si: '东口 2号站台', ko: '동쪽 출구 2番' },
-    'HAKKAISAN':      { en: 'East Exit #2', jp: '東口 2番', zh_tr: '東口 2號月台', zh_si: '东口 2号站台', ko: '동쪽 출구 2番' },
-    'DAIGENTA':       { en: 'East Exit #3', jp: '東口 3番', zh_tr: '東口 3號月台', zh_si: '东口 3号站台', ko: '동쪽 출구 3番' },
-    'TSUCHITARU':     { en: 'East Exit #3', jp: '東口 3番', zh_tr: '東口 3號月台', zh_si: '东口 3号站台', ko: '동쪽 출구 3番' },
+    'KIYOTSU':        { en: 'East Exit #2', jp: '東口 2番', zh_tr: '東口 2號月台', zh_si: '东口 2号站台', ko: '동쪽 출구 2번' },
+    'KIYOTSUKYO':     { en: 'East Exit #2', jp: '東口 2番', zh_tr: '東口 2號月台', zh_si: '东口 2号站台', ko: '동쪽 출구 2번' },
+    'TOKAMACHI_AEON': { en: 'East Exit #2', jp: '東口 2番', zh_tr: '東口 2號月台', zh_si: '东口 2号站台', ko: '동쪽 출구 2번' },
+    'TOKAMACHIAEON':  { en: 'East Exit #2', jp: '東口 2番', zh_tr: '東口 2號月台', zh_si: '东口 2号站台', ko: '동쪽 출구 2번' },
+    'MUIKAMACHI':     { en: 'East Exit #2', jp: '東口 2番', zh_tr: '東口 2號月台', zh_si: '东口 2号站台', ko: '동쪽 출구 2번' },
+    'HAKKAISAN':      { en: 'East Exit #2', jp: '東口 2番', zh_tr: '東口 2號月台', zh_si: '东口 2号站台', ko: '동쪽 출구 2번' },
+    'DAIGENTA':       { en: 'East Exit #3', jp: '東口 3番', zh_tr: '東口 3號月台', zh_si: '东口 3号站台', ko: '동쪽 출구 3번' },
+    'TSUCHITARU':     { en: 'East Exit #3', jp: '東口 3番', zh_tr: '東口 3號月台', zh_si: '东口 3号站台', ko: '동쪽 출구 3번' },
     'SEIBU_CRYSTAL':  { en: 'East Exit #1', jp: '東口 1番', zh_tr: '東口 1號月台', zh_si: '东口 1号站台', ko: '동쪽 출구 1번' },
     'CRYSTAL':        { en: 'East Exit #1', jp: '東口 1番', zh_tr: '東口 1號月台', zh_si: '东口 1号站台', ko: '동쪽 출구 1번' },
 
@@ -657,7 +676,7 @@
     'LOOP':           { en: 'West Exit Rotary', jp: '西口 ロータリー', zh_tr: '西口 接駁專區', zh_si: '西口 接驳专区', ko: '서쪽 출구 로터리' }
   };
 
-  // --- 2. CORE FUNCTIONS ---
+  // --- 3. CORE FUNCTIONS ---
 
   function normalizeKey(str) {
     return (str || '').trim().toUpperCase()
