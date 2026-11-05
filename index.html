@@ -95,6 +95,7 @@
       background: #334155;
       color: var(--accent);
       margin-left: 8px;
+      flex-shrink: 0;
     }
     
     /* Mode Toggle */
@@ -188,6 +189,7 @@
       display: flex;
       flex-direction: column;
       line-height: 1.3;
+      min-width: 0;
     }
     .services-nav-text strong {
       font-size: 0.88rem;
@@ -246,13 +248,15 @@
       margin-top: 5px;
       letter-spacing: 0.02em;
     }
-        /* Transit Alert & Disruption Notice (Dark Mode Matched) */
+
+    /* Transit Alert & Disruption Notice */
     .transit-alert-box {
+      position: relative;
       background: rgba(245, 158, 11, 0.08);
       border: 1px solid rgba(245, 158, 11, 0.3);
       border-left: 4px solid #f59e0b;
       border-radius: 10px;
-      padding: 12px 14px;
+      padding: 12px 44px 12px 14px;
       margin-bottom: 16px;
       display: flex;
       align-items: flex-start;
@@ -274,45 +278,36 @@
       color: #fbbf24;
       margin-bottom: 4px;
     }
-    .alert-desc {
-      color: #cbd5e1;
-    }
+    .alert-desc { color: #cbd5e1; }
     .alert-en {
       display: block;
       margin-top: 6px;
       font-size: 0.8rem;
       color: #94a3b8;
     }
-    /* --- TRANSIT ALERT & DISMISS BUTTON --- */
-.transit-alert-box {
-  position: relative;
-  padding-right: 44px; /* Prevents text from colliding with the dismiss button on small screens */
-}
-
-.alert-close-btn {
-  position: absolute;
-  top: 10px;
-  right: 10px;
-  background: transparent;
-  border: none;
-  color: #94a3b8;
-  font-size: 22px;
-  line-height: 1;
-  cursor: pointer;
-  padding: 6px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  border-radius: 6px;
-  touch-action: manipulation;
-  transition: color 0.15s ease, background-color 0.15s ease;
-}
-
-.alert-close-btn:hover,
-.alert-close-btn:active {
-  color: #f8fafc;
-  background: rgba(255, 255, 255, 0.12);
-}
+    .alert-close-btn {
+      position: absolute;
+      top: 10px;
+      right: 10px;
+      background: transparent;
+      border: none;
+      color: #94a3b8;
+      font-size: 22px;
+      line-height: 1;
+      cursor: pointer;
+      padding: 6px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 6px;
+      touch-action: manipulation;
+      transition: color 0.15s ease, background-color 0.15s ease;
+    }
+    .alert-close-btn:hover,
+    .alert-close-btn:active {
+      color: #f8fafc;
+      background: rgba(255, 255, 255, 0.12);
+    }
   </style>
 </head>
 <body>
@@ -357,7 +352,7 @@
     <button class="mode-btn active" id="btnPublic" onclick="switchMode('public')">🚍 Public Transit</button>
   </div>
 
-   <!-- Filter Grid -->
+  <!-- Filter Grid -->
   <div class="controls">
     <div class="control-group">
       <label id="lblRoute">Route</label>
@@ -381,7 +376,7 @@
     </div>
   </div>
 
-  <!-- Route Alerts (Toggled via JS) -->
+  <!-- Route Alerts -->
   <div id="hakkaisanAlert" class="transit-alert-box" style="display: none;">
     <div class="alert-icon">⚠️</div>
     <div class="alert-content">
@@ -403,6 +398,7 @@
         <span class="alert-en">Schedules currently shown reflect provisional/previous season data. Official 2026–2027 timetables will be finalized upon ski resort openings in late November/December.</span>
       </p>
     </div>
+    <button type="button" class="alert-close-btn" onclick="dismissAlert('winterAlert')" aria-label="Dismiss alert">&times;</button>
   </div>
 
   <!-- Timetable List -->
@@ -415,7 +411,6 @@
   // 1. Resolve Language: URL parameter -> LocalStorage -> Browser default -> English fallback
   const SUPPORTED_LANGS = ['en', 'jp', 'zh_tr', 'zh_si', 'ko'];
 
-  // localStorage can throw (private mode, blocked site data), so never let it stop the page
   function safeGetItem(key) {
     try { return localStorage.getItem(key); } catch (e) { return null; }
   }
@@ -423,7 +418,6 @@
     try { localStorage.setItem(key, value); } catch (e) {}
   }
 
-  // Browser codes differ from this page's codes: "ja" -> jp, "zh-TW/HK/Hant" -> zh_tr, other "zh" -> zh_si
   function detectBrowserLang() {
     const full = (navigator.language || '').toLowerCase();
     if (full.startsWith('ja')) return 'jp';
@@ -446,10 +440,9 @@
     currentLang = browserLang;
   }
 
-  // Persist preference for future visits
   safeSetItem('yuzawa_lang', currentLang);
 
-  // --- 2. GLOBAL STATE & CACHE (Strictly Isolated) ---
+  // --- 2. GLOBAL STATE & CACHE ---
   const cache = {
     winter: { rawStops: [], schedules: [], stopsMap: {}, loaded: false },
     public: { rawStops: [], schedules: [], stopsMap: {}, loaded: false }
@@ -457,7 +450,6 @@
 
   let currentMode = window.location.hash === '#winter' ? 'winter' : 'public';
 
-  // Base CSV URLs for Google Sheets
   const SHEET_BASE_WORK = 'PLACEHOLDER_WORK_URL'; 
   const SHEET_BASE_PERSONAL = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vT4XgepABOjpsBX4-KSJ93em-AETYmfY-1VLszziG7MuluSKtLLCG-MYlaTD5hY6t5WZTvx46RBtXep/pub';
   
@@ -466,24 +458,24 @@
       stops: [
         `${SHEET_BASE_WORK}?gid=1435758286&single=true&output=csv`,      // Tier 1: Work Account
         `${SHEET_BASE_PERSONAL}?gid=1435758286&single=true&output=csv`,  // Tier 2: Personal Account
-        'Winter_Transit_Stops.csv'                                      // Tier 3: Local Static Backup
+        './Winter_Transit_Stops.csv'                                     // Tier 3: Root Static Backup
       ],
       schedules: [
         `${SHEET_BASE_WORK}?gid=1362971870&single=true&output=csv`,      // Tier 1: Work Account
         `${SHEET_BASE_PERSONAL}?gid=1362971870&single=true&output=csv`,  // Tier 2: Personal Account
-        'Winter_Transit_Schedule.csv'                                   // Tier 3: Local Static Backup
+        './Winter_Transit_Schedule.csv'                                  // Tier 3: Root Static Backup
       ]
     },
     public: {
       stops: [
         `${SHEET_BASE_WORK}?gid=1059473422&single=true&output=csv`,      // Tier 1: Work Account
         `${SHEET_BASE_PERSONAL}?gid=1059473422&single=true&output=csv`,  // Tier 2: Personal Account
-        'Public_Transit_Stops.csv'                                      // Tier 3: Local Static Backup
+        './Public_Transit_Stops.csv'                                     // Tier 3: Root Static Backup
       ],
       schedules: [
         `${SHEET_BASE_WORK}?gid=0&single=true&output=csv`,               // Tier 1: Work Account
         `${SHEET_BASE_PERSONAL}?gid=0&single=true&output=csv`,           // Tier 2: Personal Account
-        'Public_Transit_Schedule.csv'                                    // Tier 3: Local Static Backup
+        './Public_Transit_Schedule.csv'                                  // Tier 3: Root Static Backup
       ]
     }
   };
@@ -546,6 +538,7 @@
       'WEEKEND_HOLIDAY': { en: 'Weekend / Holiday', jp: '土休日', zh_tr: '週末 / 假日', zh_si: '周末 / 节假日', ko: '주말 / 공휴일' },
       'DESIGNATED_FRIDAYS_ONLY': { en: 'Designated Fridays Only', jp: '特定金曜日運行', zh_tr: '特定週五運行', zh_si: '特定周五运行', ko: '특정 금요일 운행' },
       'WEEKEND/HOLIDAY_ONLY': { en: 'Weekend / Holiday Only', jp: '土休日のみ運行', zh_tr: '僅週末 / 假日運行', zh_si: '仅周末 / 节假日运行', ko: '주말 / 공휴일 운행' },
+      'WEEKEND_HOLIDAY_ONLY': { en: 'Weekend / Holiday Only', jp: '土休日のみ運行', zh_tr: '僅週末 / 假日運行', zh_si: '仅周末 / 节假日运行', ko: '주말 / 공휴일 운행' },
       'DAILY_UNTIL_APR05': { en: 'Daily (until Apr 5)', jp: '毎日運行（4/5まで）', zh_tr: '每日運行（至4/5）', zh_si: '每日运行（至4/5）', ko: '매일 운행 (~4/5까지)' },
       'NIGHT_SKI_DAYS': { en: 'Night Ski Days', jp: 'ナイター営業日', zh_tr: '夜間滑雪營業日', zh_si: '夜间滑雪营业日', ko: '야간 스키 영업일' },
       'DAILY_RESERVATION': { en: 'Daily (Reservation Req.)', jp: '毎日運行（要予約）', zh_tr: '每日運行（需預約）', zh_si: '每日运行（需预约）', ko: '매일 운행 (예약 필수)' },
@@ -554,7 +547,6 @@
       'GUESTS_ONLY_RESERVATION': { en: 'Hotel Guests Only (Reservation)', jp: '宿泊者専用（要予約）', zh_tr: '僅限房客（需預約）', zh_si: '仅限房客（需预约）', ko: '투숙객 전용 (예약 필수)' },
       'NIGHT_SUN_HOLIDAY': { en: 'Sun & Holidays (Night)', jp: '日曜・祝日（夜便）', zh_tr: '週日・國定假日（夜班）', zh_si: '周日・节假日（夜班）', ko: '일요일・공휴일 (야간편)' },
       'NIGHT_SAT_SPECIAL': { en: 'Sat & Designated Days (Night)', jp: '土曜・特定日（夜便）', zh_tr: '週六・特定日（夜班）', zh_si: '周六・特定日（夜班）', ko: '토요일・특정일 (야간편)' }
-
     },
     routes: {
       'SEIBU_CRYSTAL': { en: 'Seibu Crystal Line', jp: '西武クリスタル線', zh_tr: '西武水晶線', zh_si: '西武水晶线', ko: '세이부 크리스탈선' },
@@ -584,14 +576,14 @@
       'ISHIUCHI_NIGHT': { en: 'Ishiuchi Night Shuttle', jp: '石打ナイターシャトル', zh_tr: '石打夜間接駁車', zh_si: '石打夜间接驳车', ko: '이시우치 야간 셔틀' },
       'DIRECT': { en: 'Direct Express Shuttle', jp: '直行便シャトル', zh_tr: '直達接駁專車', zh_si: '直达接驳专车', ko: '직행 셔틀' },
       'NIGHT': { en: 'Night Ski Shuttle', jp: 'ナイターシャトル', zh_tr: '夜間滑雪接駁車', zh_si: '夜间滑雪接驳车', ko: '야간 스키 셔틀' },
-      'IWAHARA': { en: 'Iwahara Line', jp: '岩原線', zh_tr: '岩原線', zh_si: '岩原线', ko: '이와하라선' },
-      'IWAPPARA': { en: 'Iwahara Line', jp: '岩原線', zh_tr: '岩原線', zh_si: '岩原线', ko: '이와하라선' },
-      'IWAHARA_JOKOKU': { en: 'Iwahara / Jokoku Shuttle', jp: '岩原・上国シャトル', zh_tr: '岩原・上國接駁車', zh_si: '岩原・上国接驳车', ko: '이와하라・조코쿠 셔틀' },
-      'IWAPPARA_JOKOKU': { en: 'Iwahara / Jokoku Shuttle', jp: '岩原・上国シャトル', zh_tr: '岩原・上國接駁車', zh_si: '岩原・上国接驳车', ko: '이와하라・조코쿠 셔틀' },
-      'IWAHARA_JOUKOKU': { en: 'Iwahara / Jokoku Shuttle', jp: '岩原・上国シャトル', zh_tr: '岩原・上國接駁車', zh_si: '岩原・上国接驳车', ko: '이와하라・조코쿠 셔틀' },
-      'IWAPPARA_JOUKOKU': { en: 'Iwahara / Jokoku Shuttle', jp: '岩原・上国シャトル', zh_tr: '岩原・上國接駁車', zh_si: '岩原・上国接驳车', ko: '이와하라・조코쿠 셔틀' },
-      'IWAHARA_JOETSU_KOKUSAI': { en: 'Iwahara / Jokoku Shuttle', jp: '岩原・上国シャトル', zh_tr: '岩原・上國接駁車', zh_si: '岩原・上国接驳车', ko: '이와하라・조코쿠 셔틀' },
-      'IWAPPARA_JOETSU_KOKUSAI': { en: 'Iwahara / Jokoku Shuttle', jp: '岩原・上国シャトル', zh_tr: '岩原・上國接駁車', zh_si: '岩原・上国接驳车', ko: '이와하라・조코쿠 셔틀' },
+      'IWAHARA': { en: 'Iwappara Line', jp: '岩原線', zh_tr: '岩原線', zh_si: '岩原线', ko: '이와하라선' },
+      'IWAPPARA': { en: 'Iwappara Line', jp: '岩原線', zh_tr: '岩原線', zh_si: '岩原线', ko: '이와하라선' },
+      'IWAHARA_JOKOKU': { en: 'Iwappara / Jokoku Shuttle', jp: '岩原・上国シャトル', zh_tr: '岩原・上國接駁車', zh_si: '岩原・上国接驳车', ko: '이와하라・조코쿠 셔틀' },
+      'IWAPPARA_JOKOKU': { en: 'Iwappara / Jokoku Shuttle', jp: '岩原・上国シャトル', zh_tr: '岩原・上國接駁車', zh_si: '岩原・上国接驳车', ko: '이와하라・조코쿠 셔틀' },
+      'IWAHARA_JOUKOKU': { en: 'Iwappara / Jokoku Shuttle', jp: '岩原・上国シャトル', zh_tr: '岩原・上國接駁車', zh_si: '岩原・上国接驳车', ko: '이와하라・조코쿠 셔틀' },
+      'IWAPPARA_JOUKOKU': { en: 'Iwappara / Jokoku Shuttle', jp: '岩原・上国シャトル', zh_tr: '岩原・上國接駁車', zh_si: '岩原・上国接驳车', ko: '이와하라・조코쿠 셔틀' },
+      'IWAHARA_JOETSU_KOKUSAI': { en: 'Iwappara / Jokoku Shuttle', jp: '岩原・上国シャトル', zh_tr: '岩原・上國接駁車', zh_si: '岩原・上国接驳车', ko: '이와하라・조코쿠 셔틀' },
+      'IWAPPARA_JOETSU_KOKUSAI': { en: 'Iwappara / Jokoku Shuttle', jp: '岩原・上国シャトル', zh_tr: '岩原・上國接駁車', zh_si: '岩原・上国接驳车', ko: '이와하라・조코쿠 셔틀' },
       'CHATEAU_SHIOZAWA': { en: 'Chateau Shiozawa Shuttle', jp: 'シャトー塩沢シャトル', zh_tr: '鹽澤城堡接駁車', zh_si: '盐泽城堡接驳车', ko: '샤토 시오자와 셔틀' },
       'CHATEAU_SHIIOZAWA': { en: 'Chateau Shiozawa Shuttle', jp: 'シャトー塩沢シャトル', zh_tr: '鹽澤城堡接駁車', zh_si: '盐泽城堡接驳车', ko: '샤토 시오자와 셔틀' },
       'KAGURA_LOCAL': { en: 'Kagura Local Line', jp: 'かぐら各停便', zh_tr: '神樂各站停靠便', zh_si: '神乐各站停靠便', ko: '카구라 각역정차편' },
@@ -613,7 +605,7 @@
       'ISHIUCHI': { en: 'Ishiuchi Maruyama Shuttle', jp: '石打丸山シャトル', zh_tr: '石打丸山接駁車', zh_si: '石打丸山接驳车', ko: '이시우치 마루야마 셔틀' },
       'GALA': { en: 'GALA Shuttle', jp: 'GALAシャトル', zh_tr: 'GALA接駁車', zh_si: 'GALA接驳车', ko: 'GALA 셔틀' },
       'NASPA': { en: 'NASPA Shuttle', jp: 'NASPAシャトル', zh_tr: 'NASPA接駁車', zh_si: 'NASPA接驳车', ko: 'NASPA 셔틀' },
-      'YUZAWA_KOGEN': { en: 'Yuzawa Kogen Shuttle', jp: '湯沢高原シャトル', zh_tr: '湯澤高原接駁車', zh_si: '汤泽高原接驳车', ko: '유자와 코겐 셔틀' },
+      'YUZAWA_KOGEN': { en: 'Yuzawa Kogen Shuttle', jp: '湯沢高原シャトル', zh_tr: '湯澤高原接駁車', zh_si: '汤泽高原接驳车', ko: '유자와 코겐 셔틀' }
     },
     directions: {
       'OUTBOUND': { en: 'Outbound (From Station)', jp: '下り（越後湯沢駅発）', zh_tr: '去程（越後湯澤站發車）', zh_si: '去程（越后汤泽站发车）', ko: '하행 (유자와역발)' },
@@ -630,6 +622,7 @@
       'TO_NAEBA': { en: 'To Naeba', jp: '苗場行', zh_tr: '往苗場', zh_si: '往苗场', ko: '나에바행' },
       'TO_HOTEL': { en: 'To Hotel', jp: 'ホテル行', zh_tr: '往飯店', zh_si: '往饭店', ko: '호텔행' },
       'TO_JOETSU_KOKUSAI': { en: 'To Joetsu Kokusai', jp: '上越国際行', zh_tr: '往上越國際', zh_si: '往上越国际', ko: '조에츠 고쿠사이행' },
+      'TO_JOKOKU': { en: 'To Joetsu Kokusai', jp: '上越国際行', zh_tr: '往上越國際', zh_si: '往上越国际', ko: '조에츠 고쿠사이행' },
       'TO_IWAPPARA': { en: 'To Iwappara', jp: '岩原行', zh_tr: '往岩原', zh_si: '往岩原', ko: '이와하라행' },
       'TO_SHIOZAWA_STA': { en: 'To Shiozawa Sta.', jp: '塩沢駅行', zh_tr: '往鹽澤站', zh_si: '往盐泽站', ko: '시오자와역행' },
       'TO_YUZAWA_STA': { en: 'To Echigo-Yuzawa Sta.', jp: '越後湯沢駅行', zh_tr: '往越後湯澤站', zh_si: '往越后汤泽站', ko: '에치고유자와역행' }
@@ -638,25 +631,24 @@
 
   const stopLangKeys = { en: 'Stop_Name_EN', jp: 'Stop_Name_JP', zh_tr: 'Stop_Name_ZH_TR', zh_si: 'Stop_Name_ZH_SI', ko: 'Stop_Name_KO' };
 
-  // 2026–2027 Season Japanese Public Holidays (YYYY-MM-DD)
   const JP_HOLIDAYS = new Set([
-    '2026-10-12', // Sports Day
-    '2026-11-03', // Culture Day
-    '2026-11-23', // Labor Thanksgiving
-    '2026-12-29', '2026-12-30', '2026-12-31', // Year-end transit adjustments
-    '2027-01-01', '2027-01-02', '2027-01-03', // New Year transit adjustments
-    '2027-01-11', // Coming of Age Day
-    '2027-02-11', // National Foundation Day
-    '2027-02-23', // Emperor's Birthday
-    '2027-03-21', '2027-03-22', // Vernal Equinox (and observed)
-    '2027-04-29', // Showa Day
-    '2027-05-03', '2027-05-04', '2027-05-05'  // Golden Week
+    '2026-10-12',
+    '2026-11-03',
+    '2026-11-23',
+    '2026-12-29', '2026-12-30', '2026-12-31',
+    '2027-01-01', '2027-01-02', '2027-01-03',
+    '2027-01-11',
+    '2027-02-11',
+    '2027-02-23',
+    '2027-03-21', '2027-03-22',
+    '2027-04-29',
+    '2027-05-03', '2027-05-04', '2027-05-05'
   ]);
 
-  // Echigo-Yuzawa Station Boarding Pole Mapping
   const STATION_POLE_MAP = {
-    // East Exit - Minami Echigo Bus Poles & Express Lines
     'KAGURA_EXPRESS': { en: 'East Exit #1', jp: '東口 1番', zh_tr: '東口 1號月台', zh_si: '东口 1号站台', ko: '동쪽 출구 1번' },
+    'KAGURA_NAEBA':   { en: 'East Exit #1', jp: '東口 1番', zh_tr: '東口 1號月台', zh_si: '东口 1号站台', ko: '동쪽 출구 1번' },
+    'KAGURA':         { en: 'East Exit #1', jp: '東口 1番', zh_tr: '東口 1號月台', zh_si: '东口 1号站台', ko: '동쪽 출구 1번' },
     'NAEBA':          { en: 'East Exit #1', jp: '東口 1番', zh_tr: '東口 1號月台', zh_si: '东口 1号站台', ko: '동쪽 출구 1번' },
     'KIYOTSU':        { en: 'East Exit #2', jp: '東口 2番', zh_tr: '東口 2號月台', zh_si: '东口 2号站台', ko: '동쪽 출구 2번' },
     'KIYOTSUKYO':     { en: 'East Exit #2', jp: '東口 2番', zh_tr: '東口 2號月台', zh_si: '东口 2号站台', ko: '동쪽 출구 2번' },
@@ -668,8 +660,7 @@
     'TSUCHITARU':     { en: 'East Exit #3', jp: '東口 3番', zh_tr: '東口 3號月台', zh_si: '东口 3号站台', ko: '동쪽 출구 3번' },
     'SEIBU_CRYSTAL':  { en: 'East Exit #1', jp: '東口 1番', zh_tr: '東口 1號月台', zh_si: '东口 1号站台', ko: '동쪽 출구 1번' },
     'CRYSTAL':        { en: 'East Exit #1', jp: '東口 1番', zh_tr: '東口 1號月台', zh_si: '东口 1号站台', ko: '동쪽 출구 1번' },
-
-    // East Exit - Resort Shuttles
+    'R_01':           { en: 'East Exit #1', jp: '東口 1番', zh_tr: '東口 1號月台', zh_si: '东口 1号站台', ko: '동쪽 출구 1번' },
     'KANDATSU':       { en: 'East Exit Rotary', jp: '東口 ロータリー', zh_tr: '東口 接駁專區', zh_si: '东口 接驳专区', ko: '동쪽 출구 로터리' },
     'YUZAWA_NAKASATO':{ en: 'East Exit Rotary', jp: '東口 ロータリー', zh_tr: '東口 接駁專區', zh_si: '东口 接驳专区', ko: '동쪽 출구 로터리' },
     'NAKASATO':       { en: 'East Exit Rotary', jp: '東口 ロータリー', zh_tr: '東口 接駁專區', zh_si: '东口 接驳专区', ko: '동쪽 출구 로터리' },
@@ -679,8 +670,6 @@
     'MAIKO_DIRECT':   { en: 'East Exit Rotary', jp: '東口 ロータリー', zh_tr: '東口 接駁專區', zh_si: '东口 接驳专区', ko: '동쪽 출구 로터리' },
     'IWAPPARA':       { en: 'East Exit Rotary', jp: '東口 ロータリー', zh_tr: '東口 接駁專區', zh_si: '东口 接驳专区', ko: '동쪽 출구 로터리' },
     'IWAHARA':        { en: 'East Exit Rotary', jp: '東口 ロータリー', zh_tr: '東口 接駁專區', zh_si: '东口 接驳专区', ko: '동쪽 출구 로터리' },
-
-    // West Exit - Town Loop & Free Shuttles
     'BLUE':           { en: 'West Exit Rotary', jp: '西口 ロータリー', zh_tr: '西口 接駁專區', zh_si: '西口 接驳专区', ko: '서쪽 출구 로터리' },
     'YELLOW':         { en: 'West Exit Rotary', jp: '西口 ロータリー', zh_tr: '西口 接駁專區', zh_si: '西口 接驳专区', ko: '서쪽 출구 로터리' },
     'ORANGE':         { en: 'West Exit Rotary', jp: '西口 ロータリー', zh_tr: '西口 接駁專區', zh_si: '西口 接驳专区', ko: '서쪽 출구 로터리' },
@@ -724,7 +713,7 @@
 
   function getTodayScheduleCategory() {
     const jstDate = new Date(new Date().toLocaleString("en-US", { timeZone: "Asia/Tokyo" }));
-    const dayOfWeek = jstDate.getDay(); // 0 = Sun, 6 = Sat
+    const dayOfWeek = jstDate.getDay();
     const yyyy = jstDate.getFullYear();
     const mm = String(jstDate.getMonth() + 1).padStart(2, '0');
     const dd = String(jstDate.getDate()).padStart(2, '0');
@@ -800,7 +789,6 @@
       return `<span class="fare-tag">${freeText}</span>`;
     }
 
-    // Public Transit check
     const isStation = /湯沢駅|六日町駅/i.test(stopNameJP || '');
     if (isStation || num === 0) {
       const termText = I18N.ui.terminal[currentLang] || 'Terminal';
@@ -814,20 +802,19 @@
   }
 
   async function fetchWithFallback(...sources) {
-    // Flatten arrays/strings and skip unconfigured placeholders
     const urls = sources
       .flat()
-      .filter(url => url && typeof url === 'string' && !url.startsWith('PLACEHOLDER'));
+      .filter(url => url && typeof url === 'string' && !url.includes('PLACEHOLDER'));
 
     for (let i = 0; i < urls.length; i++) {
       const url = urls[i];
+      const isRemote = url.startsWith('http');
       try {
-        const res = await fetch(url, { cache: 'no-cache' });
+        // Use cache: 'no-cache' only for remote Google Sheets; allow Tier 3 root CSVs to resolve from SW cache
+        const res = await fetch(url, isRemote ? { cache: 'no-cache' } : {});
         if (!res.ok) throw new Error(`HTTP ${res.status}`);
 
         const text = await res.text();
-
-        // Guard against Google Sheets returning a login redirect or HTML error page
         const isHtml = text.trim().startsWith('<!DOCTYPE') || text.includes('<html');
         if (text && text.length > 50 && !isHtml) {
           return text;
@@ -838,7 +825,7 @@
       }
     }
 
-    return ''; // Return empty string rather than crashing the entire app
+    return '';
   }
 
   async function loadDataForMode(mode) {
@@ -856,7 +843,6 @@
       header: true, skipEmptyLines: 'greedy',
       transformHeader: h => h.trim().replace(/^\ufeff/, ''),
       complete: (results) => {
-        // Filter out empty rows and duplicate header rows
         cache[mode].rawStops = results.data.filter(row => {
           const sId = (row.Stop_ID || row.stop_id || '').trim();
           return sId && !/^stop_?id$/i.test(sId);
@@ -866,7 +852,7 @@
           const sId = (row.Stop_ID || row.stop_id || '').trim();
           const rCode = normalizeKey(row.Route_Code || row.Route_ID || '');
           if (sId) {
-            cache[mode].stopsMap[sId] = row;
+            if (!cache[mode].stopsMap[sId]) cache[mode].stopsMap[sId] = row;
             if (rCode) cache[mode].stopsMap[`${rCode}__${sId}`] = row;
           }
         });
@@ -877,7 +863,6 @@
       header: true, skipEmptyLines: 'greedy',
       transformHeader: h => h.trim().replace(/^\ufeff/, ''),
       complete: (results) => {
-        // Reject any row where the values are the column header names
         cache[mode].schedules = results.data
           .filter(r => {
             const rc = (r.Route_Code || r.Route_ID || '').trim();
@@ -899,14 +884,13 @@
 
     cache[mode].loaded = true;
   }
-   // --- ALERT DISMISSAL LOGIC ---
+
   function dismissAlert(alertId) {
     const el = document.getElementById(alertId);
     if (el) el.style.display = 'none';
     safeSetItem(`${alertId}_dismissed`, 'true');
   }
 
-  // --- UI STATE & FILTERING ---
   async function switchMode(mode) {
     currentMode = mode;
     window.location.hash = `#${mode}`;
@@ -914,16 +898,16 @@
     document.getElementById('btnWinter').classList.toggle('active', mode === 'winter');
     document.getElementById('btnPublic').classList.toggle('active', mode === 'public');
     
-    // Toggle Alert Banners by Mode & Persistent Dismissal State
     const hakkaisanEl = document.getElementById('hakkaisanAlert');
     const winterEl = document.getElementById('winterAlert');
     const isHakkaisanDismissed = safeGetItem('hakkaisanAlert_dismissed') === 'true';
+    const isWinterDismissed = safeGetItem('winterAlert_dismissed') === 'true';
 
     if (hakkaisanEl) {
       hakkaisanEl.style.display = (mode === 'public' && !isHakkaisanDismissed) ? 'flex' : 'none';
     }
     if (winterEl) {
-      winterEl.style.display = (mode === 'winter') ? 'flex' : 'none';
+      winterEl.style.display = (mode === 'winter' && !isWinterDismissed) ? 'flex' : 'none';
     }
 
     document.getElementById('searchInput').value = '';
@@ -934,8 +918,10 @@
     populateRoutes();
   }
 
-  function populateRoutes() {
+  function populateRoutes(preserveState = false) {
     const routeSelect = document.getElementById('routeSelect');
+    const prevRoute = preserveState ? routeSelect.value : null;
+
     const uniqueRoutes = [...new Set(cache[currentMode].schedules.map(s => s.routeCode))];
     routeSelect.innerHTML = '';
     uniqueRoutes.forEach(route => {
@@ -944,13 +930,20 @@
       opt.textContent = translateRoute(route);
       routeSelect.appendChild(opt);
     });
-    routeSelect.onchange = populateDirections;
-    populateDirections();
+
+    if (prevRoute && uniqueRoutes.includes(prevRoute)) {
+      routeSelect.value = prevRoute;
+    }
+
+    routeSelect.onchange = () => populateDirections(false);
+    populateDirections(preserveState);
   }
 
-  function populateDirections() {
+  function populateDirections(preserveState = false) {
     const route = document.getElementById('routeSelect').value;
     const dirSelect = document.getElementById('dirSelect');
+    const prevDir = preserveState ? dirSelect.value : null;
+
     const availableDirs = [...new Set(cache[currentMode].schedules.filter(s => s.routeCode === route).map(s => s.direction))];
     dirSelect.innerHTML = '';
     availableDirs.forEach(dir => {
@@ -959,20 +952,28 @@
       opt.textContent = translateDirection(dir);
       dirSelect.appendChild(opt);
     });
-    dirSelect.onchange = populateDaysAndStops;
-    populateDaysAndStops();
+
+    if (prevDir && availableDirs.includes(prevDir)) {
+      dirSelect.value = prevDir;
+    }
+
+    dirSelect.onchange = () => populateDaysAndStops(false);
+    populateDaysAndStops(preserveState);
   }
 
-  function populateDaysAndStops() {
+  function populateDaysAndStops(preserveState = false) {
     const route = document.getElementById('routeSelect').value;
     const dir = document.getElementById('dirSelect').value;
     const daySelect = document.getElementById('daySelect');
     const stopSelect = document.getElementById('stopSelect');
     const destSelect = document.getElementById('destSelect');
+
+    const prevDay = preserveState ? daySelect.value : null;
+    const prevStop = preserveState ? stopSelect.value : null;
+    const prevDest = (preserveState && destSelect) ? destSelect.value : null;
     
     const routeSchedules = cache[currentMode].schedules.filter(s => s.routeCode === route && s.direction === dir);
 
-    // 1. Operating Days setup & Auto-Detection
     const availableDays = [...new Set(routeSchedules.map(s => s.operatingDays))];
     daySelect.innerHTML = `<option value="ALL">${I18N.ui.allDays[currentLang] || I18N.ui.allDays.en}</option>`;
     
@@ -983,20 +984,23 @@
       daySelect.appendChild(opt);
     });
 
-    const todayCat = getTodayScheduleCategory();
-    let bestDayMatch = 'ALL';
-    if (todayCat === 'WEEKEND') {
-      bestDayMatch = availableDays.find(d => /WEEKEND|HOLIDAY|土休/i.test(d)) ||
-                     availableDays.find(d => /DAILY|毎日/i.test(d)) ||
-                     'ALL';
+    if (prevDay && (prevDay === 'ALL' || availableDays.includes(prevDay))) {
+      daySelect.value = prevDay;
     } else {
-      bestDayMatch = availableDays.find(d => /WEEKDAY|平日/i.test(d)) ||
-                     availableDays.find(d => /DAILY|毎日/i.test(d)) ||
-                     'ALL';
+      const todayCat = getTodayScheduleCategory();
+      let bestDayMatch = 'ALL';
+      if (todayCat === 'WEEKEND') {
+        bestDayMatch = availableDays.find(d => /WEEKEND|HOLIDAY|土休/i.test(d)) ||
+                       availableDays.find(d => /DAILY|毎日/i.test(d)) ||
+                       'ALL';
+      } else {
+        bestDayMatch = availableDays.find(d => /WEEKDAY|平日/i.test(d)) ||
+                       availableDays.find(d => /DAILY|毎日/i.test(d)) ||
+                       'ALL';
+      }
+      daySelect.value = bestDayMatch;
     }
-    daySelect.value = bestDayMatch;
 
-    // 2. Stop Options (Boarding & Destination)
     const routeStopIds = [...new Set(routeSchedules.map(s => s.stopId))];
     const colKey = stopLangKeys[currentLang] || 'Stop_Name_EN';
 
@@ -1022,8 +1026,18 @@
       }
     });
 
-    if (routeStopIds.length > 0) {
+    if (prevStop && routeStopIds.includes(prevStop)) {
+      stopSelect.value = prevStop;
+    } else if (routeStopIds.length > 0) {
       stopSelect.value = routeStopIds[0];
+    }
+
+    if (destSelect) {
+      if (prevDest && (prevDest === 'TERMINUS' || routeStopIds.includes(prevDest))) {
+        destSelect.value = prevDest;
+      } else {
+        destSelect.value = 'TERMINUS';
+      }
     }
 
     daySelect.onchange = renderTimetable;
@@ -1039,20 +1053,17 @@
 
     if (tripNorm === selNorm) return true;
 
-    // Daily buses run every day (both weekdays and weekends/holidays)
     if (tripNorm === 'DAILY') {
       if (selNorm.includes('WEEKEND') || selNorm.includes('HOLIDAY') || selNorm.includes('WEEKDAY')) {
         return true;
       }
     }
 
-    // Weekend/Holiday grouping check
     if ((selNorm.includes('WEEKEND') || selNorm.includes('HOLIDAY')) &&
         (tripNorm.includes('WEEKEND') || tripNorm.includes('HOLIDAY'))) {
       return true;
     }
 
-    // Weekday grouping check
     if (selNorm.includes('WEEKDAY') && tripNorm.includes('WEEKDAY')) {
       return true;
     }
@@ -1060,7 +1071,15 @@
     return false;
   }
 
-   function renderTimetable() {
+  function parseTimeMins(tStr) {
+    const parts = (tStr || '0:0').split(':').map(Number);
+    const h = parts[0] || 0;
+    const m = parts[1] || 0;
+    const adjustedH = h < 4 ? h + 24 : h;
+    return adjustedH * 60 + m;
+  }
+
+  function renderTimetable() {
     const route = document.getElementById('routeSelect').value;
     const dir = document.getElementById('dirSelect').value;
     const selectedDay = document.getElementById('daySelect').value;
@@ -1088,18 +1107,13 @@
         return;
       }
 
-      tripStops.sort((a, b) => {
-        const [aH, aM] = a.departureTime.split(':').map(Number);
-        const [bH, bM] = b.departureTime.split(':').map(Number);
-        return (aH * 60 + aM) - (bH * 60 + bM);
-      });
+      tripStops.sort((a, b) => parseTimeMins(a.departureTime) - parseTimeMins(b.departureTime));
 
       const fromIndex = tripStops.findIndex(s => s.stopId === boardingStopId);
       if (fromIndex === -1) return;
 
       const fromRecord = tripStops[fromIndex];
-      const [depH, depM] = fromRecord.departureTime.split(':').map(Number);
-      const depTotal = depH * 60 + depM;
+      const depTotal = parseTimeMins(fromRecord.departureTime);
 
       let toRecord = null;
       if (tripStops.length > 1) {
@@ -1108,17 +1122,15 @@
             toRecord = tripStops[tripStops.length - 1];
           }
         } else {
-          const toIndex = tripStops.findIndex(s => s.stopId === destStopId);
-          if (toIndex > fromIndex) {
+          const toIndex = tripStops.findIndex((s, idx) => idx > fromIndex && s.stopId === destStopId);
+          if (toIndex !== -1) {
             toRecord = tripStops[toIndex];
           }
         }
       }
 
       if (toRecord) {
-        // Multi-stop bus line (shows departure and arrival times)
-        const [arrH, arrM] = toRecord.departureTime.split(':').map(Number);
-        const arrTotal = arrH * 60 + arrM;
+        const arrTotal = parseTimeMins(toRecord.departureTime);
         const durationMins = arrTotal >= depTotal ? arrTotal - depTotal : (arrTotal + 1440) - depTotal;
 
         journeys.push({
@@ -1131,8 +1143,7 @@
           direction: fromRecord.direction,
           depTotal: depTotal
         });
-      } else if (tripStops.length === 1 || destStopId === 'TERMINUS') {
-        // Single-stop shuttle departure
+      } else if (tripStops.length === 1 && destStopId === 'TERMINUS') {
         journeys.push({
           tripNumber: fromRecord.tripNumber,
           operatingDays: fromRecord.operatingDays,
@@ -1154,7 +1165,8 @@
     }
 
     const jstNow = new Date(new Date().toLocaleString("en-US", { timeZone: "Asia/Tokyo" }));
-    const currentMins = jstNow.getHours() * 60 + jstNow.getMinutes();
+    const nowH = jstNow.getHours();
+    const currentMins = (nowH < 4 ? nowH + 24 : nowH) * 60 + jstNow.getMinutes();
     let nextIndex = journeys.findIndex(j => j.depTotal >= currentMins);
 
     const tripWord = I18N.ui.trip[currentLang] || I18N.ui.trip.en;
@@ -1185,7 +1197,7 @@
         ? (destStop[colKey] || destStop['Stop_Name_EN'] || j.toStopId)
         : translateDirection(j.direction);
 
-      const fareBadge = formatFareBadge(destStop, destStop['Stop_Name_JP']);
+      const fareBadge = formatFareBadge(destStop, j.arrivalTime ? destStop['Stop_Name_JP'] : '');
       const mapUrl = destStop.Google_Maps_URL;
       const mapLink = mapUrl ? `<a class="map-link" href="${mapUrl}" target="_blank" rel="noopener">${mapWord}</a>` : '';
 
@@ -1223,7 +1235,6 @@
     }, 150);
   }
 
-
   // --- 4. SEARCH ENGINE ---
 
   const searchInput = document.getElementById('searchInput');
@@ -1249,7 +1260,8 @@
       .replace(/이와하라/g, '이와파라');
 
     const matches = activeStops.filter(stop => {
-      const names = [stop.Stop_Name_EN, stop.Stop_Name_JP, stop.Stop_Name_ZH_TR, stop.Stop_Name_ZH_SI, stop.Stop_Name_KO].filter(Boolean);
+      const routeTitle = translateRoute(stop.Route_Code || '').toLowerCase();
+      const names = [stop.Stop_Name_EN, stop.Stop_Name_JP, stop.Stop_Name_ZH_TR, stop.Stop_Name_ZH_SI, stop.Stop_Name_KO, routeTitle].filter(Boolean);
       return names.some(n => n.toLowerCase().includes(q));
     });
 
@@ -1264,10 +1276,11 @@
     }
 
     const uniqueMatches = [];
-    const seenIds = new Set();
+    const seenKeys = new Set();
     matches.forEach(m => {
-      if (!seenIds.has(m.Stop_ID)) {
-        seenIds.add(m.Stop_ID);
+      const compositeKey = `${m.Route_Code || ''}__${m.Stop_ID}`;
+      if (!seenKeys.has(compositeKey)) {
+        seenKeys.add(compositeKey);
         uniqueMatches.push(m);
       }
     });
@@ -1275,8 +1288,10 @@
     searchDropdown.innerHTML = uniqueMatches.slice(0, 15).map(stop => {
       const primaryName = stop[stopLangKeys[currentLang]] || stop.Stop_Name_EN;
       const routeName = translateRoute(stop.Route_Code || '');
+      const safeRoute = (stop.Route_Code || '').replace(/'/g, "\\'");
+      const safeStop = (stop.Stop_ID || '').replace(/'/g, "\\'");
       return `
-        <div class="search-item" onclick="selectSearchMatch('${stop.Route_Code}', '${stop.Stop_ID}')">
+        <div class="search-item" onclick="selectSearchMatch('${safeRoute}', '${safeStop}')">
           <div>
             <div class="search-item-main">${primaryName}</div>
             <div class="search-item-sub">${stop.Stop_Name_JP || ''}</div>
@@ -1293,27 +1308,33 @@
     searchInput.value = '';
     clearSearchBtn.style.display = 'none';
 
-    document.getElementById('routeSelect').value = routeCode;
+    const routeSelect = document.getElementById('routeSelect');
+    const matchingRouteOpt = Array.from(routeSelect.options).find(o => normalizeKey(o.value) === normalizeKey(routeCode));
+    if (matchingRouteOpt) {
+      routeSelect.value = matchingRouteOpt.value;
+    }
 
-    // Detect direction serving the searched stop
-    const sampleSched = cache[currentMode].schedules.find(s => s.routeCode === routeCode && s.stopId === stopId);
-    const targetDir = sampleSched ? sampleSched.direction : null;
+    const activeRoute = routeSelect.value;
+    const stopSchedules = cache[currentMode].schedules.filter(s => s.routeCode === activeRoute && s.stopId === stopId);
 
-    populateDirections();
+    const preferredSched = stopSchedules.find(s => /OUTBOUND|FROM_STATION|TO_RESORT|LOOP/i.test(normalizeKey(s.direction))) || stopSchedules[0];
+    const targetDir = preferredSched ? preferredSched.direction : null;
+
+    populateDirections(false);
 
     if (targetDir) {
       document.getElementById('dirSelect').value = targetDir;
-      populateDaysAndStops();
+      populateDaysAndStops(false);
     }
 
-    // Set destination to the searched stop
     const destSelect = document.getElementById('destSelect');
     const stopSelect = document.getElementById('stopSelect');
 
     if (destSelect && stopSelect) {
-      if (stopSelect.value !== stopId) {
+      if (stopSelect.value !== stopId && Array.from(destSelect.options).some(o => o.value === stopId)) {
         destSelect.value = stopId;
       } else {
+        stopSelect.value = stopId;
         destSelect.value = 'TERMINUS';
       }
     }
@@ -1334,10 +1355,9 @@
   document.getElementById('langSelect').addEventListener('change', (e) => {
     currentLang = e.target.value;
     updateStaticUI();
-    populateRoutes();
+    populateRoutes(true);
   });
 
-  // URL Deep-Linking
   async function handleUrlParams() {
     const params = new URLSearchParams(window.location.search);
     const mode = params.get('mode');
@@ -1357,7 +1377,7 @@
       const match = Array.from(routeSelect.options).find(opt => normalizeKey(opt.value) === normRoute);
       if (match) {
         routeSelect.value = match.value;
-        populateDirections();
+        populateDirections(false);
       }
     }
 
@@ -1367,7 +1387,7 @@
       const match = Array.from(dirSelect.options).find(opt => normalizeKey(opt.value) === normDir);
       if (match) {
         dirSelect.value = match.value;
-        populateDaysAndStops();
+        populateDaysAndStops(false);
       }
     }
 
@@ -1402,7 +1422,6 @@
     });
   }
 
-  // currentLang was already resolved at the top of this script
   document.getElementById('langSelect').value = currentLang;
 
   updateStaticUI();
