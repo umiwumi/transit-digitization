@@ -130,38 +130,87 @@
     .control-group { display: flex; flex-direction: column; gap: 4px; }
     label { font-size: 0.75rem; color: var(--text-muted); text-transform: uppercase; font-weight: 600; }
 
-    /* Timetable Cards */
+      /* Timetable Cards (Compact & Uniform) */
     .card {
       background: var(--card-bg);
       border: 1px solid var(--border);
-      border-radius: 10px;
-      padding: 12px 14px;
-      margin-bottom: 10px;
+      border-radius: 8px;
+      padding: 8px 12px;                  /* Reduced from 12px 14px */
+      min-height: 54px;                   /* Locks uniform card height */
+      margin-bottom: 6px;                 /* Reduced from 10px */
       display: flex;
       justify-content: space-between;
       align-items: center;
-      transition: all 0.3s ease;
+      gap: 12px;
+      transition: all 0.2s ease;
     }
-    .time-col { display: flex; flex-direction: column; align-items: flex-start; }
-    .time { font-size: 1.35rem; font-weight: 700; color: var(--accent); }
-    .trip-badge { font-size: 0.75rem; color: var(--text-muted); }
-    .info-col { display: flex; flex-direction: column; align-items: flex-end; text-align: right; }
-    .stop-name { font-weight: 600; font-size: 0.95rem; }
-    .details { font-size: 0.8rem; color: var(--text-muted); margin-top: 4px; display: flex; align-items: center; gap: 6px; }
+    .time-col {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+      justify-content: center;
+      gap: 2px;
+      flex-shrink: 0;
+    }
+    .time {
+      font-size: 1.12rem;                 /* Reduced from 1.35rem to prevent vertical bloat */
+      font-weight: 700;
+      color: var(--accent);
+      line-height: 1.2;
+    }
+    .trip-badge {
+      font-size: 0.72rem;
+      color: var(--text-muted);
+      line-height: 1.2;
+      white-space: nowrap;
+    }
+    .info-col {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-end;
+      justify-content: center;
+      text-align: right;
+      gap: 3px;
+      min-width: 0;                       /* Allows ellipsis truncation */
+    }
+    .stop-name {
+      font-weight: 600;
+      font-size: 0.88rem;                 /* Reduced from 0.95rem */
+      line-height: 1.25;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;            /* Prevents long station names from wrapping */
+      max-width: 210px;
+    }
+    .details {
+      font-size: 0.78rem;
+      color: var(--text-muted);
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      line-height: 1.2;
+    }
     .fare-tag {
       background: rgba(56, 189, 248, 0.1);
       color: var(--accent);
-      padding: 2px 6px;
+      padding: 1px 6px;
       border-radius: 4px;
+      font-size: 0.72rem;
       font-weight: 600;
     }
     .fare-tag.paid {
       background: rgba(16, 185, 129, 0.15);
       color: #34d399;
+      border: 1px solid rgba(16, 185, 129, 0.35);
     }
-    .map-link { color: var(--accent); text-decoration: none; font-size: 0.8rem; }
+    .map-link {
+      color: var(--accent);
+      text-decoration: none;
+      font-size: 0.75rem;
+    }
     .map-link:hover { text-decoration: underline; }
     .notice { text-align: center; color: var(--text-muted); padding: 24px; font-size: 0.95rem; }
+
 
     /* Services Cross-Link Banner */
     .services-nav-banner {
@@ -308,34 +357,6 @@
       color: #f8fafc;
       background: rgba(255, 255, 255, 0.12);
     }
-    .card-meta {
-  margin-top: 8px;
-  padding-top: 8px;
-  border-top: 1px dashed #e0e0e0;
-}
-.card-badges {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 6px;
-  margin-bottom: 6px;
-}
-.badge {
-  font-size: 0.72rem;
-  font-weight: 600;
-  padding: 2px 7px;
-  border-radius: 999px;
-  display: inline-block;
-  white-space: nowrap;
-}
-.badge-fare { background-color: #e8f5e9; color: #2e7d32; }
-.badge-info { background-color: #e3f2fd; color: #1565c0; }
-.badge-warn { background-color: #fff3e0; color: #e65100; }
-.card-disclaimer {
-  font-size: 0.75rem;
-  color: #616161;
-  margin: 0;
-  line-height: 1.35;
-}
 .card-meta {
   margin-top: 8px;
   padding-top: 8px;
@@ -363,7 +384,7 @@
   color: #616161;
   margin: 0;
   line-height: 1.35;
-}   
+}
   </style>
 </head>
 <body>
