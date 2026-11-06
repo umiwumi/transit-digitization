@@ -1023,16 +1023,29 @@
     const dirSelect = document.getElementById('dirSelect');
     const prevDir = preserveState ? dirSelect.value : null;
 
-        // Filter out Loop_Return so users just select "Loop"
+    // Filter out Loop_Return so users just select Loop
+    const allDirs = cache[currentMode].schedules
+      .filter(s => normalizeKey(s.routeCode) === normalizeKey(route))
+      .map(s => s.direction);
+
     const availableDirs = [...new Set(
-      cache[currentMode].schedules
-        .filter(s => s.routeCode === route)
-        .map(s => s.direction)
-        .filter(d => d !== 'LOOP_RETURN' && d !== 'Loop_Return')
+      allDirs.filter(d => normalizeKey(d) !== 'LOOP_RETURN')
     )];
 
+    dirSelect.innerHTML = '';
+    availableDirs.forEach(dir => {
+      const opt = document.createElement('option');
+      opt.value = dir;
+      opt.textContent = translateDirection(dir);
+      dirSelect.appendChild(opt);
+    });
+
+    // iPad WebKit fix: Explicitly lock the value and selectedIndex
     if (prevDir && availableDirs.includes(prevDir)) {
       dirSelect.value = prevDir;
+    } else if (availableDirs.length > 0) {
+      dirSelect.selectedIndex = 0;
+      dirSelect.value = availableDirs[0];
     }
 
     dirSelect.onchange = () => populateDaysAndStops(false);
@@ -1040,23 +1053,28 @@
   }
 
   function populateDaysAndStops(preserveState = false) {
-    const route = document.getElementById('routeSelect').value;
-    const dir = document.getElementById('dirSelect').value;
+    const routeSelect = document.getElementById('routeSelect');
+    const dirSelect = document.getElementById('dirSelect');
     const daySelect = document.getElementById('daySelect');
     const stopSelect = document.getElementById('stopSelect');
     const destSelect = document.getElementById('destSelect');
+
+    const route = routeSelect.value;
+    // Fallback ensures dir is NEVER empty on iPad
+    const dir = dirSelect.value || (dirSelect.options[0] ? dirSelect.options[0].value : '');
 
     const prevDay = preserveState ? daySelect.value : null;
     const prevStop = preserveState ? stopSelect.value : null;
     const prevDest = (preserveState && destSelect) ? destSelect.value : null;
     
+    // Group Loop and Loop_Return under Loop selection
     const isLoopSelection = /LOOP/i.test(normalizeKey(dir));
     const routeSchedules = cache[currentMode].schedules.filter(s => {
-      if (s.routeCode !== route) return false;
+      if (normalizeKey(s.routeCode) !== normalizeKey(route)) return false;
       if (isLoopSelection) {
         return /LOOP/i.test(normalizeKey(s.direction));
       }
-      return s.direction === dir;
+      return normalizeKey(s.direction) === normalizeKey(dir);
     });
 
     const availableDays = [...new Set(routeSchedules.map(s => s.operatingDays))];
@@ -1114,6 +1132,7 @@
     if (prevStop && routeStopIds.includes(prevStop)) {
       stopSelect.value = prevStop;
     } else if (routeStopIds.length > 0) {
+      stopSelect.selectedIndex = 0;
       stopSelect.value = routeStopIds[0];
     }
 
@@ -1130,6 +1149,16 @@
     if (destSelect) destSelect.onchange = renderTimetable;
     renderTimetable();
   }
+
+      // Temporary on-screen debugger for iPad:
+    let dbg = document.getElementById('ipad-dbg');
+    if (!dbg) {
+      dbg = document.createElement('div');
+      dbg.id = 'ipad-dbg';
+      dbg.style = 'margin:12px 0;padding:8px;background:#334155;border-radius:6px;font-size:0.75rem;color:#38bdf8;font-family:monospace;';
+      container.parentElement.insertBefore(dbg, container);
+    }
+    dbg.textContent = `Mode: ${currentMode} | Rows: ${cache[currentMode].schedules.length} | Matched: ${routeSchedules.length} | Dir: "${dir}" | Stops: ${routeStopIds.length}`;
 
   function matchesDayFilter(tripDaysRaw, selectedDayRaw) {
     if (!selectedDayRaw || selectedDayRaw === 'ALL') return true;
