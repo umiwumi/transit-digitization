@@ -1430,5 +1430,131 @@
   });
 </script>
 
+<script>
+  // Route metadata & operational disclaimers
+  const ROUTE_CONFIG = {
+    // 4-Resort Combined Shuttles
+    BLUE: {
+      isResort: true,
+      activeStart: "2026-12-24",
+      activeEnd: "2027-03-22",
+      badges: ["📱 Web: ¥100 1-Day", "💳 Tap/QR: ¥100/ride", "🚫 No Cash / No Suica"],
+      notes: {
+        en: "No cash accepted onboard. Pre-purchase web pass (¥100/day) or tap credit card/QR code at boarding (¥100/ride). Transit IC (Suica/Pasmo) is NOT supported.",
+        ja: "車内現金払い不可（完全キャッシュレス）。Web購入（1日100円）または乗車時にクレカタッチ／QR決済（1回100円）。※Suica等交通系IC不可。",
+        zh_TW: "車內不收現金（完全無現金化）。請使用Web購票（1日100日圓）或上車感應信用卡／QR碼（單次100日圓）。※不可使用Suica等交通IC卡。",
+        ko: "차내 현금 결제 불가. 사전 웹 구매(1일 100엔) 또는 탑승 시 신용카드 터치/QR코드 결제(1회 100엔). ※Suica 등 교통카드 이용 불가."
+      }
+    },
+    ORANGE: {
+      isResort: true,
+      activeStart: "2026-12-24",
+      activeEnd: "2027-03-22",
+      badges: ["📱 Web: ¥100 1-Day", "💳 Tap/QR: ¥100/ride", "🚫 No Cash / No Suica"],
+      notes: {
+        en: "No cash accepted onboard. Pre-purchase web pass (¥100/day) or tap credit card/QR code at boarding (¥100/ride). Transit IC (Suica/Pasmo) is NOT supported.",
+        ja: "車内現金払い不可（完全キャッシュレス）。Web購入（1日100円）または乗車時にクレカタッチ／QR決済（1回100円）。※Suica等交通系IC不可。",
+        zh_TW: "車內不收現金（完全無現金化）。請使用Web購票（1日100日圓）或上車感應信用卡／QR碼（單次100日圓）。※不可使用Suica等交通IC卡。",
+        ko: "차내 현금 결제 불가. 사전 웹 구매(1일 100엔) 또는 탑승 시 신용카드 터치/QR코드 결제(1회 100엔). ※Suica 등 교통카드 이용 불가."
+      }
+    },
+
+    // Minami Echigo Public Routes
+    DAIGENTA: {
+      isResort: false,
+      badges: ["💵 Cash / 整理券", "💴 ¥160〜¥410"],
+      notes: {
+        en: "Numbered ticket system. Take a ticket when boarding, pay cash at exit according to the fare chart at the front.",
+        ja: "整理券方式（後払い）。乗車時に整理券をお取りいただき、降車時に車内前方の運賃表の金額を現金でお支払いください。",
+        zh_TW: "整理券計費（後付款）。上車抽取整理券，下車依車前方螢幕金額支付現金。",
+        ko: "정리권(정산표) 방식 (후불). 승차 시 정리권을 뽑고, 하차 시 전면 전광판 운임을 현금으로 지불합니다."
+      }
+    },
+    KIYOTSUKYO: {
+      isResort: false,
+      badges: ["💳 Contactless (Tap in/out)", "🚶 30-min walk from stop"],
+      notes: {
+        en: "Credit card tap accepted (tap when boarding and exiting). ⚠️ Kiyotsukyo Gorge Tunnel is a 25–30 min uphill walk from 'Kiyotsukyo-Iriguchi' bus stop.",
+        ja: "クレカタッチ決済対応（乗降時にタッチ）。⚠️ 「清津峡入口」バス停から清津峡渓谷トンネルまでは徒歩約25〜30分（上り坂）です。",
+        zh_TW: "支援信用卡感應支付（上下車皆需感應）。⚠️ 從「清津峽入口」公車站步行至清津峽光之隧道入口約需25～30分鐘（上坡）。",
+        ko: "신용카드 터치 결제 가능 (승·하차 시 모두 태그). ⚠️ '키요츠쿄 입구' 정류장에서 키요츠쿄 터널 입구까지 도보 약 25~30분 소요."
+      }
+    },
+
+    // Town Municipal Minibus
+    TSUCHITARU: {
+      isResort: false,
+      badges: ["📅 Weekday Only", "💵 Cash Only: ¥300 Flat", "🚐 Minibus (Seated Only)"],
+      notes: {
+        en: "⚠️ Weekdays only (No service weekends/holidays). Minibus (23–27 seats, no standing). Cash only. No stop buttons—tell the driver your stop.",
+        ja: "⚠️ 平日のみ運行（土日祝・年末年始運休）。マイクロバス運行（定員制・立席不可）。現金前払いのみ（大人300円均一）。降車ボタンなし（口頭申告）。添名〜土樽間は自由乗降可能。",
+        zh_TW: "⚠️ 僅平日行駛（週末、假日及年末年初停駛）。中巴營運（座席制・客滿無法站立搭乘）。僅收現金（大人均一價300日圓）。車內無下車鈴（口頭告知）。",
+        ko: "⚠️ 평일 전용 운행 (주말/공휴일/연말연시 운휴). 마이크로버스 운행 (입석 불가). 현금 전용 (성인 균일 300엔). 하차 벨 없음 (구두 전달)."
+      }
+    }
+  };
+
+  /**
+   * Helper: Resolves dynamic display fare for a card.
+   * Handles bidirectional travel (Origin <-> Destination) to/from Echigo-Yuzawa Station.
+   */
+  function resolveCardFare(routeCode, originStop, destStop) {
+    const config = ROUTE_CONFIG[routeCode];
+    if (!config) return null;
+
+    // 1. Resort Shuttles: flat structure
+    if (config.isResort) {
+      return { type: "resort", text: "Web: ¥100 / Tap: ¥100" };
+    }
+
+    // 2. Tsuchitaru municipal route: flat ¥300
+    if (routeCode === "TSUCHITARU") {
+      return { type: "fixed", text: "¥300" };
+    }
+
+    // 3. Station bidirectional fare parity
+    const isStation = (stop) => 
+      stop.id === "DG-01" || 
+      stop.id === "KY-03" || 
+      stop.id === "TT-01" || 
+      stop.name_jp.includes("湯沢駅前");
+
+    if (isStation(originStop) && destStop && destStop.fare_yuzawa !== undefined) {
+      return { type: "distance", text: `¥${destStop.fare_yuzawa}` };
+    }
+    if (isStation(destStop) && originStop && originStop.fare_yuzawa !== undefined) {
+      return { type: "distance", text: `¥${originStop.fare_yuzawa}` };
+    }
+
+    // Intermediate hops on rural public lines
+    return { type: "seiriken", text: "整理券 (距離制)" };
+  }
+
+  /**
+   * Renders the badges and operational alert inside a journey card
+   */
+  function renderCardMetadata(routeCode, originStop, destStop, currentLang = "en") {
+    const config = ROUTE_CONFIG[routeCode];
+    if (!config) return "";
+
+    const fare = resolveCardFare(routeCode, originStop, destStop);
+    const badgesHtml = config.badges
+      .map(b => `<span class="badge ${b.includes('No') || b.includes('Weekday') ? 'badge-warn' : 'badge-info'}">${b}</span>`)
+      .join(" ");
+
+    const noteText = config.notes[currentLang] || config.notes.en;
+
+    return `
+      <div class="card-meta">
+        <div class="card-badges">
+          ${fare ? `<span class="badge badge-fare">${fare.text}</span>` : ""}
+          ${badgesHtml}
+        </div>
+        <p class="card-disclaimer">${noteText}</p>
+      </div>
+    `;
+  }
+</script>  
+  
 </body>
 </html>
