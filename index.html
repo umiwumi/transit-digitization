@@ -130,87 +130,55 @@
     .control-group { display: flex; flex-direction: column; gap: 4px; }
     label { font-size: 0.75rem; color: var(--text-muted); text-transform: uppercase; font-weight: 600; }
 
-      /* Timetable Cards (Compact & Uniform) */
+    /* Timetable Cards (Compact & Uniform) */
     .card {
       background: var(--card-bg);
       border: 1px solid var(--border);
       border-radius: 8px;
-      padding: 8px 12px;                  /* Reduced from 12px 14px */
-      min-height: 54px;                   /* Locks uniform card height */
-      margin-bottom: 6px;                 /* Reduced from 10px */
+      padding: 8px 12px;
+      min-height: 54px;
+      margin-bottom: 6px;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      transition: all 0.2s ease;
+    }
+    .card-main {
       display: flex;
       justify-content: space-between;
       align-items: center;
       gap: 12px;
-      transition: all 0.2s ease;
+      width: 100%;
     }
-    .time-col {
+    .card-meta {
+      margin-top: 8px;
+      padding-top: 8px;
+      border-top: 1px dashed var(--border);
+      width: 100%;
+    }
+    .card-badges {
       display: flex;
-      flex-direction: column;
-      align-items: flex-start;
-      justify-content: center;
-      gap: 2px;
-      flex-shrink: 0;
-    }
-    .time {
-      font-size: 1.12rem;                 /* Reduced from 1.35rem to prevent vertical bloat */
-      font-weight: 700;
-      color: var(--accent);
-      line-height: 1.2;
-    }
-    .trip-badge {
-      font-size: 0.72rem;
-      color: var(--text-muted);
-      line-height: 1.2;
-      white-space: nowrap;
-    }
-    .info-col {
-      display: flex;
-      flex-direction: column;
-      align-items: flex-end;
-      justify-content: center;
-      text-align: right;
-      gap: 3px;
-      min-width: 0;                       /* Allows ellipsis truncation */
-    }
-    .stop-name {
-      font-weight: 600;
-      font-size: 0.88rem;                 /* Reduced from 0.95rem */
-      line-height: 1.25;
-      white-space: nowrap;
-      overflow: hidden;
-      text-overflow: ellipsis;            /* Prevents long station names from wrapping */
-      max-width: 210px;
-    }
-    .details {
-      font-size: 0.78rem;
-      color: var(--text-muted);
-      display: flex;
-      align-items: center;
+      flex-wrap: wrap;
       gap: 6px;
-      line-height: 1.2;
+      margin-bottom: 4px;
     }
-    .fare-tag {
-      background: rgba(56, 189, 248, 0.1);
-      color: var(--accent);
-      padding: 1px 6px;
-      border-radius: 4px;
-      font-size: 0.72rem;
+    .badge {
+      font-size: 0.7rem;
       font-weight: 600;
+      padding: 2px 7px;
+      border-radius: 999px;
+      display: inline-block;
+      white-space: nowrap;
     }
-    .fare-tag.paid {
-      background: rgba(16, 185, 129, 0.15);
-      color: #34d399;
-      border: 1px solid rgba(16, 185, 129, 0.35);
+    .badge-fare { background: rgba(16, 185, 129, 0.15); color: #34d399; border: 1px solid rgba(16, 185, 129, 0.35); }
+    .badge-info { background: rgba(56, 189, 248, 0.12); color: #38bdf8; border: 1px solid rgba(56, 189, 248, 0.28); }
+    .badge-warn { background: rgba(245, 158, 11, 0.15); color: #fbbf24; border: 1px solid rgba(245, 158, 11, 0.35); }
+    .card-disclaimer {
+      font-size: 0.74rem;
+      color: var(--text-muted);
+      margin: 0;
+      line-height: 1.35;
     }
-    .map-link {
-      color: var(--accent);
-      text-decoration: none;
-      font-size: 0.75rem;
-    }
-    .map-link:hover { text-decoration: underline; }
-    .notice { text-align: center; color: var(--text-muted); padding: 24px; font-size: 0.95rem; }
-
 
     /* Services Cross-Link Banner */
     .services-nav-banner {
@@ -1149,17 +1117,7 @@
     if (destSelect) destSelect.onchange = renderTimetable;
     renderTimetable();
   }
-
-      // Temporary on-screen debugger for iPad:
-    let dbg = document.getElementById('ipad-dbg');
-    if (!dbg) {
-      dbg = document.createElement('div');
-      dbg.id = 'ipad-dbg';
-      dbg.style = 'margin:12px 0;padding:8px;background:#334155;border-radius:6px;font-size:0.75rem;color:#38bdf8;font-family:monospace;';
-      container.parentElement.insertBefore(dbg, container);
-    }
-    dbg.textContent = `Mode: ${currentMode} | Rows: ${cache[currentMode].schedules.length} | Matched: ${routeSchedules.length} | Dir: "${dir}" | Stops: ${routeStopIds.length}`;
-
+  
   function matchesDayFilter(tripDaysRaw, selectedDayRaw) {
     if (!selectedDayRaw || selectedDayRaw === 'ALL') return true;
     const tripNorm = normalizeKey(tripDaysRaw);
@@ -1202,13 +1160,14 @@
     const destStopId = destSelect ? destSelect.value : 'TERMINUS';
     const container = document.getElementById('scheduleContainer');
 
-    const routeSchedules = cache[currentMode].schedules.filter(s => s.routeCode === route && s.direction === dir);
-
-    const tripsMap = {};
-    routeSchedules.forEach(item => {
-      const key = `${normalizeKey(item.operatingDays)}__${item.tripNumber}`;
-      if (!tripsMap[key]) tripsMap[key] = [];
-      tripsMap[key].push(item);
+    // 1. Define isLoopSelection in this scope & normalize route/direction matching
+    const isLoopSelection = /LOOP/i.test(normalizeKey(dir));
+    const routeSchedules = cache[currentMode].schedules.filter(s => {
+      if (normalizeKey(s.routeCode) !== normalizeKey(route)) return false;
+      if (isLoopSelection) {
+        return /LOOP/i.test(normalizeKey(s.direction));
+      }
+      return normalizeKey(s.direction) === normalizeKey(dir);
     });
 
     const journeys = [];
@@ -1350,6 +1309,369 @@
             <div class="stop-name">➔ ${destName}</div>
             <div class="details">${fareBadge} ${mapLink}</div>
           </div>
+        </div>
+      `;
+    }).join('');
+
+    setTimeout(() => {
+      const nextEl = document.getElementById('next-bus');
+      if (nextEl) nextEl.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    }, 150);
+  }
+
+    // --- ROUTE METADATA & OPERATIONAL DISCLAIMERS ---
+  const ROUTE_CONFIG = {
+    BLUE: {
+      isResort: true,
+      activeStart: "2026-12-24",
+      activeEnd: "2027-03-22",
+      badges: ["📱 Web: ¥100 1-Day", "💳 Tap/QR: ¥100/ride", "🚫 No Cash / No Suica"],
+      notes: {
+        en: "No cash accepted onboard. Pre-purchase web pass (¥100/day) or tap credit card/QR code at boarding (¥100/ride). Transit IC (Suica/Pasmo) is NOT supported.",
+        jp: "車内現金払い不可（完全キャッシュレス）。Web購入（1日100円）または乗車時にクレカタッチ／QR決済（1回100円）。※Suica等交通系IC不可。",
+        zh_tr: "車內不收現金（完全無現金化）。請使用Web購票（1日100日圓）或上車感應信用卡／QR碼（單次100日圓）。※不可使用Suica等交通IC卡。",
+        zh_si: "车内不收现金（完全无现金化）。请使用Web购票（1日100日元）或上车感应信用卡／二维码（单次100日元）。※不可使用Suica等交通IC卡。",
+        ko: "차내 현금 결제 불가. 사전 웹 구매(1일 100엔) 또는 탑승 시 신용카드 터치/QR코드 결제(1회 100엔). ※Suica 등 교통카드 이용 불가."
+      }
+    },
+    ORANGE: {
+      isResort: true,
+      activeStart: "2026-12-24",
+      activeEnd: "2027-03-22",
+      badges: ["📱 Web: ¥100 1-Day", "💳 Tap/QR: ¥100/ride", "🚫 No Cash / No Suica"],
+      notes: {
+        en: "No cash accepted onboard. Pre-purchase web pass (¥100/day) or tap credit card/QR code at boarding (¥100/ride). Transit IC (Suica/Pasmo) is NOT supported.",
+        jp: "車内現金払い不可（完全キャッシュレス）。Web購入（1日100円）または乗車時にクレカタッチ／QR決済（1回100円）。※Suica等交通系IC不可。",
+        zh_tr: "車內不收現金（完全無現金化）。請使用Web購票（1日100日圓）或上車感應信用卡／QR碼（單次100日圓）。※不可使用Suica等交通IC卡。",
+        zh_si: "车内不收现金（完全无现金化）。请使用Web购票（1日100日元）或上车感应信用卡／二维码（单次100日元）。※不可使用Suica等交通IC卡。",
+        ko: "차내 현금 결제 불가. 사전 웹 구매(1일 100엔) 또는 탑승 시 신용카드 터치/QR코드 결제(1회 100엔). ※Suica 등 교통카드 이용 불가."
+      }
+    },
+    DAIGENTA: {
+      isResort: false,
+      badges: ["💵 Cash / 整理券", "💴 ¥160〜¥410"],
+      notes: {
+        en: "Numbered ticket system. Take a ticket when boarding, pay cash at exit according to the fare chart at the front.",
+        jp: "整理券方式（後払い）。乗車時に整理券をお取りいただき、降車時に車内前方の運賃表の金額を現金でお支払いください。",
+        zh_tr: "整理券計費（後付款）。上車抽取整理券，下車依車前方螢幕金額支付現金。",
+        zh_si: "整理券计费（后付款）。上车抽取整理券，下车依车前方屏幕金额支付现金。",
+        ko: "정리권(정산표) 방식 (후불). 승차 시 정리권을 뽑고, 하차 시 전면 전광판 운임을 현금으로 지불합니다."
+      }
+    },
+    KIYOTSUKYO: {
+      isResort: false,
+      badges: ["💳 Contactless (Tap in/out)", "🚶 30-min walk from stop"],
+      notes: {
+        en: "Credit card tap accepted (tap when boarding and exiting). ⚠️ Kiyotsukyo Gorge Tunnel is a 25–30 min uphill walk from 'Kiyotsukyo-Iriguchi' bus stop.",
+        jp: "クレカタッチ決済対応（乗降時にタッチ）。⚠️ 「清津峡入口」バス停から清津峡渓谷トンネルまでは徒歩約25〜30分（上り坂）です。",
+        zh_tr: "支援信用卡感應支付（上下車皆需感應）。⚠️ 從「清津峽入口」公車站步行至清津峽光之隧道入口約需25～30分鐘（上坡）。",
+        zh_si: "支持信用卡感应支付（上下车皆需感应）。⚠️ 从“清津峡入口”公交站步行至清津峡光之隧道入口约需25～30分钟（上坡）。",
+        ko: "신용카드 터치 결제 가능 (승·하차 시 모두 태그). ⚠️ '키요츠쿄 입구' 정류장에서 키요츠쿄 터널 입구까지 도보 약 25~30분 소요."
+      }
+    },
+    KIYOTSU: {
+      isResort: false,
+      badges: ["💳 Contactless (Tap in/out)", "🚶 30-min walk from stop"],
+      notes: {
+        en: "Credit card tap accepted (tap when boarding and exiting). ⚠️ Kiyotsukyo Gorge Tunnel is a 25–30 min uphill walk from 'Kiyotsukyo-Iriguchi' bus stop.",
+        jp: "クレカタッチ決済対応（乗降時にタッチ）。⚠️ 「清津峡入口」バス停から清津峡渓谷トンネルまでは徒歩約25〜30分（上り坂）です。",
+        zh_tr: "支援信用卡感應支付（上下車皆需感應）。⚠️ 從「清津峽入口」公車站步行至清津峽光之隧道入口約需25～30分鐘（上坡）。",
+        zh_si: "支持信用卡感应支付（上下车皆需感应）。⚠️ 从“清津峡入口”公交站步行至清津峡光之隧道入口约需25～30分钟（上坡）。",
+        ko: "신용카드 터치 결제 가능 (승·하차 시 모두 태그). ⚠️ '키요츠쿄 입구' 정류장에서 키요츠쿄 터널 입구까지 도보 약 25~30분 소요."
+      }
+    },
+    TSUCHITARU: {
+      isResort: false,
+      badges: ["📅 Weekday Only", "💵 Cash Only: ¥300 Flat", "🚐 Minibus (Seated Only)"],
+      notes: {
+        en: "⚠️ Weekdays only (No service weekends/holidays). Minibus (23–27 seats, no standing). Cash only. No stop buttons—tell the driver your stop.",
+        jp: "⚠️ 平日のみ運行（土日祝・年末年始運休）。マイクロバス運行（定員制・立席不可）。現金前払いのみ（大人300円均一）。降車ボタンなし（口頭申告）。添名〜土樽間は自由乗降可能。",
+        zh_tr: "⚠️ 僅平日行駛（週末、假日及年末年初停駛）。中巴營運（座席制・客滿無法站立搭乘）。僅收現金（大人均一價300日圓）。車內無下車鈴（口頭告知）。",
+        zh_si: "⚠️ 仅平日行驶（周末、节假日及年末年初停驶）。中巴营运（座席制・客满无法站立搭乘）。仅收现金（大人均一价300日元）。车内无下车铃（口头告知）。",
+        ko: "⚠️ 평일 전용 운행 (주말/공휴일/연말연시 운휴). 마이크로버스 운행 (입석 불가). 현금 전용 (성인 균일 300엔). 하차 벨 없음 (구두 전달)."
+      }
+    }
+  };
+
+  function extractStopFare(stop) {
+    if (!stop) return null;
+    for (const key of Object.keys(stop)) {
+      if (/^(fare|fare_yuzawa|price|cost|運賃)/i.test(key.trim())) {
+        const val = String(stop[key] ?? '').trim();
+        const digits = val.replace(/[^\d.]/g, '');
+        const num = parseFloat(digits);
+        if (!isNaN(num) && num > 0) return Math.round(num);
+      }
+    }
+    return null;
+  }
+
+  function resolveCardFare(routeCode, originStop, destStop) {
+    const rKey = normalizeKey(routeCode);
+    const config = ROUTE_CONFIG[rKey] || ROUTE_CONFIG[routeCode];
+    if (!config) return null;
+
+    if (config.isResort) {
+      return { type: "resort", text: "Web: ¥100 / Tap: ¥100" };
+    }
+
+    if (rKey === "TSUCHITARU") {
+      return { type: "fixed", text: "¥300" };
+    }
+
+    const isStation = (stop) => {
+      if (!stop) return false;
+      const sId = (stop.Stop_ID || stop.stop_id || stop.id || '').trim().toUpperCase();
+      const nameJp = stop.Stop_Name_JP || stop.name_jp || '';
+      const nameEn = stop.Stop_Name_EN || stop.name_en || '';
+      return sId === "DG-01" || sId === "KY-03" || sId === "TT-01" || sId === "S-01" ||
+             /湯沢駅|Yuzawa Sta/i.test(nameJp + ' ' + nameEn);
+    };
+
+    const destFare = extractStopFare(destStop);
+    const origFare = extractStopFare(originStop);
+
+    if (isStation(originStop) && destFare !== null) {
+      return { type: "distance", text: `¥${destFare.toLocaleString()}` };
+    }
+    if (isStation(destStop) && origFare !== null) {
+      return { type: "distance", text: `¥${origFare.toLocaleString()}` };
+    }
+
+    const seirikenI18n = {
+      en: "Numbered Ticket (Distance Fare)",
+      jp: "整理券 (距離制)",
+      zh_tr: "整理券 (依距離計費)",
+      zh_si: "整理券 (按距离计费)",
+      ko: "정리권 (거리비례제)"
+    };
+    return { type: "seiriken", text: seirikenI18n[currentLang] || seirikenI18n.en };
+  }
+
+  function renderCardMetadata(routeCode, originStop, destStop, lang = "en") {
+    const rKey = normalizeKey(routeCode);
+    const config = ROUTE_CONFIG[rKey] || ROUTE_CONFIG[routeCode];
+    if (!config) return "";
+
+    const fare = resolveCardFare(rKey, originStop, destStop);
+    const badgesHtml = config.badges
+      .map(b => `<span class="badge ${b.includes('No') || b.includes('Weekday') ? 'badge-warn' : 'badge-info'}">${b}</span>`)
+      .join(" ");
+
+    const noteText = config.notes[lang] || config.notes.en;
+
+    return `
+      <div class="card-meta">
+        <div class="card-badges">
+          ${fare ? `<span class="badge badge-fare">${fare.text}</span>` : ""}
+          ${badgesHtml}
+        </div>
+        <p class="card-disclaimer">${noteText}</p>
+      </div>
+    `;
+  }
+
+  function matchesDayFilter(tripDaysRaw, selectedDayRaw) {
+    if (!selectedDayRaw || selectedDayRaw === 'ALL') return true;
+    const tripNorm = normalizeKey(tripDaysRaw);
+    const selNorm = normalizeKey(selectedDayRaw);
+
+    if (tripNorm === selNorm) return true;
+
+    if (tripNorm === 'DAILY') {
+      if (selNorm.includes('WEEKEND') || selNorm.includes('HOLIDAY') || selNorm.includes('WEEKDAY')) {
+        return true;
+      }
+    }
+
+    if ((selNorm.includes('WEEKEND') || selNorm.includes('HOLIDAY')) &&
+        (tripNorm.includes('WEEKEND') || tripNorm.includes('HOLIDAY'))) {
+      return true;
+    }
+
+    if (selNorm.includes('WEEKDAY') && tripNorm.includes('WEEKDAY')) {
+      return true;
+    }
+
+    return false;
+  }
+
+  function parseTimeMins(tStr) {
+    const parts = (tStr || '0:0').split(':').map(Number);
+    const h = parts[0] || 0;
+    const m = parts[1] || 0;
+    const adjustedH = h < 4 ? h + 24 : h;
+    return adjustedH * 60 + m;
+  }
+
+  function renderTimetable() {
+    const route = document.getElementById('routeSelect').value;
+    const dir = document.getElementById('dirSelect').value;
+    const selectedDay = document.getElementById('daySelect').value;
+    const boardingStopId = document.getElementById('stopSelect').value;
+    const destSelect = document.getElementById('destSelect');
+    const destStopId = destSelect ? destSelect.value : 'TERMINUS';
+    const container = document.getElementById('scheduleContainer');
+
+    const isLoopSelection = /LOOP/i.test(normalizeKey(dir));
+    const routeSchedules = cache[currentMode].schedules.filter(s => {
+      if (normalizeKey(s.routeCode) !== normalizeKey(route)) return false;
+      if (isLoopSelection) {
+        return /LOOP/i.test(normalizeKey(s.direction));
+      }
+      return normalizeKey(s.direction) === normalizeKey(dir);
+    });
+
+    const tripsMap = {};
+    routeSchedules.forEach(item => {
+      const key = `${normalizeKey(item.operatingDays)}__${item.tripNumber}`;
+      if (!tripsMap[key]) tripsMap[key] = [];
+      tripsMap[key].push(item);
+    });
+
+    const journeys = [];
+
+    Object.keys(tripsMap).forEach(key => {
+      let tripStops = tripsMap[key];
+      if (!tripStops || tripStops.length === 0) return;
+
+      if (!matchesDayFilter(tripStops[0].operatingDays, selectedDay)) {
+        return;
+      }
+
+      tripStops.sort((a, b) => parseTimeMins(a.departureTime) - parseTimeMins(b.departureTime));
+
+      const fromIndex = tripStops.findIndex(s => s.stopId === boardingStopId);
+      if (fromIndex === -1) return;
+
+      const fromRecord = tripStops[fromIndex];
+      const depTotal = parseTimeMins(fromRecord.departureTime);
+
+      let toRecord = null;
+      if (tripStops.length > 1) {
+        if (destStopId === 'TERMINUS') {
+          if (tripStops.length - 1 > fromIndex) {
+            toRecord = tripStops[tripStops.length - 1];
+          }
+        } else {
+          const toIndex = tripStops.findIndex((s, idx) => idx > fromIndex && s.stopId === destStopId);
+          if (toIndex !== -1) {
+            toRecord = tripStops[toIndex];
+          }
+        }
+      }
+
+      if (toRecord) {
+        const arrTotal = parseTimeMins(toRecord.departureTime);
+        const durationMins = arrTotal >= depTotal ? arrTotal - depTotal : (arrTotal + 1440) - depTotal;
+
+        journeys.push({
+          tripNumber: fromRecord.tripNumber,
+          operatingDays: fromRecord.operatingDays,
+          departureTime: fromRecord.departureTime,
+          arrivalTime: toRecord.departureTime,
+          duration: durationMins,
+          toStopId: toRecord.stopId,
+          direction: fromRecord.direction,
+          depTotal: depTotal
+        });
+      } else if (tripStops.length === 1 && destStopId === 'TERMINUS') {
+        journeys.push({
+          tripNumber: fromRecord.tripNumber,
+          operatingDays: fromRecord.operatingDays,
+          departureTime: fromRecord.departureTime,
+          arrivalTime: null,
+          duration: 0,
+          toStopId: fromRecord.stopId,
+          direction: fromRecord.direction,
+          depTotal: depTotal
+        });
+      }
+    });
+
+    journeys.sort((a, b) => a.depTotal - b.depTotal);
+
+    if (journeys.length === 0) {
+      container.innerHTML = `<div class="notice">${I18N.ui.noDepartures[currentLang] || I18N.ui.noDepartures.en}</div>`;
+      return;
+    }
+
+    const jstNow = new Date(new Date().toLocaleString("en-US", { timeZone: "Asia/Tokyo" }));
+    const nowH = jstNow.getHours();
+    const currentMins = (nowH < 4 ? nowH + 24 : nowH) * 60 + jstNow.getMinutes();
+    let nextIndex = journeys.findIndex(j => j.depTotal >= currentMins);
+
+    const tripWord = I18N.ui.trip[currentLang] || I18N.ui.trip.en;
+    const minWord = I18N.ui.mins[currentLang] || 'min';
+    const nextText = I18N.ui.nextBus[currentLang] || 'NEXT';
+    const mapWord = I18N.ui.map[currentLang] || 'Map ↗';
+    const colKey = stopLangKeys[currentLang] || 'Stop_Name_EN';
+
+    const fromStopObj = resolveStop(currentMode, route, boardingStopId);
+    const isStationOrigin = /湯沢駅|S-01/i.test(boardingStopId) || /湯沢駅/i.test(fromStopObj.Stop_Name_JP || '') || /Yuzawa Sta/i.test(fromStopObj.Stop_Name_EN || '');
+
+    let platformBadge = '';
+    if (isStationOrigin) {
+      const poleData = STATION_POLE_MAP[normalizeKey(route)] || STATION_POLE_MAP[route];
+      if (poleData) {
+        const poleText = poleData[currentLang] || poleData.en;
+        platformBadge = `<div class="platform-badge">🚏 ${poleText}</div>`;
+      }
+    }
+
+    container.innerHTML = journeys.map((j, index) => {
+      const isNext = index === nextIndex;
+      const cardStyle = isNext ? 'border: 2px solid var(--accent); box-shadow: 0 0 10px rgba(56, 189, 248, 0.2);' : '';
+      const nextBadge = isNext ? `<span style="background: var(--accent); color: #0f172a; padding: 2px 6px; border-radius: 4px; font-size: 0.7rem; font-weight: bold; margin-bottom: 4px; display: inline-block;">${nextText}</span><br>` : '';
+
+      const destStop = resolveStop(currentMode, route, j.toStopId);
+      let destName = j.arrivalTime
+        ? (destStop[colKey] || destStop['Stop_Name_EN'] || j.toStopId)
+        : translateDirection(j.direction);
+
+      if (isLoopSelection && destStopId === 'TERMINUS') {
+        const loopReturnText = {
+          en: '🔄 Full Loop (via Ishiuchi / GALA)',
+          jp: '🔄 循環（石打・GALA経由）',
+          zh_tr: '🔄 全線循環（經由石打・GALA）',
+          zh_si: '🔄 全线循环（经由石打・GALA）',
+          ko: '🔄 순환 (이시우치・GALA 경유)'
+        };
+        destName = loopReturnText[currentLang] || loopReturnText.en;
+      }
+
+      const fareBadge = formatFareBadge(destStop, j.arrivalTime ? destStop['Stop_Name_JP'] : '');
+      const mapUrl = destStop.Google_Maps_URL;
+      const mapLink = mapUrl ? `<a class="map-link" href="${mapUrl}" target="_blank" rel="noopener">${mapWord}</a>` : '';
+      const cardMetaHtml = renderCardMetadata(route, fromStopObj, destStop, currentLang);
+
+      const timeHtml = j.arrivalTime
+        ? `<div style="display: flex; align-items: baseline; gap: 6px;">
+             <span class="time">${j.departureTime}</span>
+             <span style="color: var(--text-muted); font-size: 0.85rem;">➔</span>
+             <span style="font-size: 1.15rem; font-weight: 600; color: #e2e8f0;">${j.arrivalTime}</span>
+           </div>`
+        : `<div style="display: flex; align-items: baseline; gap: 6px;">
+             <span class="time">${j.departureTime}</span>
+           </div>`;
+
+      return `
+        <div class="card" style="${cardStyle}" ${isNext ? 'id="next-bus"' : ''}>
+          <div class="card-main">
+            <div class="time-col">
+              ${nextBadge}
+              ${timeHtml}
+              <span class="trip-badge">
+                ${j.duration > 0 ? `⏱ ${j.duration}${minWord} · ` : ''}${tripWord} #${j.tripNumber} · ${translateDays(j.operatingDays)}
+              </span>
+              ${platformBadge}
+            </div>
+            <div class="info-col">
+              <div class="stop-name">➔ ${destName}</div>
+              <div class="details">${fareBadge} ${mapLink}</div>
+            </div>
+          </div>
+          ${cardMetaHtml}
         </div>
       `;
     }).join('');
@@ -1553,132 +1875,6 @@
   switchMode(currentMode).then(() => {
     handleUrlParams();
   });
-</script>
-
-<script>
-  // Route metadata & operational disclaimers
-  const ROUTE_CONFIG = {
-    // 4-Resort Combined Shuttles
-    BLUE: {
-      isResort: true,
-      activeStart: "2026-12-24",
-      activeEnd: "2027-03-22",
-      badges: ["📱 Web: ¥100 1-Day", "💳 Tap/QR: ¥100/ride", "🚫 No Cash / No Suica"],
-      notes: {
-        en: "No cash accepted onboard. Pre-purchase web pass (¥100/day) or tap credit card/QR code at boarding (¥100/ride). Transit IC (Suica/Pasmo) is NOT supported.",
-        ja: "車内現金払い不可（完全キャッシュレス）。Web購入（1日100円）または乗車時にクレカタッチ／QR決済（1回100円）。※Suica等交通系IC不可。",
-        zh_TW: "車內不收現金（完全無現金化）。請使用Web購票（1日100日圓）或上車感應信用卡／QR碼（單次100日圓）。※不可使用Suica等交通IC卡。",
-        ko: "차내 현금 결제 불가. 사전 웹 구매(1일 100엔) 또는 탑승 시 신용카드 터치/QR코드 결제(1회 100엔). ※Suica 등 교통카드 이용 불가."
-      }
-    },
-    ORANGE: {
-      isResort: true,
-      activeStart: "2026-12-24",
-      activeEnd: "2027-03-22",
-      badges: ["📱 Web: ¥100 1-Day", "💳 Tap/QR: ¥100/ride", "🚫 No Cash / No Suica"],
-      notes: {
-        en: "No cash accepted onboard. Pre-purchase web pass (¥100/day) or tap credit card/QR code at boarding (¥100/ride). Transit IC (Suica/Pasmo) is NOT supported.",
-        ja: "車内現金払い不可（完全キャッシュレス）。Web購入（1日100円）または乗車時にクレカタッチ／QR決済（1回100円）。※Suica等交通系IC不可。",
-        zh_TW: "車內不收現金（完全無現金化）。請使用Web購票（1日100日圓）或上車感應信用卡／QR碼（單次100日圓）。※不可使用Suica等交通IC卡。",
-        ko: "차내 현금 결제 불가. 사전 웹 구매(1일 100엔) 또는 탑승 시 신용카드 터치/QR코드 결제(1회 100엔). ※Suica 등 교통카드 이용 불가."
-      }
-    },
-
-    // Minami Echigo Public Routes
-    DAIGENTA: {
-      isResort: false,
-      badges: ["💵 Cash / 整理券", "💴 ¥160〜¥410"],
-      notes: {
-        en: "Numbered ticket system. Take a ticket when boarding, pay cash at exit according to the fare chart at the front.",
-        ja: "整理券方式（後払い）。乗車時に整理券をお取りいただき、降車時に車内前方の運賃表の金額を現金でお支払いください。",
-        zh_TW: "整理券計費（後付款）。上車抽取整理券，下車依車前方螢幕金額支付現金。",
-        ko: "정리권(정산표) 방식 (후불). 승차 시 정리권을 뽑고, 하차 시 전면 전광판 운임을 현금으로 지불합니다."
-      }
-    },
-    KIYOTSUKYO: {
-      isResort: false,
-      badges: ["💳 Contactless (Tap in/out)", "🚶 30-min walk from stop"],
-      notes: {
-        en: "Credit card tap accepted (tap when boarding and exiting). ⚠️ Kiyotsukyo Gorge Tunnel is a 25–30 min uphill walk from 'Kiyotsukyo-Iriguchi' bus stop.",
-        ja: "クレカタッチ決済対応（乗降時にタッチ）。⚠️ 「清津峡入口」バス停から清津峡渓谷トンネルまでは徒歩約25〜30分（上り坂）です。",
-        zh_TW: "支援信用卡感應支付（上下車皆需感應）。⚠️ 從「清津峽入口」公車站步行至清津峽光之隧道入口約需25～30分鐘（上坡）。",
-        ko: "신용카드 터치 결제 가능 (승·하차 시 모두 태그). ⚠️ '키요츠쿄 입구' 정류장에서 키요츠쿄 터널 입구까지 도보 약 25~30분 소요."
-      }
-    },
-
-    // Town Municipal Minibus
-    TSUCHITARU: {
-      isResort: false,
-      badges: ["📅 Weekday Only", "💵 Cash Only: ¥300 Flat", "🚐 Minibus (Seated Only)"],
-      notes: {
-        en: "⚠️ Weekdays only (No service weekends/holidays). Minibus (23–27 seats, no standing). Cash only. No stop buttons—tell the driver your stop.",
-        ja: "⚠️ 平日のみ運行（土日祝・年末年始運休）。マイクロバス運行（定員制・立席不可）。現金前払いのみ（大人300円均一）。降車ボタンなし（口頭申告）。添名〜土樽間は自由乗降可能。",
-        zh_TW: "⚠️ 僅平日行駛（週末、假日及年末年初停駛）。中巴營運（座席制・客滿無法站立搭乘）。僅收現金（大人均一價300日圓）。車內無下車鈴（口頭告知）。",
-        ko: "⚠️ 평일 전용 운행 (주말/공휴일/연말연시 운휴). 마이크로버스 운행 (입석 불가). 현금 전용 (성인 균일 300엔). 하차 벨 없음 (구두 전달)."
-      }
-    }
-  };
-
-  /**
-   * Helper: Resolves dynamic display fare for a card.
-   * Handles bidirectional travel (Origin <-> Destination) to/from Echigo-Yuzawa Station.
-   */
-  function resolveCardFare(routeCode, originStop, destStop) {
-    const config = ROUTE_CONFIG[routeCode];
-    if (!config) return null;
-
-    // 1. Resort Shuttles: flat structure
-    if (config.isResort) {
-      return { type: "resort", text: "Web: ¥100 / Tap: ¥100" };
-    }
-
-    // 2. Tsuchitaru municipal route: flat ¥300
-    if (routeCode === "TSUCHITARU") {
-      return { type: "fixed", text: "¥300" };
-    }
-
-    // 3. Station bidirectional fare parity
-    const isStation = (stop) => 
-      stop.id === "DG-01" || 
-      stop.id === "KY-03" || 
-      stop.id === "TT-01" || 
-      stop.name_jp.includes("湯沢駅前");
-
-    if (isStation(originStop) && destStop && destStop.fare_yuzawa !== undefined) {
-      return { type: "distance", text: `¥${destStop.fare_yuzawa}` };
-    }
-    if (isStation(destStop) && originStop && originStop.fare_yuzawa !== undefined) {
-      return { type: "distance", text: `¥${originStop.fare_yuzawa}` };
-    }
-
-    // Intermediate hops on rural public lines
-    return { type: "seiriken", text: "整理券 (距離制)" };
-  }
-
-  /**
-   * Renders the badges and operational alert inside a journey card
-   */
-  function renderCardMetadata(routeCode, originStop, destStop, currentLang = "en") {
-    const config = ROUTE_CONFIG[routeCode];
-    if (!config) return "";
-
-    const fare = resolveCardFare(routeCode, originStop, destStop);
-    const badgesHtml = config.badges
-      .map(b => `<span class="badge ${b.includes('No') || b.includes('Weekday') ? 'badge-warn' : 'badge-info'}">${b}</span>`)
-      .join(" ");
-
-    const noteText = config.notes[currentLang] || config.notes.en;
-
-    return `
-      <div class="card-meta">
-        <div class="card-badges">
-          ${fare ? `<span class="badge badge-fare">${fare.text}</span>` : ""}
-          ${badgesHtml}
-        </div>
-        <p class="card-disclaimer">${noteText}</p>
-      </div>
-    `;
-  }
 </script>  
   
 </body>
