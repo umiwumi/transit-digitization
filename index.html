@@ -1,8 +1,12 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <script src="https://cdn.jsdelivr.net/npm/eruda"></script>
-<script>eruda.init();</script>
+  <script>
+    // Developer console (eruda) loads only when the URL has ?debug=1
+    if (/[?&]debug=1/.test(location.search)) {
+      document.write('<script src="https://cdn.jsdelivr.net/npm/eruda@3.4.1"><\/script><script>eruda.init();<\/script>');
+    }
+  </script>
   
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -874,7 +878,7 @@
     // 3. Fallback rendering
     if (currentMode === 'winter') {
       if (num !== null && num > 0) {
-        return `<span class="fare-tag paid">¥${num.toLocaleString()}</span> <span class="fare-tag" style="background: rgba(239, 68, 68, 0.15); color: #f87171; border: 1px solid rgba(239, 68, 68, 0.35); font-size: 0.68rem;">💳 Tap/QR</span>`;
+        return `<span class="fare-tag paid">¥${num.toLocaleString()}</span>`;
       }
       return `<span class="fare-tag">${freeText}</span>`;
     }
@@ -1174,206 +1178,6 @@
     renderTimetable();
   }
   
-  function matchesDayFilter(tripDaysRaw, selectedDayRaw) {
-    if (!selectedDayRaw || selectedDayRaw === 'ALL') return true;
-    const tripNorm = normalizeKey(tripDaysRaw);
-    const selNorm = normalizeKey(selectedDayRaw);
-
-    if (tripNorm === selNorm) return true;
-
-    if (tripNorm === 'DAILY') {
-      if (selNorm.includes('WEEKEND') || selNorm.includes('HOLIDAY') || selNorm.includes('WEEKDAY')) {
-        return true;
-      }
-    }
-
-    if ((selNorm.includes('WEEKEND') || selNorm.includes('HOLIDAY')) &&
-        (tripNorm.includes('WEEKEND') || tripNorm.includes('HOLIDAY'))) {
-      return true;
-    }
-
-    if (selNorm.includes('WEEKDAY') && tripNorm.includes('WEEKDAY')) {
-      return true;
-    }
-
-    return false;
-  }
-
-  function parseTimeMins(tStr) {
-    const parts = (tStr || '0:0').split(':').map(Number);
-    const h = parts[0] || 0;
-    const m = parts[1] || 0;
-    const adjustedH = h < 4 ? h + 24 : h;
-    return adjustedH * 60 + m;
-  }
-
-  function renderTimetable() {
-    const route = document.getElementById('routeSelect').value;
-    const dir = document.getElementById('dirSelect').value;
-    const selectedDay = document.getElementById('daySelect').value;
-    const boardingStopId = document.getElementById('stopSelect').value;
-    const destSelect = document.getElementById('destSelect');
-    const destStopId = destSelect ? destSelect.value : 'TERMINUS';
-    const container = document.getElementById('scheduleContainer');
-
-    // 1. Define isLoopSelection in this scope & normalize route/direction matching
-    const isLoopSelection = /LOOP/i.test(normalizeKey(dir));
-    const routeSchedules = cache[currentMode].schedules.filter(s => {
-      if (normalizeKey(s.routeCode) !== normalizeKey(route)) return false;
-      if (isLoopSelection) {
-        return /LOOP/i.test(normalizeKey(s.direction));
-      }
-      return normalizeKey(s.direction) === normalizeKey(dir);
-    });
-
-    const journeys = [];
-
-    Object.keys(tripsMap).forEach(key => {
-      let tripStops = tripsMap[key];
-      if (!tripStops || tripStops.length === 0) return;
-
-      if (!matchesDayFilter(tripStops[0].operatingDays, selectedDay)) {
-        return;
-      }
-
-      tripStops.sort((a, b) => parseTimeMins(a.departureTime) - parseTimeMins(b.departureTime));
-
-      const fromIndex = tripStops.findIndex(s => s.stopId === boardingStopId);
-      if (fromIndex === -1) return;
-
-      const fromRecord = tripStops[fromIndex];
-      const depTotal = parseTimeMins(fromRecord.departureTime);
-
-      let toRecord = null;
-      if (tripStops.length > 1) {
-        if (destStopId === 'TERMINUS') {
-          if (tripStops.length - 1 > fromIndex) {
-            toRecord = tripStops[tripStops.length - 1];
-          }
-        } else {
-          const toIndex = tripStops.findIndex((s, idx) => idx > fromIndex && s.stopId === destStopId);
-          if (toIndex !== -1) {
-            toRecord = tripStops[toIndex];
-          }
-        }
-      }
-
-      if (toRecord) {
-        const arrTotal = parseTimeMins(toRecord.departureTime);
-        const durationMins = arrTotal >= depTotal ? arrTotal - depTotal : (arrTotal + 1440) - depTotal;
-
-        journeys.push({
-          tripNumber: fromRecord.tripNumber,
-          operatingDays: fromRecord.operatingDays,
-          departureTime: fromRecord.departureTime,
-          arrivalTime: toRecord.departureTime,
-          duration: durationMins,
-          toStopId: toRecord.stopId,
-          direction: fromRecord.direction,
-          depTotal: depTotal
-        });
-      } else if (tripStops.length === 1 && destStopId === 'TERMINUS') {
-        journeys.push({
-          tripNumber: fromRecord.tripNumber,
-          operatingDays: fromRecord.operatingDays,
-          departureTime: fromRecord.departureTime,
-          arrivalTime: null,
-          duration: 0,
-          toStopId: fromRecord.stopId,
-          direction: fromRecord.direction,
-          depTotal: depTotal
-        });
-      }
-    });
-
-    journeys.sort((a, b) => a.depTotal - b.depTotal);
-
-    if (journeys.length === 0) {
-      container.innerHTML = `<div class="notice">${I18N.ui.noDepartures[currentLang] || I18N.ui.noDepartures.en}</div>`;
-      return;
-    }
-
-    const jstNow = new Date(new Date().toLocaleString("en-US", { timeZone: "Asia/Tokyo" }));
-    const nowH = jstNow.getHours();
-    const currentMins = (nowH < 4 ? nowH + 24 : nowH) * 60 + jstNow.getMinutes();
-    let nextIndex = journeys.findIndex(j => j.depTotal >= currentMins);
-
-    const tripWord = I18N.ui.trip[currentLang] || I18N.ui.trip.en;
-    const minWord = I18N.ui.mins[currentLang] || 'min';
-    const nextText = I18N.ui.nextBus[currentLang] || 'NEXT';
-    const mapWord = I18N.ui.map[currentLang] || 'Map ↗';
-    const colKey = stopLangKeys[currentLang] || 'Stop_Name_EN';
-
-    const fromStopObj = resolveStop(currentMode, route, boardingStopId);
-    const isStationOrigin = /湯沢駅|S-01/i.test(boardingStopId) || /湯沢駅/i.test(fromStopObj.Stop_Name_JP || '') || /Yuzawa Sta/i.test(fromStopObj.Stop_Name_EN || '');
-
-    let platformBadge = '';
-    if (isStationOrigin) {
-      const poleData = STATION_POLE_MAP[normalizeKey(route)] || STATION_POLE_MAP[route];
-      if (poleData) {
-        const poleText = poleData[currentLang] || poleData.en;
-        platformBadge = `<div class="platform-badge">🚏 ${poleText}</div>`;
-      }
-    }
-
-    container.innerHTML = journeys.map((j, index) => {
-      const isNext = index === nextIndex;
-      const cardStyle = isNext ? 'border: 2px solid var(--accent); box-shadow: 0 0 10px rgba(56, 189, 248, 0.2);' : '';
-      const nextBadge = isNext ? `<span style="background: var(--accent); color: #0f172a; padding: 2px 6px; border-radius: 4px; font-size: 0.7rem; font-weight: bold; margin-bottom: 4px; display: inline-block;">${nextText}</span><br>` : '';
-
-      const destStop = resolveStop(currentMode, route, j.toStopId);
-      let destName = j.arrivalTime
-        ? (destStop[colKey] || destStop['Stop_Name_EN'] || j.toStopId)
-        : translateDirection(j.direction);
-
-      if (isLoopSelection && destStopId === 'TERMINUS') {
-        const loopReturnText = {
-          en: '🔄 Full Loop (via Ishiuchi / GALA)',
-          jp: '🔄 循環（石打・GALA経由）',
-          zh_tr: '🔄 全線循環（經由石打・GALA）',
-          zh_si: '🔄 全线循环（经由石打・GALA）',
-          ko: '🔄 순환 (이시우치・GALA 경유)'
-        };
-        destName = loopReturnText[currentLang] || loopReturnText.en;
-      }
-      const fareBadge = formatFareBadge(route, fromStopObj, destStop, Boolean(j.arrivalTime));
-      const mapUrl = destStop.Google_Maps_URL;
-      const mapLink = mapUrl ? `<a class="map-link" href="${mapUrl}" target="_blank" rel="noopener">${mapWord}</a>` : '';
-
-      const timeHtml = j.arrivalTime
-        ? `<div style="display: flex; align-items: baseline; gap: 6px;">
-             <span class="time">${j.departureTime}</span>
-             <span style="color: var(--text-muted); font-size: 0.85rem;">➔</span>
-             <span style="font-size: 1.15rem; font-weight: 600; color: #e2e8f0;">${j.arrivalTime}</span>
-           </div>`
-        : `<div style="display: flex; align-items: baseline; gap: 6px;">
-             <span class="time">${j.departureTime}</span>
-           </div>`;
-
-      return `
-        <div class="card" style="${cardStyle}" ${isNext ? 'id="next-bus"' : ''}>
-          <div class="time-col">
-            ${nextBadge}
-            ${timeHtml}
-            <span class="trip-badge">
-              ${j.duration > 0 ? `⏱ ${j.duration}${minWord} · ` : ''}${tripWord} #${j.tripNumber} · ${translateDays(j.operatingDays)}
-            </span>
-            ${platformBadge}
-          </div>
-          <div class="info-col">
-            <div class="stop-name">➔ ${destName}</div>
-            <div class="details">${fareBadge} ${mapLink}</div>
-          </div>
-        </div>
-      `;
-    }).join('');
-
-    setTimeout(() => {
-      const nextEl = document.getElementById('next-bus');
-      if (nextEl) nextEl.scrollIntoView({ behavior: 'smooth', block: 'center' });
-    }, 150);
-  }
-
     // --- ROUTE METADATA & OPERATIONAL DISCLAIMERS ---
   const ROUTE_CONFIG = {
     BLUE: {
@@ -1524,6 +1328,12 @@
         <p class="card-disclaimer">${noteText}</p>
       </div>
     `;
+  }
+
+  function dismissAlert(alertId) {
+    const el = document.getElementById(alertId);
+    if (el) el.style.display = 'none';
+    safeSetItem(`${alertId}_dismissed`, 'true');
   }
 
   function matchesDayFilter(tripDaysRaw, selectedDayRaw) {
@@ -1701,7 +1511,7 @@
       const fareBadge = formatFareBadge(route, fromStopObj, destStop);
       const mapUrl = destStop.Google_Maps_URL;
       const mapLink = mapUrl ? `<a class="map-link" href="${mapUrl}" target="_blank" rel="noopener">${mapWord}</a>` : '';
-      const cardMetaHtml = renderCardMetadata(route, fromStopObj, destStop, currentLang);
+      const cardMetaHtml = ''; // route-level banner above the list already shows this
 
       const timeHtml = j.arrivalTime
         ? `<div style="display: flex; align-items: baseline; gap: 6px;">
