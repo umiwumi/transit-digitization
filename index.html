@@ -842,10 +842,10 @@
     `;
   }
 
- function formatFareBadge(routeCode, originStop, destStop) {
+function formatFareBadge(routeCode, originStop, destStop) {
   const freeText = I18N.ui.free[currentLang] || I18N.ui.free.en;
 
-  // 1. Check ROUTE_CONFIG rules first (Resort, Tsuchitaru flat fare, bidirectional station parity, or Seiriken)
+  // 1. Check ROUTE_CONFIG rules first (Resort shuttles, flat fares, or Seiriken)
   const specialFare = resolveCardFare(routeCode, originStop, destStop);
   if (specialFare) {
     if (specialFare.type === 'resort') {
@@ -857,21 +857,20 @@
     return `<span class="fare-tag paid">${specialFare.text}</span>`;
   }
 
-  // Helper to extract numeric fare from stop object keys
-  function extractStopFare(stop) {
-    if (!stop || typeof stop !== 'object') return null;
-    for (const key of Object.keys(stop)) {
+  // 2. Fallback parser for standard routes
+  let num = null;
+  if (destStop && typeof destStop === 'object') {
+    for (const key of Object.keys(destStop)) {
       if (/^(fare|fare_yuzawa|price|cost|運賃)/i.test(key.trim())) {
-        const val = String(stop[key] || '').replace(/[^\d.]/g, '');
-        const num = parseFloat(val);
-        if (!isNaN(num)) return num;
+        const val = String(destStop[key] || '').replace(/[^\d.]/g, '');
+        const parsed = parseFloat(val);
+        if (!isNaN(parsed)) {
+          num = parsed;
+          break;
+        }
       }
     }
-    return null;
   }
-
-  // 2. Fallback for standard routes not in ROUTE_CONFIG
-  const num = extractStopFare(destStop);
 
   if (currentMode === 'winter') {
     if (num !== null && num > 0) {
@@ -879,6 +878,19 @@
     }
     return `<span class="fare-tag">${freeText}</span>`;
   }
+
+  const isStation = /湯沢駅|六日町駅/i.test(destStop?.Stop_Name_JP || '');
+  if (isStation || num === 0) {
+    const termText = I18N.ui.terminal[currentLang] || 'Terminal';
+    return `<span class="fare-tag" style="background: rgba(148, 163, 184, 0.15); color: var(--text-muted); font-weight: 500;">${termText}</span>`;
+  }
+  if (num !== null && num > 0) {
+    const suffix = I18N.ui.toFromStation[currentLang] || '';
+    return `<span class="fare-tag paid">¥${num.toLocaleString()} <small style="font-size:0.72rem; opacity:0.85; font-weight:normal;">${suffix}</small></span>`;
+  }
+  return `<span class="fare-tag">${freeText}</span>`;
+}
+
 
   const isStation = /湯沢駅|六日町駅/i.test(destStop?.Stop_Name_JP || '');
   if (isStation || num === 0) {
