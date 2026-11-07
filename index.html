@@ -326,34 +326,43 @@
       color: #f8fafc;
       background: rgba(255, 255, 255, 0.12);
     }
-.card-meta {
-  margin-top: 8px;
-  padding-top: 8px;
-  border-top: 1px dashed #e0e0e0;
-}
-.card-badges {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 6px;
-  margin-bottom: 6px;
-}
-.badge {
-  font-size: 0.72rem;
-  font-weight: 600;
-  padding: 2px 7px;
-  border-radius: 999px;
-  display: inline-block;
-  white-space: nowrap;
-}
-.badge-fare { background-color: #e8f5e9; color: #2e7d32; }
-.badge-info { background-color: #e3f2fd; color: #1565c0; }
-.badge-warn { background-color: #fff3e0; color: #e65100; }
-.card-disclaimer {
-  font-size: 0.75rem;
-  color: #616161;
-  margin: 0;
-  line-height: 1.35;
-}
+        /* Replace the duplicate .card-meta / .badge block at the bottom of <style> with this: */
+    .card-main {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      width: 100%;
+      gap: 12px;
+    }
+    .time { font-size: 1.25rem; font-weight: 700; color: var(--text); }
+    .trip-badge { display: block; font-size: 0.75rem; color: var(--text-muted); margin-top: 2px; }
+    .info-col { text-align: right; }
+    .stop-name { font-size: 0.9rem; font-weight: 600; color: var(--text); }
+    .details { display: flex; gap: 6px; justify-content: flex-end; align-items: center; margin-top: 4px; }
+    .fare-tag {
+      font-size: 0.72rem;
+      font-weight: 600;
+      padding: 2px 8px;
+      border-radius: 6px;
+      background: rgba(16, 185, 129, 0.15);
+      color: #34d399;
+      border: 1px solid rgba(16, 185, 129, 0.35);
+    }
+    .map-link {
+      font-size: 0.75rem;
+      color: var(--accent);
+      text-decoration: none;
+      font-weight: 600;
+    }
+    .notice {
+      text-align: center;
+      padding: 28px 16px;
+      color: var(--text-muted);
+      background: var(--card-bg);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      font-size: 0.9rem;
+    }
   </style>
 </head>
 <body>
@@ -860,19 +869,7 @@
     }
 
     // 2. Extract numeric fare from destStop properties
-    let num = null;
-    if (destStop && typeof destStop === 'object') {
-      for (const key of Object.keys(destStop)) {
-        if (/^(fare|fare_yuzawa|price|cost|運賃)/i.test(key.trim())) {
-          const val = String(destStop[key] || '').replace(/[^\d.]/g, '');
-          const parsed = parseFloat(val);
-          if (!isNaN(parsed)) {
-            num = parsed;
-            break;
-          }
-        }
-      }
-    }
+    const num = extractStopFare(destStop);
 
     // 3. Fallback rendering
     if (currentMode === 'winter') {
@@ -894,20 +891,6 @@
     return `<span class="fare-tag">${freeText}</span>`;
   }
 
-
-    const stopNameJP = hasArrival ? (destStop['Stop_Name_JP'] || '') : '';
-    const isStation = /湯沢駅|六日町駅/i.test(stopNameJP);
-    if (isStation || num === 0) {
-      const termText = I18N.ui.terminal[currentLang] || 'Terminal';
-      return `<span class="fare-tag" style="background: rgba(148, 163, 184, 0.15); color: var(--text-muted); font-weight: 500;">${termText}</span>`;
-    }
-    if (num !== null && num > 0) {
-      const suffix = I18N.ui.toFromStation[currentLang] || '';
-      return `<span class="fare-tag paid">¥${num.toLocaleString()} <small style="font-size:0.72rem; opacity:0.85; font-weight:normal;">${suffix}</small></span>`;
-    }
-    return `<span class="fare-tag">${freeText}</span>`;
-  }
-
   async function fetchWithFallback(...sources) {
     const urls = sources
       .flat()
@@ -917,7 +900,6 @@
       const url = urls[i];
       const isRemote = url.startsWith('http');
       try {
-        // Use cache: 'no-cache' only for remote Google Sheets; allow Tier 3 root CSVs to resolve from SW cache
         const res = await fetch(url, isRemote ? { cache: 'no-cache' } : {});
         if (!res.ok) throw new Error(`HTTP ${res.status}`);
 
@@ -936,7 +918,12 @@
   }
 
   async function loadDataForMode(mode) {
-    if (cache[mode].loaded) return;
+    if (cache[mode].loaded) return true;
+
+    if (typeof Papa === 'undefined') {
+      console.error('PapaParse library failed to load.');
+      return false;
+    }
 
     const stopsSources = DATA_CONFIG[mode].stops;
     const schedSources = DATA_CONFIG[mode].schedules;
@@ -946,11 +933,16 @@
       fetchWithFallback(schedSources)
     ]);
 
+    if (!stopsRes || !schedRes) {
+      console.error(`[Load Failed] Missing CSV data for mode: ${mode}`);
+      return false;
+    }
+
     Papa.parse(stopsRes, {
       header: true, skipEmptyLines: 'greedy',
       transformHeader: h => h.trim().replace(/^\ufeff/, ''),
       complete: (results) => {
-        cache[mode].rawStops = results.data.filter(row => {
+        cache[mode].rawStops = (results.data || []).filter(row => {
           const sId = (row.Stop_ID || row.stop_id || '').trim();
           return sId && !/^stop_?id$/i.test(sId);
         });
@@ -970,7 +962,7 @@
       header: true, skipEmptyLines: 'greedy',
       transformHeader: h => h.trim().replace(/^\ufeff/, ''),
       complete: (results) => {
-        cache[mode].schedules = results.data
+        cache[mode].schedules = (results.data || [])
           .filter(r => {
             const rc = (r.Route_Code || r.Route_ID || '').trim();
             const dt = (r.Departure_Time || '').trim();
@@ -989,13 +981,9 @@
       }
     });
 
-    cache[mode].loaded = true;
-  }
-
-  function dismissAlert(alertId) {
-    const el = document.getElementById(alertId);
-    if (el) el.style.display = 'none';
-    safeSetItem(`${alertId}_dismissed`, 'true');
+    const hasData = cache[mode].schedules.length > 0;
+    cache[mode].loaded = hasData;
+    return hasData;
   }
 
   async function switchMode(mode) {
@@ -1020,10 +1008,18 @@
     document.getElementById('searchInput').value = '';
     document.getElementById('clearSearch').style.display = 'none';
     document.getElementById('searchDropdown').style.display = 'none';
+    document.getElementById('scheduleContainer').innerHTML = `<div class="notice">${I18N.ui.loading[currentLang] || I18N.ui.loading.en}</div>`;
     
-    await loadDataForMode(mode);
+    const ok = await loadDataForMode(mode);
+    if (mode !== currentMode) return; // Prevent race condition if user clicked again
+
+    if (!ok) {
+      document.getElementById('scheduleContainer').innerHTML = `<div class="notice">⚠️ Unable to load timetable data. Please check your connection and try again.</div>`;
+      return;
+    }
     populateRoutes();
   }
+
 
   function populateRoutes(preserveState = false) {
     const routeSelect = document.getElementById('routeSelect');
