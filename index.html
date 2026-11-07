@@ -842,67 +842,58 @@
     `;
   }
 
-function formatFareBadge(routeCode, originStop, destStop) {
-  const freeText = I18N.ui.free[currentLang] || I18N.ui.free.en;
+  function formatFareBadge(routeCode, originStop, destStop) {
+    const freeText = I18N.ui.free[currentLang] || I18N.ui.free.en;
 
-  // 1. Check ROUTE_CONFIG rules first (Resort shuttles, flat fares, or Seiriken)
-  const specialFare = resolveCardFare(routeCode, originStop, destStop);
-  if (specialFare) {
-    if (specialFare.type === 'resort') {
-      return `<span class="fare-tag paid">¥100</span> <span class="fare-tag" style="background: rgba(239, 68, 68, 0.15); color: #f87171; border: 1px solid rgba(239, 68, 68, 0.35); font-size: 0.68rem;">💳 Tap/QR</span>`;
+    // 1. Check ROUTE_CONFIG rules (Resort shuttles, Tsuchitaru flat fare, or Seiriken)
+    if (typeof resolveCardFare === 'function') {
+      const specialFare = resolveCardFare(routeCode, originStop, destStop);
+      if (specialFare) {
+        if (specialFare.type === 'resort') {
+          return `<span class="fare-tag paid">¥100</span> <span class="fare-tag" style="background: rgba(239, 68, 68, 0.15); color: #f87171; border: 1px solid rgba(239, 68, 68, 0.35); font-size: 0.68rem;">💳 Tap/QR</span>`;
+        }
+        if (specialFare.type === 'seiriken') {
+          return `<span class="fare-tag" style="background: rgba(245, 158, 11, 0.15); color: #fbbf24; border: 1px solid rgba(245, 158, 11, 0.35);">${specialFare.text}</span>`;
+        }
+        return `<span class="fare-tag paid">${specialFare.text}</span>`;
+      }
     }
-    if (specialFare.type === 'seiriken') {
-      return `<span class="fare-tag" style="background: rgba(245, 158, 11, 0.15); color: #fbbf24; border: 1px solid rgba(245, 158, 11, 0.35);">${specialFare.text}</span>`;
-    }
-    return `<span class="fare-tag paid">${specialFare.text}</span>`;
-  }
 
-  // 2. Fallback parser for standard routes
-  let num = null;
-  if (destStop && typeof destStop === 'object') {
-    for (const key of Object.keys(destStop)) {
-      if (/^(fare|fare_yuzawa|price|cost|運賃)/i.test(key.trim())) {
-        const val = String(destStop[key] || '').replace(/[^\d.]/g, '');
-        const parsed = parseFloat(val);
-        if (!isNaN(parsed)) {
-          num = parsed;
-          break;
+    // 2. Extract numeric fare from destStop properties
+    let num = null;
+    if (destStop && typeof destStop === 'object') {
+      for (const key of Object.keys(destStop)) {
+        if (/^(fare|fare_yuzawa|price|cost|運賃)/i.test(key.trim())) {
+          const val = String(destStop[key] || '').replace(/[^\d.]/g, '');
+          const parsed = parseFloat(val);
+          if (!isNaN(parsed)) {
+            num = parsed;
+            break;
+          }
         }
       }
     }
-  }
 
-  if (currentMode === 'winter') {
+    // 3. Fallback rendering
+    if (currentMode === 'winter') {
+      if (num !== null && num > 0) {
+        return `<span class="fare-tag paid">¥${num.toLocaleString()}</span> <span class="fare-tag" style="background: rgba(239, 68, 68, 0.15); color: #f87171; border: 1px solid rgba(239, 68, 68, 0.35); font-size: 0.68rem;">💳 Tap/QR</span>`;
+      }
+      return `<span class="fare-tag">${freeText}</span>`;
+    }
+
+    const isStation = /湯沢駅|六日町駅/i.test(destStop?.Stop_Name_JP || '');
+    if (isStation || num === 0) {
+      const termText = I18N.ui.terminal[currentLang] || 'Terminal';
+      return `<span class="fare-tag" style="background: rgba(148, 163, 184, 0.15); color: var(--text-muted); font-weight: 500;">${termText}</span>`;
+    }
     if (num !== null && num > 0) {
-      return `<span class="fare-tag paid">¥${num.toLocaleString()}</span> <span class="fare-tag" style="background: rgba(239, 68, 68, 0.15); color: #f87171; border: 1px solid rgba(239, 68, 68, 0.35); font-size: 0.68rem;">💳 Tap/QR</span>`;
+      const suffix = I18N.ui.toFromStation[currentLang] || '';
+      return `<span class="fare-tag paid">¥${num.toLocaleString()} <small style="font-size:0.72rem; opacity:0.85; font-weight:normal;">${suffix}</small></span>`;
     }
     return `<span class="fare-tag">${freeText}</span>`;
   }
 
-  const isStation = /湯沢駅|六日町駅/i.test(destStop?.Stop_Name_JP || '');
-  if (isStation || num === 0) {
-    const termText = I18N.ui.terminal[currentLang] || 'Terminal';
-    return `<span class="fare-tag" style="background: rgba(148, 163, 184, 0.15); color: var(--text-muted); font-weight: 500;">${termText}</span>`;
-  }
-  if (num !== null && num > 0) {
-    const suffix = I18N.ui.toFromStation[currentLang] || '';
-    return `<span class="fare-tag paid">¥${num.toLocaleString()} <small style="font-size:0.72rem; opacity:0.85; font-weight:normal;">${suffix}</small></span>`;
-  }
-  return `<span class="fare-tag">${freeText}</span>`;
-}
-
-
-  const isStation = /湯沢駅|六日町駅/i.test(destStop?.Stop_Name_JP || '');
-  if (isStation || num === 0) {
-    const termText = I18N.ui.terminal[currentLang] || 'Terminal';
-    return `<span class="fare-tag" style="background: rgba(148, 163, 184, 0.15); color: var(--text-muted); font-weight: 500;">${termText}</span>`;
-  }
-  if (num !== null && num > 0) {
-    const suffix = I18N.ui.toFromStation[currentLang] || '';
-    return `<span class="fare-tag paid">¥${num.toLocaleString()} <small style="font-size:0.72rem; opacity:0.85; font-weight:normal;">${suffix}</small></span>`;
-  }
-  return `<span class="fare-tag">${freeText}</span>`;
-}
 
     const stopNameJP = hasArrival ? (destStop['Stop_Name_JP'] || '') : '';
     const isStation = /湯沢駅|六日町駅/i.test(stopNameJP);
